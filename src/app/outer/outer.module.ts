@@ -4,6 +4,7 @@ import { ResetComponent } from './reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { OuterComponent } from './outer.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const routes: Routes = [
   {
@@ -26,7 +27,8 @@ const routes: Routes = [
   declarations: [ResetComponent, LoginComponent, OuterComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatToolbarModule
   ]
 })
 export class OuterModule { }
