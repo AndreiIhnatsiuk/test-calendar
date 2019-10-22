@@ -1,7 +1,14 @@
-<mat-toolbar>
-  <span>ITman Study</span>
-</mat-toolbar>
-<p>
-  outer works!
-</p>
-<router-outlet></router-outlet>
+<header>
+  <mat-toolbar color="primary">
+    <span>ITman Study</span>
+  </mat-toolbar>
+</header>
+
+<div class="center">
+  <router-outlet></router-outlet>
+
+  <br>
+  <p class="left-align">
+    Записаться на курсы можно на сайте <a href="https://itman.by">itman.by</a>
+  </p>
+</div>
