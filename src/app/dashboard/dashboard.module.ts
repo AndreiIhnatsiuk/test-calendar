@@ -16,7 +16,7 @@ import {MatTableModule} from '@angular/material/table';
 import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
-import { SubmissionComponent } from './submission/submission.component';
+import {SubmissionComponent} from './submission/submission.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const routes: Routes = [

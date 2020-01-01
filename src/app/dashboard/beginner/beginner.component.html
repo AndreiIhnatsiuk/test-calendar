@@ -10,7 +10,10 @@
       <a mat-list-item [routerLink]="'topic/' + topicId" [class.active-list-item]="!taskId">Теория</a>
     </mat-nav-list>
     <mat-nav-list *ngFor="let task of tasks">
-      <a mat-list-item [routerLink]="'topic/' + topicId + '/task/' + task.id" routerLinkActive="active-list-item">{{task.title}}</a>
+      <a mat-list-item [routerLink]="'topic/' + topicId + '/task/' + task.id" routerLinkActive="active-list-item">
+        {{task.title}}
+        <span class="accepted" *ngIf="acceptedTasks.has(task.id)">&nbsp;OK</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
