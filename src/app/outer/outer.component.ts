@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-outer',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OuterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router,
+              private authService: AuthService) {
+  }
 
   ngOnInit() {
+    if (this.authService.currentUserValue) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
 }

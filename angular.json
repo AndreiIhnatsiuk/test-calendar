@@ -62,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "itman-study:build"
+            "browserTarget": "itman-study:build",
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {

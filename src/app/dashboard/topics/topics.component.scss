@@ -1,0 +1,42 @@
+mat-sidenav-container {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+mat-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+}
+
+mat-sidenav-content {
+  padding: 16px 32px;
+}
+
+.topic {
+  max-width: 853px;
+}
+
+.active-list-item {
+  color: #673ab7 !important; /* Note: You could also use a custom theme */
+}
+
+.topic-part-youtube {
+  max-width: 100%;
+  max-height: 100%;
+
+  iframe {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.topic-part-tasks {
+  background-color: lightblue;
+  padding: 16px 8px;
+  margin-bottom: 8px;
+}

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -8,8 +9,9 @@ const routes: Routes = [
     component: NotFoundComponent
   },
   {
-    path: 'cabinet',
-    loadChildren: () => import('./cabinet/cabinet.module').then(m => m.CabinetModule)
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '',
