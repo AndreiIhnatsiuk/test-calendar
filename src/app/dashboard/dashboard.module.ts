@@ -13,6 +13,10 @@ import {MarkedPipe} from '../pipes/marked.pipe';
 import {BeginnerComponent} from './beginner/beginner.component';
 import {TaskComponent} from './task/task.component';
 import {MatTableModule} from '@angular/material/table';
+import {FormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+import { SubmissionComponent } from './submission/submission.component';
 
 const routes: Routes = [
   {
@@ -56,7 +60,11 @@ const routes: Routes = [
     BasicComponent,
     MarkedPipe,
     BeginnerComponent,
-    TaskComponent
+    TaskComponent,
+    SubmissionComponent
+  ],
+  entryComponents: [
+    SubmissionComponent
   ],
   imports: [
     CommonModule,
@@ -66,7 +74,10 @@ const routes: Routes = [
     MatSidenavModule,
     MatListModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    FormsModule,
+    MatSnackBarModule,
+    MatDialogModule
   ]
 })
 export class DashboardModule {

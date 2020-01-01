@@ -1,4 +1,4 @@
-<div class="topic" *ngIf="!task && topic">
+<div class="topic" *ngIf="topic">
   <h1>{{topic.title}}</h1>
   <div class="topic-part" *ngFor="let part of topic.parts">
     <div class="topic-part-text" *ngIf="part.text" [innerHTML]="part.text | marked"></div>
@@ -8,7 +8,7 @@
     <div class="topic-part-tasks" *ngIf="part.taskIds">
       <p>Ты уже можешь решить следующие задачи:</p>
       <ul>
-        <li *ngFor="let id of part.taskIds"><a [routerLink]="'/dashboard/topic/' + topic.id + '/task/' + id">Задача #{{id}}</a></li>
+        <li *ngFor="let id of part.taskIds"><a [routerLink]="'task/' + id">Задача #{{id}}</a></li>
       </ul>
     </div>
   </div>

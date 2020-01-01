@@ -1,0 +1,16 @@
+<div class="submission" *ngIf="submission">
+  <div *ngIf="submission.test">
+    <i>Входные данные</i>
+    <pre class="data">{{submission.test.input}}</pre>
+    <i>Выходные данные</i>
+    <pre class="data">{{submission.test.output}}</pre>
+    <div>
+      <i>Вывод программы</i>
+      <pre class="data">{{submission.errorString}}</pre>
+    </div>
+  </div>
+  <div *ngIf="!submission.test">
+    <p>Тест не доступен для просмотра.</p>
+  </div>
+</div>
+<button mat-raised-button color="primary" (click)="close()">Закрыть</button>

@@ -10,3 +10,5 @@ export enum SubmissionStatus {
   MEMORY_LIMIT,
   WRONG_ANSWER
 }
+
+export type SubmissionStatusStrings = keyof typeof SubmissionStatus;
