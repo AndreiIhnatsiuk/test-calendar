@@ -9,12 +9,15 @@
       <pre class="data">{{test.output}}</pre>
       <hr>
     </div>
+
     <div class="send">
       <h2>Отправить решение</h2>
       <textarea [(ngModel)]="solution" rows="15" placeholder="public class Task{{task.id}} {&#10;    public static void main(String[] args) {&#10;&#10;    }&#10;}"></textarea>
-      <button mat-raised-button color="primary" (click)="send()" [disabled]="sending || running">Отправить</button>
+      <button mat-raised-button color="primary" (click)="send()" *ngIf="!(sending || running)">Отправить</button>
+      <mat-spinner *ngIf="(sending || running)" diameter="35"></mat-spinner>
     </div>
     <hr>
+
     <div class="submissions" *ngIf="submissions && submissions.length">
       <table mat-table [dataSource]="submissions">
 
@@ -35,11 +38,14 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-          <td mat-cell *matCellDef="let row"><button mat-button *ngIf="showMore(row)">Подробнее</button></td>
+          <td mat-cell *matCellDef="let row">
+            <button mat-button *ngIf="showMore(row)" (click)="seeMore(row)">Подробнее</button>
+            <mat-spinner *ngIf="isRunning(row)" diameter="16"></mat-spinner>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="seeMore(row)"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
   </div>

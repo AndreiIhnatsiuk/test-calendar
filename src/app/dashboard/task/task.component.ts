@@ -73,6 +73,11 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  isRunning(submission: Submission): boolean {
+    const status = SubmissionStatus[submission.status];
+    return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+  }
+
   showMore(submission: Submission): boolean {
     const status = SubmissionStatus[submission.status];
     return !(status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING || status === SubmissionStatus.ACCEPTED);
