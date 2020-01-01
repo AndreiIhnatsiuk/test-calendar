@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Topic} from '../../entities/topic';
+import {ActivatedRoute} from '@angular/router';
 import {TopicService} from '../../services/topic.service';
 import {FullTopic} from '../../entities/full-topic';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-topics',
-  templateUrl: './topics.component.html',
-  styleUrls: ['./topics.component.scss']
+  selector: 'app-topic',
+  templateUrl: './topic.component.html',
+  styleUrls: ['./topic.component.scss']
 })
-export class TopicsComponent implements OnInit {
-  id: number;
-  topics: Array<Topic>;
+export class TopicComponent implements OnInit {
   topic: FullTopic;
 
   constructor(private route: ActivatedRoute,
@@ -22,10 +19,9 @@ export class TopicsComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
-      this.id = +map.get('id');
-      this.topicService.getTopicById(this.id).subscribe(fullTopic => this.topic = fullTopic);
+      const topicId = +map.get('topicId');
+      this.topicService.getTopicById(topicId).subscribe(fullTopic => this.topic = fullTopic);
     });
-    this.topicService.getTopics().subscribe(topics => this.topics = topics);
   }
 
   generateYoutubeLink(link: string): SafeUrl {

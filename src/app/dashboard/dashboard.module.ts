@@ -1,19 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DashboardComponent } from './dashboard.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
-import { TopicsComponent } from './topics/topics.component';
+import {TopicComponent} from './topic/topic.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
-import { AdvancedComponent } from './advanced/advanced.component';
+import {BasicComponent} from './basic/basic.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {AuthInterceptor} from '../interceptors/auth.interceptor';
-import {AppModule} from '../app.module';
-import {NotFoundComponent} from '../not-found/not-found.component';
 import {MarkedPipe} from '../pipes/marked.pipe';
+import {BeginnerComponent} from './beginner/beginner.component';
+import {TaskComponent} from './task/task.component';
+import {MatTableModule} from '@angular/material/table';
 
 const routes: Routes = [
   {
@@ -22,19 +21,29 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'topic/1',
+        redirectTo: 'beginner',
       },
       {
-        path: 'topics',
-        redirectTo: 'topic/1',
+        path: 'beginner',
+        component: BeginnerComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'topic/1'
+          },
+          {
+            path: 'topic/:topicId',
+            component: TopicComponent
+          },
+          {
+            path: 'topic/:topicId/task/:taskId',
+            component: TaskComponent
+          }
+        ]
       },
       {
-        path: 'topic/:id',
-        component: TopicsComponent
-      },
-      {
-        path: 'advanced',
-        component: AdvancedComponent
+        path: 'basic',
+        component: BasicComponent
       }
     ]
   }
@@ -43,9 +52,11 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardComponent,
-    TopicsComponent,
-    AdvancedComponent,
-    MarkedPipe
+    TopicComponent,
+    BasicComponent,
+    MarkedPipe,
+    BeginnerComponent,
+    TaskComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +65,9 @@ const routes: Routes = [
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule
   ]
 })
-export class DashboardModule { }
+export class DashboardModule {
+}

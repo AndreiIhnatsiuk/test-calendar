@@ -2,6 +2,8 @@ import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest}
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { catchError } from 'rxjs/operators';
+import { EMPTY, throwError } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AuthInterceptor implements HttpInterceptor {
@@ -15,12 +17,13 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     const headers = req.headers.set('Authorization', 'bearer ' + user.token);
     const newReq = req.clone({ headers: headers });
-    const response = next.handle(newReq);
-    response.subscribe(data => {}, error => {
+    return next.handle(newReq).pipe(catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
         this.authService.logout();
+        return EMPTY;
+      } else {
+        return throwError(error);
       }
-    });
-    return response;
+    }));
   }
 }
