@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TokenInfo } from '../entities/token-info';
 import { LocalStorageService } from './local-storage.service';
+import {SubmissionRequest} from '../entities/submission-request';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
   login(email: string, password: string, callback: (data: any) => void, errorCallback: (error: any) => void) {
     const body = new HttpParams()
       .append('username', email)
-      .append('password', password.trim())
+      .append('password', password)
       .append('grant_type', 'password');
 
     const headers = new HttpHeaders()
@@ -44,6 +45,14 @@ export class AuthService {
       error => {
         errorCallback(error);
       });
+  }
+
+  public resetPassword(email: string): Observable<any> {
+    return this.http.post('/api/reset-password-tokens', {email: email});
+  }
+
+  public updatePassword(token: string, password: string): Observable<any> {
+    return this.http.put('/api/user-passwords', {token: token, password: password});
   }
 
   logout() {

@@ -10,6 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RenewComponent } from './renew/renew.component';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const routes: Routes = [
   {
@@ -33,7 +35,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ResetComponent, LoginComponent, OuterComponent, RenewComponent],
+  declarations: [
+    OuterComponent,
+    ResetComponent,
+    LoginComponent,
+    RenewComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -41,7 +48,9 @@ const routes: Routes = [
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class OuterModule { }

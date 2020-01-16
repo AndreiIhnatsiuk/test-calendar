@@ -11,9 +11,11 @@
       <input matInput [(ngModel)]="password" name="password" placeholder="Пароль" type="password">
     </mat-form-field>
 
-    <button (click)="login()" mat-raised-button color="primary">Войти</button>
+    <div>
+      <button (click)="login()" mat-raised-button color="primary" [disabled]="!(email && password)" *ngIf="!sending">Войти</button>
+      <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+    </div>
 
-    <br>
     <br>
     <a routerLink="/reset">Забыли пароль?</a>
   </form>

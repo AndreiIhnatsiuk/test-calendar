@@ -4,12 +4,14 @@
   </h2>
   <form class="login-form">
     <mat-form-field class="full-width">
-      <input matInput placeholder="Email" type="email">
+      <input matInput [(ngModel)]="email" placeholder="Email" type="email" name="email">
     </mat-form-field>
 
-    <button mat-raised-button color="primary">Восстановить</button>
+    <div>
+      <button mat-raised-button color="primary" [disabled]="!(email)"  *ngIf="!sending" (click)="reset()">Восстановить</button>
+      <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+    </div>
 
-    <br>
     <br>
     <a routerLink="/">Вход</a>
   </form>
