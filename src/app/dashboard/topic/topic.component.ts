@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TopicService} from '../../services/topic.service';
 import {FullTopic} from '../../entities/full-topic';
@@ -7,7 +7,8 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 @Component({
   selector: 'app-topic',
   templateUrl: './topic.component.html',
-  styleUrls: ['./topic.component.scss']
+  styleUrls: ['./topic.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TopicComponent implements OnInit {
   topic: FullTopic;
