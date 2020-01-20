@@ -12,7 +12,9 @@
 
     <div class="send">
       <h2>Отправить решение</h2>
-      <textarea [(ngModel)]="solution" rows="15" placeholder="public class Task{{task.id}} {&#10;    public static void main(String[] args) {&#10;&#10;    }&#10;}"></textarea>
+      <div class="ace-container">
+        <ace mode="java" theme="github" [(value)]="solution"></ace>
+      </div>
       <button mat-raised-button color="primary" (click)="send()" *ngIf="!(sending || running)">Отправить</button>
       <mat-spinner *ngIf="(sending || running)" diameter="35"></mat-spinner>
     </div>

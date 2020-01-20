@@ -9,6 +9,10 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {SubmissionComponent} from '../submission/submission.component';
 
+import 'brace';
+import 'brace/mode/java';
+import 'brace/theme/github';
+
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
@@ -29,11 +33,13 @@ export class TaskComponent implements OnInit {
               private taskService: TaskService,
               private submissionService: SubmissionService,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.taskId = +map.get('taskId');
+      this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
       this.updateSubmission(this);
     });
