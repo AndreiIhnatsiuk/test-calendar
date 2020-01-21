@@ -18,9 +18,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
 import {SubmissionComponent} from './submission/submission.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { AceModule } from 'ngx-ace-wrapper';
-import { ACE_CONFIG } from 'ngx-ace-wrapper';
-import { AceConfigInterface } from 'ngx-ace-wrapper';
+import {AceModule} from 'ngx-ace-wrapper';
+import {ACE_CONFIG} from 'ngx-ace-wrapper';
+import {AceConfigInterface} from 'ngx-ace-wrapper';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true

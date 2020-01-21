@@ -1,1 +1,34 @@
-<h1 style="text-align: center">Скоро</h1>
+<div class="center">
+  <mat-card>
+    <h1>
+      Основной курс
+    </h1>
+    <form class="login-form" *ngIf="courses && courses.length >= 1">
+      <div class>
+        <p><b>Старт</b>: {{courses[0].startDate | date:'fullDate'}} at 19:00</p>
+        <p><b>Место</b>: Skype</p>
+      </div>
+
+      <div>
+        <p>Для успешного зачисления необходимо решить 5 задач за 2 часа в удобное для тебя время.</p>
+
+        <p>Для решения задач необходимы следующие знания:</p>
+        <ul>
+          <li>Базовый синтаксис Java (операторы, условия, циклы, ввод-вывод)</li>
+          <li>Базовые знания алгоритмов</li>
+        </ul>
+      </div>
+
+      <div *ngIf="isEnroll === false">
+        <button mat-raised-button color="primary" *ngIf="!sending" (click)="enroll()">Записаться</button>
+        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+      </div>
+
+      <div *ngIf="isEnroll === true">
+        <b>Заявка оставлена</b>
+        <p>Скоро будет доступно вступительное задание, ориентировочно 24 января.</p>
+        <p>Рекомендую потренироваться на задачах из начального курса.</p>
+      </div>
+    </form>
+  </mat-card>
+</div>
