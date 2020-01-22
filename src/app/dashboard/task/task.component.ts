@@ -270,7 +270,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
   run() {
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
-    console.log(this.input);
     const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
     this.submissionService.postRunSubmission(submission).subscribe(added => {
       this.gtag.event('sent', {
@@ -283,7 +282,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
         duration: 5000
       });
       this.output = added.output;
-      console.log(this.output);
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }
@@ -324,7 +322,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   parseErrors(out: string): void {
     const errors = out.split(/^.*\.java:(\d+): error: /gm);
-    console.log(errors);
     const annotations = [];
     for (let i = 1; i < errors.length; i += 2) {
       annotations.push({
