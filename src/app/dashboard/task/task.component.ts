@@ -39,7 +39,12 @@ export class TaskComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.taskId = +map.get('taskId');
-      this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+      if (this.taskId <= 2) {
+        this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+      } else {
+        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
+          ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+      }
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
       this.updateSubmission(this);
     });
