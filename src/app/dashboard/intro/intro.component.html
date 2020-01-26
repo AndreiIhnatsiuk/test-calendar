@@ -1,0 +1,24 @@
+<mat-sidenav-container *ngIf="intro" >
+  <mat-sidenav class="nav-tasks" mode="side" opened disableClose position="end">
+    <mat-nav-list *ngFor="let taskId of intro.taskIds; let i = index">
+      <a mat-list-item [routerLink]="'/dashboard/basic/intro/' + intro.courseRegistrationId + '/task/' + taskId" routerLinkActive="active-list-item">
+        Задача #{{i + 1}}
+        <span class="accepted" *ngIf="acceptedTasks.has(taskId)">&nbsp;OK</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div>
+      <b>
+        <span *ngIf="time && time.getTime() > 0 && acceptedTasks.size < intro.taskIds.length">Осталось: {{time | date:'HH:mm:ss':'Z'}}. </span>
+        <span *ngIf="time && time.getTime() == 0">Время вышло. </span>
+        Вы решили {{acceptedTasks.size}} из {{intro.taskIds.length}} задач.
+      </b>
+      <br>
+      Окончательный вердикт о зачислении придет на почту после ручной проверки
+    </div>
+    <hr>
+    <app-task *ngIf="taskId" [startDate]="intro.start" [endDate]="intro.end"></app-task>
+  </mat-sidenav-content>
+</mat-sidenav-container>

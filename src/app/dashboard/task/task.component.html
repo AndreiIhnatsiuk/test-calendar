@@ -15,7 +15,7 @@
       <div class="ace-container">
         <ace mode="java" theme="github" [(value)]="solution"></ace>
       </div>
-      <button mat-raised-button color="primary" (click)="send()" *ngIf="!(sending || running)">Отправить</button>
+      <button mat-raised-button color="primary" (click)="send()" [disabled]="isSendDisabled()" *ngIf="!(sending || running)">Отправить</button>
       <mat-spinner *ngIf="(sending || running)" diameter="35"></mat-spinner>
     </div>
     <hr>

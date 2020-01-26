@@ -26,4 +26,13 @@ export class TaskService {
       return EMPTY;
     }
   }
+
+  public getAcceptedByDate(taskIds: Array<number>, start: Date, end: Date): Observable<Set<number>> {
+    if (taskIds.length) {
+      const url = '/api/accepted-tasks?taskIds=' + taskIds + '&start=' + start.toISOString() + '&end=' + end.toISOString();
+      return this.http.get<Array<number>>(url).pipe(map(array => new Set(array)));
+    } else {
+      return EMPTY;
+    }
+  }
 }

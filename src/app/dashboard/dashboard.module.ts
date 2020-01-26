@@ -21,6 +21,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AceModule} from 'ngx-ace-wrapper';
 import {ACE_CONFIG} from 'ngx-ace-wrapper';
 import {AceConfigInterface} from 'ngx-ace-wrapper';
+import { IntroComponent } from './intro/intro.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -56,6 +57,14 @@ const routes: Routes = [
       {
         path: 'basic',
         component: BasicComponent
+      },
+      {
+        path: 'basic/intro/:registrationId',
+        component: IntroComponent
+      },
+      {
+        path: 'basic/intro/:registrationId/task/:taskId',
+        component: IntroComponent
       }
     ]
   }
@@ -69,7 +78,8 @@ const routes: Routes = [
     MarkedPipe,
     BeginnerComponent,
     TaskComponent,
-    SubmissionComponent
+    SubmissionComponent,
+    IntroComponent
   ],
   entryComponents: [
     SubmissionComponent

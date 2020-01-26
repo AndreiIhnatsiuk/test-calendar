@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {FullTask} from '../../entities/full-task';
@@ -20,6 +20,9 @@ import 'brace/theme/github';
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit {
+  @Input() startDate: Date;
+  @Input() endDate: Date;
+
   taskId: number;
   displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
   task: FullTask;
@@ -69,7 +72,7 @@ export class TaskComponent implements OnInit {
 
   private updateSubmission(self: TaskComponent) {
     self.running = true;
-    self.submissionService.getSubmissionsByTaskId(self.taskId).subscribe(submissions => {
+    self.submissionService.getSubmissionsByTaskId(self.taskId, this.startDate, this.endDate).subscribe(submissions => {
       self.submissions = submissions;
       self.running = submissions
         .filter(submission => {
@@ -100,5 +103,12 @@ export class TaskComponent implements OnInit {
       return;
     }
     this.dialog.open(SubmissionComponent, {data: submission.id});
+  }
+
+  isSendDisabled(): boolean {
+    if (!this.endDate) {
+      return false;
+    }
+    return this.endDate.getTime() - new Date().getTime() < 0;
   }
 }

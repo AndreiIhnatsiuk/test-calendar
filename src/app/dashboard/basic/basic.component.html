@@ -4,13 +4,16 @@
       Основной курс
     </h1>
     <form class="login-form" *ngIf="courses && courses.length >= 1">
+      <div>
+        <p><b>Внимание!!! Если Вы только начинаете учить программирование или неуверенны в своих силах пройдите полностью <a routerLink="/dashboard/beginner">курс для начинающих</a></b></p>
+      </div>
       <div class>
         <p><b>Старт</b>: {{courses[0].startDate | date:'fullDate'}} at 19:00</p>
         <p><b>Место</b>: Skype</p>
       </div>
 
       <div>
-        <p>Для успешного зачисления необходимо решить 5 задач за 2 часа в удобное для тебя время.</p>
+        <p>Для успешного зачисления необходимо решить 5 задач за 3 часа в удобное для тебя время.</p>
 
         <p>Для решения задач необходимы следующие знания:</p>
         <ul>
@@ -25,9 +28,14 @@
       </div>
 
       <div *ngIf="isEnroll === true">
-        <b>Заявка оставлена</b>
-        <p>Скоро будет доступно вступительное задание, ориентировочно 24 января.</p>
-        <p>Рекомендую потренироваться на задачах из начального курса.</p>
+        <button mat-raised-button color="primary" *ngIf="!sending" (click)="start()" [disabled]="!loading">{{intros.length ? "Перейти" : "Начать"}}</button>
+        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+      </div>
+
+      <div *ngIf="isEnroll === true && intros.length === 0">
+        <br>
+        <p><b>Важно:</b> после нажатие на кнопку "Начать", у Вас будет три часа на решение пяти зачад</p>
+        <p>Перед началом, рекомендую решить <a routerLink="/dashboard/beginner/topic/2/task/6">Задачу #6</a>, чтобы ознакомиться с системой.</p>
       </div>
     </form>
   </mat-card>

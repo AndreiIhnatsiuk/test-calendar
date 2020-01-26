@@ -4,10 +4,12 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { catchError } from 'rxjs/operators';
 import { EMPTY, throwError } from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,
+              private router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -20,6 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(newReq).pipe(catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
         this.authService.logout();
+        this.router.navigate(['/']);
         return EMPTY;
       } else {
         return throwError(error);
