@@ -14,12 +14,12 @@ export class SubmissionService {
     let params = new HttpParams()
       .append('taskId', '' + taskId);
     if (start) {
-      params.append('start', start.toISOString());
+      params = params.append('start', start.toISOString());
     }
     if (end) {
-      params.append('end', end.toISOString());
+      params = params.append('end', end.toISOString());
     }
-    return this.http.get<Array<Submission>>('/api/submissions', {params:params});
+    return this.http.get<Array<Submission>>('/api/submissions', {params: params});
   }
 
   public getSubmissionById(id: string): Observable<FullSubmission> {

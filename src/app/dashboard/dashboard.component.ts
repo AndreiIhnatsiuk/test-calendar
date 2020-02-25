@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../services/auth.service';
+import {Personal} from '../entities/personal';
+import {LocalStorageService} from '../services/local-storage.service';
+import {Gtag, GtagEventDirective} from 'angular-gtag';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +10,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  personal: Personal;
 
-  constructor() { }
+  constructor(private authService: AuthService,
+              private gtag: Gtag) {
+  }
 
   ngOnInit() {
+    this.authService.getMe().subscribe(personal => {
+      this.personal = personal;
+      this.gtag.config({user_id: personal.analyticsId});
+      this.gtag.event('set', {
+        event_category: 'userId'
+      });
+    });
   }
 
 }

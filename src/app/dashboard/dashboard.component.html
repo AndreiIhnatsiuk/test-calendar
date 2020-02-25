@@ -3,6 +3,8 @@
     <a routerLink="beginner" mat-button>ITman Study</a>
     <a routerLink="beginner" mat-button routerLinkActive="active-button">Начальный курс</a>
     <a routerLink="basic" mat-button routerLinkActive="active-button">Основной курс</a>
+    <span class="spacer"></span>
+    <span *ngIf="personal" class="name">Привет, {{personal.name}}</span>
   </mat-toolbar>
 </header>
 <b class="warning" style="display: none;">Рекомендую проходить обучение на компьютере</b>

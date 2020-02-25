@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { TokenInfo } from '../entities/token-info';
 import { LocalStorageService } from './local-storage.service';
 import {SubmissionRequest} from '../entities/submission-request';
+import {Personal} from '../entities/personal';
+import {Course} from '../entities/course';
+import {Gtag} from 'angular-gtag';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -58,5 +61,9 @@ export class AuthService {
   logout() {
     this.localStorageService.removeItem('currentUser');
     this.currentUserSubject.next(null);
+  }
+
+  getMe(): Observable<Personal> {
+    return this.http.get<Personal>('/api/users/me');
   }
 }

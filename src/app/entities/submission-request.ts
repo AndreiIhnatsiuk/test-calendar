@@ -1,6 +1,6 @@
 export class SubmissionRequest {
-  private taskId: number;
-  private solution: string;
+  taskId: number;
+  solution: string;
 
   constructor(taskId: number, solution: string) {
     this.taskId = taskId;

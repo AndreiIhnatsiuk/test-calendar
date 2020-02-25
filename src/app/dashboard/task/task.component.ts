@@ -12,6 +12,7 @@ import {SubmissionComponent} from '../submission/submission.component';
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-task',
@@ -36,7 +37,8 @@ export class TaskComponent implements OnInit {
               private taskService: TaskService,
               private submissionService: SubmissionService,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private gtag: Gtag) {
   }
 
   ngOnInit() {
@@ -56,7 +58,15 @@ export class TaskComponent implements OnInit {
   send() {
     this.sending = true;
     const submission = new SubmissionRequest(this.taskId, this.solution);
+    this.gtag.event('sending', {
+      event_category: 'submission',
+      event_label: this.taskId.toString()
+    });
     this.submissionService.postSubmission(submission).subscribe(() => {
+      this.gtag.event('sent', {
+        event_category: 'submission',
+        event_label: this.taskId.toString()
+      });
       this.sending = false;
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 5000
