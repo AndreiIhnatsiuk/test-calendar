@@ -32,3 +32,33 @@ mat-sidenav-content {
 .accepted {
   color: lightgreen;
 }
+
+@media screen and (max-width: 992px) {
+  mat-sidenav-container {
+    position: relative;
+    top: 0;
+  }
+
+  mat-sidenav {
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  mat-sidenav-content {
+    margin: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+    clear: both;
+    padding: 16px;
+  }
+
+  .nav-topics, .nav-tasks {
+    max-width: 300px;
+    min-width: 250px;
+  }
+
+  .nav-tasks {
+    float: right;
+  }
+}

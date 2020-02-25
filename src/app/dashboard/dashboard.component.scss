@@ -1,3 +1,10 @@
 .active-button {
   color: lightgrey;
 }
+
+@media screen and (max-width: 992px) {
+  .warning {
+    padding: 16px 16px;
+    display: block !important;
+  }
+}

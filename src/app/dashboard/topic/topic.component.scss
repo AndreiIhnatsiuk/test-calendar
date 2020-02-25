@@ -18,7 +18,17 @@
   margin-bottom: 10px;
 }
 
+code {
+  padding: 5px;
+}
+
 code, pre {
   background-color: #fff;
-  padding: 4px;
+}
+
+pre {
+  padding: 10px;
+  code {
+    padding: 0;
+  }
 }
