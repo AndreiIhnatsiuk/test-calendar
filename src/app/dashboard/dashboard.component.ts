@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.authService.getMe().subscribe(personal => {
       this.personal = personal;
-      this.gtag.config({user_id: personal.analyticsId});
+      this.gtag.setUserId(personal.analyticsId);
       this.gtag.event('set', {
         event_category: 'userId'
       });

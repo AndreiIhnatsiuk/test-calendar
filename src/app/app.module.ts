@@ -19,7 +19,7 @@ import {GtagModule} from 'angular-gtag';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    GtagModule.forRoot({ trackingId: 'UA-138130610-3', trackPageviews: true, debug: true })
+    GtagModule.forRoot({ trackingId: 'UA-138130610-3', trackPageviews: true })
   ],
   providers: [
     {
