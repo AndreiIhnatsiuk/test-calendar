@@ -1,8 +1,9 @@
 <div class="task" *ngIf="task">
   <div class="content" [innerHTML]="task.content | marked"></div>
   <div class="tests" *ngIf="task.tests.length">
-    <h2>Примеры</h2>
-    <div class="test" *ngFor="let test of task.tests">
+    <h2>Тесты</h2>
+    <div class="test" *ngFor="let test of task.tests, let i = index">
+      <p *ngIf="task.tests.length > 1"><b>Тест {{i + 1}}</b></p>
       <i>Входные данные</i>
       <pre class="data">{{test.input}}</pre>
       <i>Выходные данные</i>
@@ -35,7 +36,7 @@
 
         <ng-container matColumnDef="maxExecutionTime">
           <th mat-header-cell *matHeaderCellDef>Время выполнения</th>
-          <td mat-cell *matCellDef="let element">{{element.maxExecutionTime}}</td>
+          <td mat-cell *matCellDef="let element">{{element.maxExecutionTime}} мс</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
