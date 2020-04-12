@@ -21,7 +21,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AceModule} from 'ngx-ace-wrapper';
 import {ACE_CONFIG} from 'ngx-ace-wrapper';
 import {AceConfigInterface} from 'ngx-ace-wrapper';
-import { IntroComponent } from './intro/intro.component';
+import {IntroComponent} from './intro/intro.component';
+import {MatInputModule} from '@angular/material/input';
+import {NgxMaskModule} from 'ngx-mask';
+
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -97,7 +100,9 @@ const routes: Routes = [
     MatSnackBarModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    AceModule
+    AceModule,
+    MatInputModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [
     {

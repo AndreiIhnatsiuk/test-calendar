@@ -3,11 +3,11 @@
     <h1>
       Основной курс
     </h1>
-    <form class="login-form" *ngIf="courses && courses.length >= 1">
+    <form class="login-form" *ngIf="personal && courses && courses.length >= 1">
       <div>
         <p><b>Внимание!!! Если Вы только начинаете учить программирование или неуверенны в своих силах пройдите полностью <a routerLink="/dashboard/beginner">курс для начинающих</a></b></p>
       </div>
-      <div class>
+      <div>
         <p><b>Старт</b>: {{courses[0].startDate | date:'fullDate'}} at 19:00</p>
         <p><b>Место</b>: Skype</p>
       </div>
@@ -22,7 +22,26 @@
         </ul>
       </div>
 
-      <div *ngIf="isEnroll === false">
+      <div *ngIf="isEnroll === false && !personal.phone">
+        <div>
+          <hr>
+          <p><b>Для записи на курс необходимо указать свой номер телефона.</b></p>
+          <mat-form-field class="full-width">
+            <input matInput
+                   name="phone"
+                   placeholder="Телефон"
+                   [(ngModel)]="phone"
+                   prefix="+375 "
+                   mask="(00) 000-00-00"
+                   [showMaskTyped]="true">
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" *ngIf="!sending" (click)="enrollWithPhone()" [disabled]="!phone || phone.length < 9">Записаться</button>
+        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+      </div>
+
+      <div *ngIf="isEnroll === false && personal.phone">
         <button mat-raised-button color="primary" *ngIf="!sending" (click)="enroll()">Записаться</button>
         <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
       </div>

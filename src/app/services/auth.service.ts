@@ -66,4 +66,8 @@ export class AuthService {
   getMe(): Observable<Personal> {
     return this.http.get<Personal>('/api/users/me');
   }
+
+  updatePhone(phone: String): Observable<any> {
+    return this.http.patch('/api/users/me', {phone: phone});
+  }
 }

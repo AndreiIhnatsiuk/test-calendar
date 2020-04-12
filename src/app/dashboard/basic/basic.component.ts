@@ -6,6 +6,9 @@ import {CourseRegistration} from '../../entities/course-registration';
 import {Intro} from '../../entities/intro';
 import {IntroService} from '../../services/intro.service';
 import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {Personal} from '../../entities/personal';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-basic',
@@ -19,10 +22,14 @@ export class BasicComponent implements OnInit {
   isEnroll: boolean;
   intros: Array<Intro>;
   loading: boolean;
+  personal: Personal;
+  phone: string;
 
   constructor(private courseService: CourseService,
               private courseRegistrationService: CourseRegistrationService,
               private introService: IntroService,
+              private authService: AuthService,
+              private snackBar: MatSnackBar,
               private router: Router) {
     this.sending = false;
     this.intros = [];
@@ -36,6 +43,7 @@ export class BasicComponent implements OnInit {
         this.updateStatus(courses[0].id);
       }
     });
+    this.authService.getMe().subscribe(personal => this.personal = personal);
   }
 
   private updateStatus(courseId: number) {
@@ -60,8 +68,28 @@ export class BasicComponent implements OnInit {
     this.courseRegistrationService.registration(this.courses[0].id).subscribe(() => {
       this.updateStatus(this.courses[0].id);
       this.sending = false;
-    }, () => {
+    }, error => {
       this.sending = false;
+      this.snackBar.open(error.error.message, undefined, {
+        duration: 5000
+      });
+    });
+  }
+
+  enrollWithPhone() {
+    this.sending = true;
+    this.authService.updatePhone('+375' + this.phone).subscribe(() => {
+      this.authService.getMe().subscribe(personal => this.personal = personal);
+      this.enroll();
+    }, error => {
+      this.sending = false;
+      let message = error.error.message;
+      if (message === 'Ошибка. Проверьте введенные данные.') {
+        message = 'Телефон должен буть в формате: +375 25 xxx-xx-xx, +375 29 xxx-xx-xx, +375 33 xxx-xx-xx или +375 44 xxx-xx-xx';
+      }
+      this.snackBar.open(message, undefined, {
+        duration: 10000
+      });
     });
   }
 
