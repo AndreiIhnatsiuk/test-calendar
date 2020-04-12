@@ -5,7 +5,8 @@ import {FullTask} from '../../entities/full-task';
 import {Submission} from '../../entities/submission';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {SubmissionComponent} from '../submission/submission.component';
 
