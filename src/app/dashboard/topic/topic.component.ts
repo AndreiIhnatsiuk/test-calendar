@@ -12,6 +12,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 })
 export class TopicComponent implements OnInit {
   topic: FullTopic;
+  safeVideoUrl: Map<string, SafeUrl>;
 
   constructor(private route: ActivatedRoute,
               private topicService: TopicService,
@@ -21,7 +22,14 @@ export class TopicComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       const topicId = +map.get('topicId');
-      this.topicService.getTopicById(topicId).subscribe(fullTopic => this.topic = fullTopic);
+      this.topicService.getTopicById(topicId).subscribe(fullTopic => {
+        this.topic = fullTopic;
+        // https://github.com/ionic-team/ionic-v3/issues/605
+        const videos = fullTopic.parts
+          .filter(x => x.youtubeId)
+          .map(x => [x.youtubeId, this.generateYoutubeLink(x.youtubeId)] as [string, SafeUrl]);
+        this.safeVideoUrl = new Map(videos);
+      });
     });
   }
 
