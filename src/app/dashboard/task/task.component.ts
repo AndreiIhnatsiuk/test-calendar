@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {FullTask} from '../../entities/full-task';
@@ -14,6 +14,7 @@ import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
+import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 
 @Component({
   selector: 'app-task',
@@ -37,6 +38,7 @@ export class TaskComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private submissionService: SubmissionService,
+              private acceptedSubmissionService: AcceptedSubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private gtag: Gtag) {
@@ -52,7 +54,7 @@ export class TaskComponent implements OnInit {
           ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
       }
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
-      this.updateSubmission(this);
+      this.updateSubmission(this, true);
     });
   }
 
@@ -81,7 +83,7 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  private updateSubmission(self: TaskComponent) {
+  private updateSubmission(self: TaskComponent, first?: boolean) {
     self.running = true;
     self.submissionService.getSubmissionsByTaskId(self.taskId, this.startDate, this.endDate).subscribe(submissions => {
       self.submissions = submissions;
@@ -95,6 +97,8 @@ export class TaskComponent implements OnInit {
         setTimeout(() => {
           self.updateSubmission(self);
         }, 2500);
+      } else if (first === undefined) {
+        self.acceptedSubmissionService.update(self.taskId);
       }
     });
   }

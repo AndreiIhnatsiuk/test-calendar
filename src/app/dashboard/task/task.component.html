@@ -1,9 +1,9 @@
 <div class="task" *ngIf="task">
   <div class="content" [innerHTML]="task.content | marked"></div>
   <div class="tests" *ngIf="task.tests.length">
-    <h2>Тесты</h2>
+    <h2>Примеры</h2>
     <div class="test" *ngFor="let test of task.tests, let i = index">
-      <p *ngIf="task.tests.length > 1"><b>Тест {{i + 1}}</b></p>
+      <p *ngIf="task.tests.length > 1"><b>Пример {{i + 1}}</b></p>
       <i>Входные данные</i>
       <pre class="data">{{test.input}}</pre>
       <i>Выходные данные</i>
