@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {FullTask} from '../../entities/full-task';
@@ -61,10 +61,6 @@ export class TaskComponent implements OnInit {
   send() {
     this.sending = true;
     const submission = new SubmissionRequest(this.taskId, this.solution);
-    this.gtag.event('sending', {
-      event_category: 'submission',
-      event_label: this.taskId.toString()
-    });
     this.submissionService.postSubmission(submission).subscribe(() => {
       this.gtag.event('sent', {
         event_category: 'submission',
@@ -76,6 +72,10 @@ export class TaskComponent implements OnInit {
       });
       this.updateSubmission(this);
     }, error => {
+      this.gtag.event('sending-error', {
+        event_category: 'submission',
+        event_label: this.taskId.toString()
+      });
       this.sending = false;
       this.snackBar.open(error.error.message, undefined, {
         duration: 5000
