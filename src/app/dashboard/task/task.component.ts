@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {FullTask} from '../../entities/full-task';
@@ -9,12 +9,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {SubmissionComponent} from '../submission/submission.component';
+import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
+import {AceComponent} from 'ngx-ace-wrapper';
 
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
-import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {StoredSolution} from '../../entities/stored-solution';
 
 @Component({
   selector: 'app-task',
@@ -25,12 +29,15 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
 export class TaskComponent implements OnInit {
   @Input() startDate: Date;
   @Input() endDate: Date;
+  @ViewChild(AceComponent, { static: false }) ace?: AceComponent;
 
   taskId: number;
   displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
   task: FullTask;
   submissions: Array<Submission>;
   solution: string;
+  editSubject: Subject<string>;
+  storedSolution: StoredSolution;
 
   sending = false;
   running: boolean;
@@ -42,20 +49,45 @@ export class TaskComponent implements OnInit {
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private gtag: Gtag) {
+    this.editSubject = new Subject<string>();
+    this.editSubject
+      .pipe(debounceTime(1000))
+      .subscribe(solution => {
+        const storedSolution: StoredSolution = {
+          taskId: this.taskId,
+          solution: solution
+        };
+        submissionService.storeSolution(storedSolution);
+    });
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.taskId = +map.get('taskId');
-      if (this.taskId <= 2) {
-        this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
-      } else {
-        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
-          ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+      this.taskService.getTaskById(this.taskId).subscribe(fullTask => {
+        this.task = fullTask;
+        if (this.storedSolution == null || !this.storedSolution.solution) {
+          this.initDefaultSolution();
+        }
+      });
+      if (!this.endDate) {
+        this.storedSolution = this.submissionService.getSolution(this.taskId);
+        if (this.storedSolution) {
+          this.solution = this.storedSolution.solution;
+        }
       }
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
       this.updateSubmission(this, true);
     });
+  }
+
+  initDefaultSolution() {
+    if (this.task.tests && this.task.tests.length && this.task.tests[0].input) {
+      this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
+        ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+    } else {
+      this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+    }
   }
 
   send() {
@@ -87,12 +119,7 @@ export class TaskComponent implements OnInit {
     self.running = true;
     self.submissionService.getSubmissionsByTaskId(self.taskId, this.startDate, this.endDate).subscribe(submissions => {
       self.submissions = submissions;
-      self.running = submissions
-        .filter(submission => {
-          const status = SubmissionStatus[submission.status];
-          return status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING;
-        })
-        .length > 0;
+      self.running = submissions.findIndex(self.isRunning) !== -1;
       if (this.running) {
         setTimeout(() => {
           self.updateSubmission(self);
@@ -126,4 +153,5 @@ export class TaskComponent implements OnInit {
     }
     return this.endDate.getTime() - new Date().getTime() < 0;
   }
+
 }

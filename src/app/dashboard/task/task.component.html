@@ -14,7 +14,9 @@
     <div class="send">
       <h2>Отправить решение</h2>
       <div class="ace-container">
-        <ace mode="java" theme="github" [(value)]="solution"></ace>
+        <ace mode="java" theme="github"
+             [(value)]="solution"
+             (valueChange)="editSubject.next($event)"></ace>
       </div>
       <button mat-raised-button color="primary" (click)="send()" [disabled]="isSendDisabled()" *ngIf="!(sending || running)">Отправить</button>
       <mat-spinner *ngIf="(sending || running)" diameter="35"></mat-spinner>
