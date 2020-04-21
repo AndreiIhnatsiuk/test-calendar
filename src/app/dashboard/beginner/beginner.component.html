@@ -1,7 +1,7 @@
 <mat-sidenav-container>
   <mat-sidenav class="nav-topics" mode="side" opened disableClose>
     <mat-nav-list *ngFor="let topic of topics">
-      <a mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}}</a>
+      <a mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}} [{{getAccepted(topic.id)}} / {{getTotal(topic.id)}}]</a>
     </mat-nav-list>
   </mat-sidenav>
 

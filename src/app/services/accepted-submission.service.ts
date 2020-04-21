@@ -36,4 +36,14 @@ export class AcceptedSubmissionService {
       return EMPTY;
     }
   }
+
+  public getAcceptedByTopics(): Observable<Map<number, number>> {
+    const url = '/api/accepted-tasks?groupBy=topics';
+    return concat(
+      this.http.get<Map<number, number>>(url),
+      this.updateSubject.pipe(
+        switchMap(() => this.http.get<Map<number, number>>(url))
+      )
+    ).pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
+  }
 }
