@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {FullTask} from '../../entities/full-task';
@@ -16,7 +16,7 @@ import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {StoredSolution} from '../../entities/stored-solution';
 
@@ -26,7 +26,7 @@ import {StoredSolution} from '../../entities/stored-solution';
   styleUrls: ['./task.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, OnDestroy {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @ViewChild(AceComponent, { static: false }) ace?: AceComponent;
@@ -38,6 +38,7 @@ export class TaskComponent implements OnInit {
   solution: string;
   editSubject: Subject<string>;
   storedSolution: StoredSolution;
+  submissionsSubscription: Subscription;
 
   sending = false;
   running: boolean;
@@ -77,8 +78,22 @@ export class TaskComponent implements OnInit {
         }
       }
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
-      this.updateSubmission(this, true);
+      if (this.submissionsSubscription) {
+        this.submissionsSubscription.unsubscribe();
+      }
+      this.submissionsSubscription = this.submissionService
+        .getSubmissionsByTaskId(this.taskId, this.startDate, this.endDate)
+        .subscribe(submissions => {
+          this.submissions = submissions;
+          this.running = submissions.findIndex(x => this.isRunning(x)) !== -1;
+        });
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.submissionsSubscription) {
+      this.submissionsSubscription.unsubscribe();
+    }
   }
 
   initDefaultSolution() {
@@ -99,10 +114,10 @@ export class TaskComponent implements OnInit {
         event_label: this.taskId.toString()
       });
       this.sending = false;
+      this.running = true;
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 5000
       });
-      this.updateSubmission(this);
     }, error => {
       this.gtag.event('sending-error', {
         event_category: 'submission',
@@ -115,24 +130,8 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  private updateSubmission(self: TaskComponent, first?: boolean) {
-    self.running = true;
-    self.submissionService.getSubmissionsByTaskId(self.taskId, this.startDate, this.endDate).subscribe(submissions => {
-      self.submissions = submissions;
-      self.running = submissions.findIndex(self.isRunning) !== -1;
-      if (this.running) {
-        setTimeout(() => {
-          self.updateSubmission(self);
-        }, 2500);
-      } else if (first === undefined) {
-        self.acceptedSubmissionService.update(self.taskId);
-      }
-    });
-  }
-
   isRunning(submission: Submission): boolean {
-    const status = SubmissionStatus[submission.status];
-    return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+    return this.submissionService.isRunning(submission);
   }
 
   showMore(submission: Submission): boolean {
