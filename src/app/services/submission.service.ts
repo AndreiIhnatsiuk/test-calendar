@@ -56,8 +56,8 @@ export class SubmissionService {
     return this.http.get<FullSubmission>('/api/submissions/' + id);
   }
 
-  public postSubmission(submissionRequest: SubmissionRequest): Observable<any> {
-    return this.http.post('/api/submissions', submissionRequest)
+  public postSubmission(submissionRequest: SubmissionRequest): Observable<Submission> {
+    return this.http.post<Submission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.running.add(submissionRequest.taskId)));
   }
 

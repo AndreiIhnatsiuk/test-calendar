@@ -53,13 +53,7 @@ export class TaskComponent implements OnInit, OnDestroy {
     this.editSubject = new Subject<string>();
     this.editSubject
       .pipe(debounceTime(1000))
-      .subscribe(solution => {
-        const storedSolution: StoredSolution = {
-          taskId: this.taskId,
-          solution: solution
-        };
-        submissionService.storeSolution(storedSolution);
-    });
+      .subscribe(solution => this.storeSolution(solution));
   }
 
   ngOnInit() {
@@ -104,10 +98,19 @@ export class TaskComponent implements OnInit, OnDestroy {
     }
   }
 
+  storeSolution(solution: string, submissionId?: string) {
+    const storedSolution: StoredSolution = {
+      taskId: this.taskId,
+      solution: solution,
+      submissionId: submissionId
+    };
+    this.submissionService.storeSolution(storedSolution);
+  }
+
   send() {
     this.sending = true;
     const submission = new SubmissionRequest(this.taskId, this.solution);
-    this.submissionService.postSubmission(submission).subscribe(() => {
+    this.submissionService.postSubmission(submission).subscribe(added => {
       this.gtag.event('sent', {
         event_category: 'submission',
         event_label: this.taskId.toString()
@@ -117,6 +120,10 @@ export class TaskComponent implements OnInit, OnDestroy {
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 5000
       });
+      this.submissions = [added, ...this.submissions];
+      if (this.solution === submission.solution) {
+        this.storeSolution(this.solution, added.id);
+      }
     }, error => {
       this.gtag.event('sending-error', {
         event_category: 'submission',
