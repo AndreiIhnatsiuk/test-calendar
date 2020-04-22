@@ -77,7 +77,6 @@ export class TaskComponent implements OnInit, OnDestroy {
           this.solution = this.storedSolution.solution;
         }
       }
-      this.taskService.getTaskById(this.taskId).subscribe(fullTask => this.task = fullTask);
       if (this.submissionsSubscription) {
         this.submissionsSubscription.unsubscribe();
       }
