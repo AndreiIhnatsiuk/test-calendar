@@ -120,6 +120,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   send() {
     this.sending = true;
+    this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new SubmissionRequest(this.taskId, this.solution);
     this.submissionService.postSubmission(submission).subscribe(added => {
       this.gtag.event('sent', {
@@ -183,7 +184,6 @@ export class TaskComponent implements OnInit, OnDestroy {
       });
     }
 
-    const session = this.ace.directiveRef.ace().getSession();
-    session.setAnnotations(annotations);
+    this.ace.directiveRef.ace().getSession().setAnnotations(annotations);
   }
 }
