@@ -79,6 +79,13 @@ export class TaskComponent implements OnInit, OnDestroy {
         .subscribe(submissions => {
           this.submissions = submissions;
           this.running = submissions.findIndex(x => this.isRunning(x)) !== -1;
+          if (this.storedSolution && this.storedSolution.submissionId) {
+            const index = submissions.findIndex(x => x.id === this.storedSolution.submissionId);
+            if (index !== -1 && SubmissionStatus[this.submissions[index].status] === SubmissionStatus.COMPILATION_ERROR) {
+              this.submissionService.getSubmissionById(submissions[index].id)
+                .subscribe(fullSubmission => this.parseErrors(fullSubmission.errorString));
+            }
+          }
         });
     });
   }
@@ -99,12 +106,16 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   storeSolution(solution: string, submissionId?: string) {
-    const storedSolution: StoredSolution = {
-      taskId: this.taskId,
-      solution: solution,
-      submissionId: submissionId
-    };
-    this.submissionService.storeSolution(storedSolution);
+    const old = submissionId ? null : this.submissionService.getSolution(this.taskId);
+    if (!old || old.taskId !== this.taskId || old.solution !== solution) {
+      const storedSolution: StoredSolution = {
+        taskId: this.taskId,
+        solution: solution,
+        submissionId: submissionId
+      };
+      this.storedSolution = storedSolution;
+      this.submissionService.storeSolution(storedSolution);
+    }
   }
 
   send() {
@@ -159,4 +170,20 @@ export class TaskComponent implements OnInit, OnDestroy {
     return this.endDate.getTime() - new Date().getTime() < 0;
   }
 
+  parseErrors(out: string): void {
+    const errors = out.split(/^.*\.java:(\d+): error: /gm);
+    console.log(errors);
+    const annotations = [];
+    for (let i = 1; i < errors.length; i += 2) {
+      annotations.push({
+        row: +errors[i] - 1,
+        column: 0,
+        text: errors[i + 1].split(/^\d+ errors?/gm)[0],
+        type: 'error'
+      });
+    }
+
+    const session = this.ace.directiveRef.ace().getSession();
+    session.setAnnotations(annotations);
+  }
 }

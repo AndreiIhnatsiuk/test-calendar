@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {EMPTY, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Task} from '../entities/task';
 import {FullTask} from '../entities/full-task';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class TaskService {
