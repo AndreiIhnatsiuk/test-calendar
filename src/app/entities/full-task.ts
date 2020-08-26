@@ -1,4 +1,5 @@
 import {Test} from './test';
+import {Method} from './method';
 
 export interface FullTask {
   id: number;
@@ -6,4 +7,5 @@ export interface FullTask {
   content: string;
   totalTests: string;
   tests: Array<Test>;
+  method: Method;
 }

@@ -5,8 +5,8 @@ import {FullTask} from '../../entities/full-task';
 import {Submission} from '../../entities/submission';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {SubmissionComponent} from '../submission/submission.component';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
@@ -29,7 +29,7 @@ import {StoredSolution} from '../../entities/stored-solution';
 export class TaskComponent implements OnInit, OnDestroy {
   @Input() startDate: Date;
   @Input() endDate: Date;
-  @ViewChild(AceComponent, { static: false }) ace?: AceComponent;
+  @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
 
   taskId: number;
   displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
@@ -98,8 +98,15 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   initDefaultSolution() {
     if (this.task.tests && this.task.tests.length && this.task.tests[0].input) {
-      this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
-        ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+      if (this.task.method.resultIndex === -1 &&
+        this.task.method.returnType === 'void' &&
+        this.task.method.name === 'main' &&
+        this.task.method.arguments[0] === 'string[]') {
+        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
+          ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+      } else {
+        this.solution = 'public class Task' + this.taskId + ' {\n    \n}\n';
+      }
     } else {
       this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
     }
