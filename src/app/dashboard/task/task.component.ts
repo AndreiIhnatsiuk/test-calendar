@@ -101,7 +101,7 @@ export class TaskComponent implements OnInit, OnDestroy {
       if (this.task.method.resultIndex === -1 &&
         this.task.method.returnType === 'void' &&
         this.task.method.name === 'main' &&
-        this.task.method.arguments[0] === 'string[]') {
+        this.task.method.arguments[0] === 'String[]') {
         this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
           ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
       } else {
