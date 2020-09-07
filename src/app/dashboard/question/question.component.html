@@ -1,0 +1,36 @@
+<div class="task" *ngIf="question">
+  <div class="content" [innerHTML]="question.text | marked"></div>
+  <div>
+    <ng-template #oneAnswer>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        [(ngModel)]="selectedOption">
+        <mat-radio-button
+          [color]="'primary'"
+          class="example-radio-button"
+          *ngFor="let answer of question.answers"
+          [value]="answer.id">
+          {{answer.text}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </ng-template>
+    <div *ngIf="multiple; else oneAnswer">
+      <mat-selection-list
+        [(ngModel)]="selectedOptions"
+        (ngModelChange)="onNgModelChange($event)">
+        <mat-list-option
+          [color]="'primary'"
+          [checkboxPosition]="'before'"
+          *ngFor="let answer of question.answers"
+          [value]="answer.id">
+          {{answer.text}}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </div>
+  <div>
+    <button mat-raised-button color="primary" (click)="send()">{{buttonText}}</button>
+    <p class="answers">{{rightAnswer}}</p>
+  </div>
+</div>

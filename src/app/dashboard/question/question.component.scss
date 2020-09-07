@@ -1,0 +1,23 @@
+mat-list-option {
+  margin: 10px;
+}
+
+mat-list-option[aria-selected="true"] {
+}
+
+.answers {
+  position: center;
+  color: #673ab7;
+  font-size: 24px;
+  margin-top: 2%;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.example-radio-button {
+  margin: 5px;
+}

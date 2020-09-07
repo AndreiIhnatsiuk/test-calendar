@@ -5,17 +5,28 @@
     </mat-nav-list>
   </mat-sidenav>
 
+
   <mat-sidenav class="nav-tasks" mode="side" opened disableClose position="end">
+
     <mat-nav-list>
       <a mat-list-item [routerLink]="'topic/' + topicId" [class.active-list-item]="!taskId">Теория</a>
     </mat-nav-list>
+
+    <mat-nav-list *ngFor="let question of questions">
+      <a mat-list-item [routerLink]="'topic/' + topicId + '/question/' + question.id" routerLinkActive="active-list-item">
+        {{question.title}}
+      </a>
+    </mat-nav-list>
+
     <mat-nav-list *ngFor="let task of tasks">
       <a mat-list-item [routerLink]="'topic/' + topicId + '/task/' + task.id" routerLinkActive="active-list-item">
         {{task.title}}
         <span class="accepted" *ngIf="acceptedTasks.has(task.id)">&nbsp;OK</span>
       </a>
     </mat-nav-list>
+
   </mat-sidenav>
+
 
   <mat-sidenav-content>
     <router-outlet></router-outlet>
