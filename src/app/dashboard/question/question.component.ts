@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FullQuestion} from '../../entities/full-question';
 import {QuestionService} from '../../services/question.service';
-import {Personal} from '../../entities/personal';
 import {AuthService} from '../../services/auth.service';
-import {Gtag} from 'angular-gtag';
+import {UserAnswer} from '../../entities/user-answer';
 
 @Component({
   selector: 'app-question',
@@ -14,19 +13,18 @@ import {Gtag} from 'angular-gtag';
 export class QuestionComponent implements OnInit {
   questionId: number;
   question: FullQuestion;
-  selectedOptions: number[] = [];
-  multiple: boolean;
-  classTrue: boolean;
-  classFalse: boolean;
-  buttonText = 'Отправить';
-  rightAnswer = '';
-  selectedOption: number;
+  userAnswer: UserAnswer = null;
+  selectedAnswers: number[] = [];
+  disabledButton = true;
+  disabledCheckBox = false;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
               private questionService: QuestionService) {
-    this.classFalse = false;
-    this.classTrue = false;
+  }
+
+  onNgModelChange(event) {
+    this.disabledButton = this.selectedAnswers.length <= 0;
   }
 
   ngOnInit() {
@@ -34,42 +32,30 @@ export class QuestionComponent implements OnInit {
       this.questionId = +map.get('questionId');
       this.questionService.getQuestionById(this.questionId).subscribe(fullQuestion => {
         this.question = fullQuestion;
-        this.multiple = fullQuestion.multiple;
       });
-      this.questionService.getAnswerUser(this.questionId).subscribe(right => {
-        if (right !== null) {
-          if (right.right) {
-            this.rightAnswer = 'Все правильно';
-          } else {
-            this.rightAnswer = 'Неверный ответ';
-          }
-          this.buttonText = 'Попробовать снова';
+      this.questionService.getAnswerUser(this.questionId).subscribe(userAnswer => {
+        if (userAnswer !== null) {
+          this.userAnswer = userAnswer;
+          this.disabledButton = false;
+          this.disabledCheckBox = true;
         }
       });
     });
   }
 
-  onNgModelChange(event) {
-  }
-
   send() {
-    if (this.buttonText === 'Попробовать снова') {
-      this.selectedOptions = [];
-      this.selectedOption = null;
-      this.buttonText = 'Отправить';
-      this.rightAnswer = '';
-    } else if (this.selectedOptions.length > 0 || this.selectedOption !== null) {
-      if (!this.multiple) {
-        this.selectedOptions = [this.selectedOption];
-      }
+    this.disabledButton = true;
+    if (this.userAnswer !== null) {
+      this.selectedAnswers = [];
+      this.userAnswer = null;
+      this.disabledButton = true;
+      this.disabledCheckBox = false;
+    } else if (this.selectedAnswers.length > 0) {
       this.route.paramMap.subscribe(map => {
-        this.questionService.sendAnswerUser(this.questionId, this.selectedOptions).subscribe(right => {
-            if (right.right) {
-              this.rightAnswer = 'Все правильно';
-            } else {
-              this.rightAnswer = 'Неверный ответ';
-            }
-            this.buttonText = 'Попробовать снова';
+        this.questionService.sendAnswerUser(this.questionId, this.selectedAnswers).subscribe(userAnswer => {
+          this.userAnswer = userAnswer;
+          this.disabledButton = false;
+          this.disabledCheckBox = true;
         });
       });
     }
