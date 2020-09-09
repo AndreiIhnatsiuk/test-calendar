@@ -1,37 +1,20 @@
 <div class="task" *ngIf="question">
-  <div class="content" [innerHTML]="question.text | marked"></div>
-  <div>
+  <div class="question" [innerHTML]="question.text | marked"></div>
+  <ul class="answers">
+    <li *ngFor="let answer of question.answers">
+      <mat-checkbox [(ngModel)]="answer.selected"
+                    color="primary"
+                    (ngModelChange)="onSelectAnswer()">
+        <div class="answer-content" [innerHTML]="answer.text | marked"></div>
+      </mat-checkbox>
+    </li>
+  </ul>
 
-    <div>
-      <mat-selection-list
-        [(ngModel)]="selectedAnswers"
-        (ngModelChange)="onNgModelChange($event)"
-        [disabled]="disabledCheckBox">
-        <mat-list-option
-          [color]="'primary'"
-          [checkboxPosition]="'before'"
-          *ngFor="let answer of question.answers"
-          [value]="answer.id">
-          <a class="content" [innerHTML]="answer.text | marked"></a>
-        </mat-list-option>
-      </mat-selection-list>
-    </div>
-  </div>
+  <span class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
+    {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
+  </span>
 
-  <button mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">
-    <div *ngIf="userAnswer == null; else buttonAnswer">Отправить</div>
-
-  </button>
-
-  <ng-template #buttonAnswer>Попробовать снова</ng-template>
-
-  <div *ngIf="userAnswer != null">
-    <div *ngIf="userAnswer.right; else noAnswer">
-      <p class="true-answer">Все правильно</p>
-    </div>
-    <ng-template #noAnswer>
-      <p class="false-answer">Неверный ответ</p>
-    </ng-template>
-  </div>
+  <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">Отправить</button>
+  <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Попробовать снова</button>
 
 </div>

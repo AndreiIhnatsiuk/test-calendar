@@ -25,7 +25,7 @@ import {IntroComponent} from './intro/intro.component';
 import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
-import {MatRadioModule} from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -110,7 +110,7 @@ const routes: Routes = [
     AceModule,
     MatInputModule,
     NgxMaskModule.forRoot(),
-    MatRadioModule
+    MatCheckboxModule
   ],
   providers: [
     {

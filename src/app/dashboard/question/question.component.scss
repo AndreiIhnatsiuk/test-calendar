@@ -1,13 +1,26 @@
-.true-answer {
-  position: center;
+.verdict {
+  padding-right: 16px;
+  font-weight: 500;
+}
+.verdict.true {
   color: green;
-  font-size: 24px;
-  margin-top: 25px;
+}
+.verdict.false {
+  color: red;
 }
 
-.false-answer {
-  position: center;
-  color: red;
-  font-size: 24px;
-  margin-top: 25px;
+ul.answers {
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    label, .answer-content {
+      padding-left: 8px;
+      width: 100%;
+    }
+
+    .mat-checkbox-inner-container {
+      margin: 4px 0 auto 0;
+    }
+  }
 }

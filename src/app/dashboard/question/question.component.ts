@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FullQuestion} from '../../entities/full-question';
 import {QuestionService} from '../../services/question.service';
@@ -8,13 +8,13 @@ import {UserAnswer} from '../../entities/user-answer';
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  styleUrls: ['./question.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class QuestionComponent implements OnInit {
   questionId: number;
   question: FullQuestion;
   userAnswer: UserAnswer = null;
-  selectedAnswers: number[] = [];
   disabledButton = true;
   disabledCheckBox = false;
 
@@ -23,8 +23,8 @@ export class QuestionComponent implements OnInit {
               private questionService: QuestionService) {
   }
 
-  onNgModelChange(event) {
-    this.disabledButton = this.selectedAnswers.length <= 0;
+  onSelectAnswer() {
+    this.disabledButton = this.question.answers.findIndex(answer => answer.selected) === -1;
   }
 
   ngOnInit() {
@@ -45,19 +45,20 @@ export class QuestionComponent implements OnInit {
 
   send() {
     this.disabledButton = true;
-    if (this.userAnswer !== null) {
-      this.selectedAnswers = [];
-      this.userAnswer = null;
-      this.disabledButton = true;
-      this.disabledCheckBox = false;
-    } else if (this.selectedAnswers.length > 0) {
-      this.route.paramMap.subscribe(map => {
-        this.questionService.sendAnswerUser(this.questionId, this.selectedAnswers).subscribe(userAnswer => {
-          this.userAnswer = userAnswer;
-          this.disabledButton = false;
-          this.disabledCheckBox = true;
-        });
-      });
-    }
+    const selectedAnswers = this.question.answers
+      .filter(answer => answer.selected)
+      .map(answer => answer.id);
+    this.questionService.sendAnswerUser(this.questionId, selectedAnswers).subscribe(userAnswer => {
+      this.userAnswer = userAnswer;
+      this.disabledButton = false;
+      this.disabledCheckBox = true;
+    });
+  }
+
+  reset() {
+    this.userAnswer = null;
+    this.question.answers.forEach(answer => answer.selected = false);
+    this.disabledButton = true;
+    this.disabledCheckBox = false;
   }
 }
