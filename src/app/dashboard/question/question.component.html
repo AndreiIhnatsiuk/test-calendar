@@ -4,7 +4,8 @@
     <li *ngFor="let answer of question.answers">
       <mat-checkbox [(ngModel)]="answer.selected"
                     color="primary"
-                    (ngModelChange)="onSelectAnswer()">
+                    (ngModelChange)="onSelectAnswer()"
+                    [disabled]="disabledCheckBox">
         <div class="answer-content" [innerHTML]="answer.text | marked"></div>
       </mat-checkbox>
     </li>

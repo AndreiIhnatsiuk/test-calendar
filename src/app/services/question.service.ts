@@ -18,11 +18,11 @@ export class QuestionService {
     return this.http.get<FullQuestion>('/api/questions/' + id);
   }
 
-  public sendAnswerUser(id: number, answers: number[]): Observable<UserAnswer> {
-    return this.http.post<UserAnswer>('/api/questions/' + id, {answer: answers});
+  public sendAnswerUser(questionId: number, answers: number[]): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/answers/', {questionId: questionId, answer: answers});
   }
 
-  public getAnswerUser(id: number): Observable<UserAnswer> {
-    return this.http.get<UserAnswer>('/api/questions/answers?questionId=' + id);
+  public getAnswerUser(questionId: number): Observable<UserAnswer> {
+    return this.http.get<UserAnswer>('/api/answers?questionId=' + questionId);
   }
 }
