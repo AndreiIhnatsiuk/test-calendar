@@ -1,5 +1,5 @@
-<div class="task" *ngIf="question">
-  <div class="question" [innerHTML]="question.text | marked"></div>
+<div class="question" *ngIf="question">
+  <div class="question-content" [innerHTML]="question.text | marked"></div>
   <ul class="answers">
     <li *ngFor="let answer of question.answers">
       <mat-checkbox [(ngModel)]="answer.selected"

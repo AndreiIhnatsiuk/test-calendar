@@ -1,3 +1,7 @@
+.question {
+  max-width: 800px;
+}
+
 .verdict {
   padding-right: 16px;
   font-weight: 500;
@@ -13,7 +17,15 @@ ul.answers {
   list-style-type: none;
   padding: 0;
 
+  li:not(:last-child) {
+    border-bottom: 1px solid rgba(0,0,0,.20);
+  }
+
   li {
+    label {
+      padding-top: 1em;
+    }
+
     label, .answer-content {
       padding-left: 8px;
       width: 100%;
