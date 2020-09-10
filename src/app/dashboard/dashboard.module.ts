@@ -24,6 +24,8 @@ import {AceConfigInterface} from 'ngx-ace-wrapper';
 import {IntroComponent} from './intro/intro.component';
 import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
+import {QuestionComponent} from './question/question.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -54,6 +56,10 @@ const routes: Routes = [
           {
             path: 'topic/:topicId/task/:taskId',
             component: TaskComponent
+          },
+          {
+            path: 'topic/:topicId/question/:questionId',
+            component: QuestionComponent
           }
         ]
       },
@@ -82,7 +88,8 @@ const routes: Routes = [
     BeginnerComponent,
     TaskComponent,
     SubmissionComponent,
-    IntroComponent
+    IntroComponent,
+    QuestionComponent
   ],
   entryComponents: [
     SubmissionComponent
@@ -102,7 +109,8 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     AceModule,
     MatInputModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    MatCheckboxModule
   ],
   providers: [
     {

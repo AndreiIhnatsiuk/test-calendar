@@ -1,0 +1,21 @@
+<div class="question" *ngIf="question">
+  <div class="question-content" [innerHTML]="question.text | marked"></div>
+  <ul class="answers">
+    <li *ngFor="let answer of question.answers">
+      <mat-checkbox [(ngModel)]="answer.selected"
+                    color="primary"
+                    (ngModelChange)="onSelectAnswer()"
+                    [disabled]="disabledCheckBox">
+        <div class="answer-content" [innerHTML]="answer.text | marked"></div>
+      </mat-checkbox>
+    </li>
+  </ul>
+
+  <span class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
+    {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
+  </span>
+
+  <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">Отправить</button>
+  <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Попробовать снова</button>
+
+</div>

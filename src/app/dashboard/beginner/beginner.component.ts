@@ -7,6 +7,8 @@ import {TaskService} from '../../services/task.service';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
+import {Question} from '../../entities/question';
+import {QuestionService} from '../../services/question.service';
 
 @Component({
   selector: 'app-beginner',
@@ -16,9 +18,11 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
 export class BeginnerComponent implements OnInit, OnDestroy {
   topics: Array<Topic>;
   tasks: Array<Task>;
+  questions: Array<Question>;
   acceptedTasks: Set<number>;
   topicId: number;
   taskId: number;
+  questionId: number;
   acceptedTasksByTopics: Map<number, number>;
   countTasksByTopics: Map<number, number>;
   private acceptedTasksSubscription: Subscription;
@@ -26,6 +30,7 @@ export class BeginnerComponent implements OnInit, OnDestroy {
 
   constructor(private topicService: TopicService,
               private taskService: TaskService,
+              private questionService: QuestionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
               private router: Router,
               private route: ActivatedRoute) {
@@ -51,16 +56,21 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .subscribe(paramMap => {
         const topicId = +paramMap.get('topicId');
         const taskId = +paramMap.get('taskId');
+        const questionId = +paramMap.get('questionId');
         if (topicId !== this.topicId) {
           this.topicId = topicId;
           this.taskService.getTasksByTopicId(this.topicId).subscribe(tasks => {
             this.tasks = tasks;
             this.updateAccepted();
           });
+          this.questionService.getQuestionsByTopicId(this.topicId).subscribe(questions => {
+            this.questions = questions;
+          });
         } else if (taskId !== this.taskId) {
           this.updateAccepted();
         }
         this.taskId = taskId;
+        this.questionId = questionId;
       });
   }
 
