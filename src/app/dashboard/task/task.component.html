@@ -18,10 +18,22 @@
              [(value)]="solution"
              (valueChange)="editSubject.next($event)"></ace>
       </div>
-      <button mat-raised-button color="primary" (click)="send()" [disabled]="isSendDisabled()" *ngIf="!(sending || running)">Отправить</button>
+      <button mat-raised-button color="primary" (click)="send()" [disabled]="isSendDisabled()"
+              *ngIf="!(sending || running)">Отправить
+      </button>
+
+
       <mat-spinner *ngIf="(sending || running)" diameter="35"></mat-spinner>
     </div>
-    <hr>
+
+    <div *ngFor="let hint of hints">
+      <mat-card class="card" [innerHTML]="hint.text | marked"></mat-card>
+    </div>
+
+    <form class="example-form">
+      <button *ngIf="this.task.numberHints !== this.hints.length" mat-raised-button color="accent" (click)="sendHint()">Взять подсказку</button>
+      <button *ngIf="this.task.numberHints === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок</button>
+    </form>
 
     <div class="submissions" *ngIf="submissions && submissions.length">
       <table mat-table [dataSource]="submissions">
@@ -33,7 +45,8 @@
 
         <ng-container matColumnDef="wrongTest">
           <th mat-header-cell *matHeaderCellDef>Непройденный тест</th>
-          <td mat-cell *matCellDef="let element">{{element.wrongTest ? element.wrongTest + ' / ' + task.totalTests : ''}}</td>
+          <td mat-cell
+              *matCellDef="let element">{{element.wrongTest ? element.wrongTest + ' / ' + task.totalTests : ''}}</td>
         </ng-container>
 
         <ng-container matColumnDef="maxExecutionTime">

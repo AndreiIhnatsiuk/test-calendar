@@ -40,3 +40,16 @@ code {
   }
 }
 
+.card {
+  margin-bottom: 5px;
+}
+
+.example-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.example-form > * {
+  width: 100%;
+}

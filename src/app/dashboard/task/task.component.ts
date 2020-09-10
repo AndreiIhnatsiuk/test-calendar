@@ -19,6 +19,8 @@ import {Gtag} from 'angular-gtag';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {StoredSolution} from '../../entities/stored-solution';
+import {HintService} from '../../services/hint.services';
+import {Hint} from '../../entities/hint';
 
 @Component({
   selector: 'app-task',
@@ -35,6 +37,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
   task: FullTask;
   submissions: Array<Submission>;
+  hints: Array<Hint> = [];
   solution: string;
   editSubject: Subject<string>;
   storedSolution: StoredSolution;
@@ -45,6 +48,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
+              private hintService: HintService,
               private submissionService: SubmissionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
               private snackBar: MatSnackBar,
@@ -64,6 +68,9 @@ export class TaskComponent implements OnInit, OnDestroy {
         if (this.storedSolution == null || !this.storedSolution.solution) {
           this.initDefaultSolution();
         }
+      });
+      this.hintService.getAllOpenedHints(this.taskId).subscribe(hints => {
+        this.hints = hints;
       });
       if (!this.endDate) {
         this.storedSolution = this.submissionService.getSolution(this.taskId);
@@ -123,6 +130,12 @@ export class TaskComponent implements OnInit, OnDestroy {
       this.storedSolution = storedSolution;
       this.submissionService.storeSolution(storedSolution);
     }
+  }
+
+  sendHint() {
+    this.hintService.postNextHintByTaskId(this.taskId).subscribe(hint => {
+      this.hints.push(hint);
+    });
   }
 
   send() {
