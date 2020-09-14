@@ -31,8 +31,8 @@
     </div>
 
     <form class="example-form">
-      <button *ngIf="this.task.numberHints !== this.hints.length" mat-raised-button color="accent" (click)="sendHint()">Взять подсказку</button>
-      <button *ngIf="this.task.numberHints === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок</button>
+      <button *ngIf="this.task.hintsCount !== this.hints.length" mat-raised-button color="accent" (click)="sendHint()">Взять подсказку</button>
+      <button *ngIf="this.task.hintsCount === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок</button>
     </form>
 
     <div class="submissions" *ngIf="submissions && submissions.length">

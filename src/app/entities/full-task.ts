@@ -8,5 +8,5 @@ export interface FullTask {
   totalTests: string;
   tests: Array<Test>;
   method: Method;
-  numberHints: number;
+  hintsCount: number;
 }
