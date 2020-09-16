@@ -8,4 +8,5 @@ export interface FullTask {
   totalTests: string;
   tests: Array<Test>;
   method: Method;
+  hintsCount: number;
 }
