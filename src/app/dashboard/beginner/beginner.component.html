@@ -1,10 +1,10 @@
 <mat-sidenav-container>
   <mat-sidenav class="nav-topics" mode="side" opened disableClose>
     <mat-nav-list *ngFor="let topic of topics">
-      <a mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}} [{{getAccepted(topic.id)}} / {{getTotal(topic.id)}}]</a>
+      <a *ngIf="availableTopics.has(topic.id)" mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}} [{{getAccepted(topic.id)}} / {{getTotal(topic.id)}}]</a>
+      <a *ngIf="!availableTopics.has(topic.id)" mat-list-item title="Выполните задания предыдущего урока" class="lock">{{topic.title}}</a>
     </mat-nav-list>
   </mat-sidenav>
-
 
   <mat-sidenav class="nav-tasks" mode="side" opened disableClose position="end">
 

@@ -9,6 +9,7 @@ import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 import {Question} from '../../entities/question';
 import {QuestionService} from '../../services/question.service';
+import {AvailableTopicsService} from '../../services/available-topics.service';
 
 @Component({
   selector: 'app-beginner',
@@ -20,6 +21,7 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   tasks: Array<Task>;
   questions: Array<Question>;
   acceptedTasks: Set<number>;
+  availableTopics: Set<number>;
   topicId: number;
   taskId: number;
   questionId: number;
@@ -27,14 +29,17 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   countTasksByTopics: Map<number, number>;
   private acceptedTasksSubscription: Subscription;
   private acceptedTasksByTopicsSubscription: Subscription;
+  private availableTopicsSubscription: Subscription;
 
   constructor(private topicService: TopicService,
               private taskService: TaskService,
               private questionService: QuestionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
+              private availableTopicsService: AvailableTopicsService,
               private router: Router,
               private route: ActivatedRoute) {
     this.acceptedTasks = new Set<number>();
+    this.availableTopics = new Set<number>();
   }
 
   ngOnInit() {
@@ -44,6 +49,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .subscribe(accepted => this.acceptedTasksByTopics = accepted);
     this.taskService.countByTopic()
       .subscribe(number => this.countTasksByTopics = number);
+    this.availableTopicsSubscription = this.availableTopicsService.getAvailableTopics()
+      .subscribe(availableTopics => this.availableTopics = new Set(availableTopics));
 
     concat(
       of(this.route.firstChild),
@@ -65,8 +72,9 @@ export class BeginnerComponent implements OnInit, OnDestroy {
           });
           this.questionService.getQuestionsByTopicId(this.topicId).subscribe(questions => {
             this.questions = questions;
+            this.updateAccepted();
           });
-        } else if (taskId !== this.taskId) {
+        } else if (taskId !== this.taskId || questionId !== this.questionId) {
           this.updateAccepted();
         }
         this.taskId = taskId;
@@ -81,6 +89,9 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     if (this.acceptedTasksByTopicsSubscription) {
       this.acceptedTasksByTopicsSubscription.unsubscribe();
     }
+    if (this.availableTopicsSubscription) {
+      this.availableTopicsSubscription.unsubscribe();
+    }
   }
 
   private updateAccepted() {
@@ -92,6 +103,12 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       this.acceptedTasksSubscription = this.acceptedSubmissionService.getAccepted(this.tasks.map(x => x.id))
         .subscribe(accepted => this.acceptedTasks = accepted);
     }
+    if (this.availableTopicsSubscription) {
+      this.availableTopicsSubscription.unsubscribe();
+      this.availableTopicsSubscription = undefined;
+    }
+    this.availableTopicsSubscription = this.availableTopicsService.getAvailableTopics()
+      .subscribe(availableTopics => this.availableTopics = new Set(availableTopics));
   }
 
   public getAccepted(id: number) {

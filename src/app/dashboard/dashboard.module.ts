@@ -26,6 +26,7 @@ import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -110,7 +111,7 @@ const routes: Routes = [
     AceModule,
     MatInputModule,
     NgxMaskModule.forRoot(),
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   providers: [
     {
