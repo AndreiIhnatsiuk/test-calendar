@@ -9,11 +9,11 @@ export class TopicService {
   constructor(private http: HttpClient) {
   }
 
-  public getTopics(): Observable<Array<Topic>> {
-    return this.http.get<Array<Topic>>('/api/topics');
-  }
-
   public getTopicById(id: number): Observable<FullTopic> {
     return this.http.get<FullTopic>('/api/topics/' + id);
+  }
+
+  public getTopics(): Observable<Array<Topic>> {
+    return this.http.get<Array<Topic>>('/api/chapters');
   }
 }

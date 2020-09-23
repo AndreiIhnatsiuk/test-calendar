@@ -1,4 +1,5 @@
 export interface Topic {
   id: number;
-  title: string;
+  name: string;
+  topics?: Array<Topic>;
 }

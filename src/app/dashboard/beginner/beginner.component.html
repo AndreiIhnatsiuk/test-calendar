@@ -1,10 +1,20 @@
 <mat-sidenav-container>
   <mat-sidenav class="nav-topics" mode="side" opened disableClose>
-    <mat-nav-list *ngFor="let topic of topics">
-      <a mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}} [{{getAccepted(topic.id)}} / {{getTotal(topic.id)}}]</a>
-    </mat-nav-list>
-  </mat-sidenav>
 
+    <mat-accordion>
+      <mat-expansion-panel hideToggle *ngFor="let topic of topics">
+        <mat-expansion-panel-header >
+          <mat-panel-title>
+            {{topic.name}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list *ngFor="let subtopic of topic.topics">
+          <a mat-list-item [routerLink]="'topic/' + subtopic.id" routerLinkActive="active-list-item">{{subtopic.name}} [{{getAccepted(subtopic.id)}} / {{getTotal(subtopic.id)}}]</a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </mat-sidenav>
 
   <mat-sidenav class="nav-tasks" mode="side" opened disableClose position="end">
 
