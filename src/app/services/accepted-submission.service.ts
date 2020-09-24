@@ -37,8 +37,8 @@ export class AcceptedSubmissionService {
     }
   }
 
-  public getAcceptedByTopics(): Observable<Map<number, number>> {
-    const url = '/api/accepted-tasks?groupBy=topics';
+  public getAcceptedBySubtopics(): Observable<Map<number, number>> {
+    const url = '/api/accepted-tasks?groupBy=subtopics';
     return concat(
       this.http.get<Map<number, number>>(url),
       this.updateSubject.pipe(
