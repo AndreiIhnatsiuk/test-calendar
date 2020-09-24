@@ -1,6 +1,6 @@
 import {Subtopic} from './subtopic';
 
-export interface Chapter {
+export interface Topic {
   id: number;
   name: string;
   subtopics: Array<Subtopic>;

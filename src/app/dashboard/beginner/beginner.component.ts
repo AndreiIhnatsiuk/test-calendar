@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SubtopicService} from '../../services/subtopic.service';
-import {Chapter} from '../../entities/chapter';
+import {Topic} from '../../entities/topic';
 import {Task} from '../../entities/task';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
@@ -16,7 +16,7 @@ import {QuestionService} from '../../services/question.service';
   styleUrls: ['./beginner.component.scss']
 })
 export class BeginnerComponent implements OnInit, OnDestroy {
-  subtopics: Array<Chapter>;
+  topics: Array<Topic>;
   tasks: Array<Task>;
   questions: Array<Question>;
   acceptedTasks: Set<number>;
@@ -38,8 +38,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subtopicService.getChapters()
-      .subscribe(topics => this.subtopics = topics);
+    this.subtopicService.getTopics()
+      .subscribe(topics => this.topics = topics);
     this.acceptedTasksBySubtopicsSubscription = this.acceptedSubmissionService.getAcceptedBySubtopics()
       .subscribe(accepted => this.acceptedTasksBySubtopics = accepted);
     this.taskService.countBySubtopic()

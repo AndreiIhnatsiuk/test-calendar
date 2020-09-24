@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Chapter} from '../entities/chapter';
+import {Topic} from '../entities/topic';
 import {Observable} from 'rxjs';
 import {FullSubtopic} from '../entities/full-subtopic';
 
@@ -13,7 +13,7 @@ export class SubtopicService {
     return this.http.get<FullSubtopic>('/api/subtopics/' + id);
   }
 
-  public getChapters(): Observable<Array<Chapter>> {
-    return this.http.get<Array<Chapter>>('/api/chapters');
+  public getTopics(): Observable<Array<Topic>> {
+    return this.http.get<Array<Topic>>('/api/topics');
   }
 }
