@@ -85,7 +85,7 @@ export class BasicComponent implements OnInit {
       this.sending = false;
       let message = error.error.message;
       if (message === 'Ошибка. Проверьте введенные данные.') {
-        message = 'Телефон должен буть в формате: +375 25 xxx-xx-xx, +375 29 xxx-xx-xx, +375 33 xxx-xx-xx или +375 44 xxx-xx-xx';
+        message = 'Телефон должен быть в формате: +375 25 xxx-xx-xx, +375 29 xxx-xx-xx, +375 33 xxx-xx-xx или +375 44 xxx-xx-xx';
       }
       this.snackBar.open(message, undefined, {
         duration: 10000

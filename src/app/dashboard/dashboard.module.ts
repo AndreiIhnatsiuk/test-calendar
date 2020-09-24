@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
-import {TopicComponent} from './topic/topic.component';
+import {SubtopicComponent} from './topic/subtopic.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {BasicComponent} from './basic/basic.component';
@@ -48,18 +48,18 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'topic/1'
+            redirectTo: 'subtopic/1'
           },
           {
-            path: 'topic/:topicId',
-            component: TopicComponent
+            path: 'subtopic/:subtopicId',
+            component: SubtopicComponent
           },
           {
-            path: 'topic/:topicId/task/:taskId',
+            path: 'subtopic/:subtopicId/task/:taskId',
             component: TaskComponent
           },
           {
-            path: 'topic/:topicId/question/:questionId',
+            path: 'subtopic/:subtopicId/question/:questionId',
             component: QuestionComponent
           }
         ]
@@ -83,7 +83,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardComponent,
-    TopicComponent,
+    SubtopicComponent,
     BasicComponent,
     MarkedPipe,
     BeginnerComponent,
