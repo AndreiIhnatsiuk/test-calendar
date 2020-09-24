@@ -10,16 +10,16 @@ export class TaskService {
   constructor(private http: HttpClient) {
   }
 
-  public getTasksByTopicId(topicId: number): Observable<Array<Task>> {
-    return this.http.get<Array<Task>>('/api/tasks?topicId=' + topicId);
+  public getTasksBySubtopicId(subtopicId: number): Observable<Array<Task>> {
+    return this.http.get<Array<Task>>('/api/tasks?subtopicId=' + subtopicId);
   }
 
   public getTaskById(id: number): Observable<FullTask> {
     return this.http.get<FullTask>('/api/tasks/' + id);
   }
 
-  public countByTopic(): Observable<Map<number, number>> {
-    return this.http.get('/api/tasks?groupBy=topics')
+  public countBySubtopic(): Observable<Map<number, number>> {
+    return this.http.get('/api/tasks?groupBy=subtopics')
       .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
 }

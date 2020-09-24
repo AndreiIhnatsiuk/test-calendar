@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
-import {TopicComponent} from './topic/topic.component';
+import {SubtopicComponent} from './topic/subtopic.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {BasicComponent} from './basic/basic.component';
@@ -26,6 +26,7 @@ import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -47,18 +48,18 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'topic/1'
+            redirectTo: 'subtopic/1'
           },
           {
-            path: 'topic/:topicId',
-            component: TopicComponent
+            path: 'subtopic/:subtopicId',
+            component: SubtopicComponent
           },
           {
-            path: 'topic/:topicId/task/:taskId',
+            path: 'subtopic/:subtopicId/task/:taskId',
             component: TaskComponent
           },
           {
-            path: 'topic/:topicId/question/:questionId',
+            path: 'subtopic/:subtopicId/question/:questionId',
             component: QuestionComponent
           }
         ]
@@ -82,7 +83,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardComponent,
-    TopicComponent,
+    SubtopicComponent,
     BasicComponent,
     MarkedPipe,
     BeginnerComponent,
@@ -110,7 +111,8 @@ const routes: Routes = [
     AceModule,
     MatInputModule,
     NgxMaskModule.forRoot(),
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule
   ],
   providers: [
     {

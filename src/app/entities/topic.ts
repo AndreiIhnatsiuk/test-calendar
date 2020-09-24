@@ -1,4 +1,7 @@
+import {Subtopic} from './subtopic';
+
 export interface Topic {
   id: number;
-  title: string;
+  name: string;
+  subtopics: Array<Subtopic>;
 }

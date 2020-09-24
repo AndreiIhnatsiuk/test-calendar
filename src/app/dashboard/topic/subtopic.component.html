@@ -1,6 +1,6 @@
-<div class="topic" *ngIf="topic">
-  <h1>{{topic.title}}</h1>
-  <div class="topic-part" *ngFor="let part of topic.parts">
+<div class="topic" *ngIf="subtopic">
+  <h1>{{subtopic.title}}</h1>
+  <div class="topic-part" *ngFor="let part of subtopic.parts">
     <div class="topic-part-text" *ngIf="part.text" [innerHTML]="part.text | marked"></div>
     <div class="topic-part-youtube" *ngIf="part.youtubeId">
       <iframe width="800" height="450" [src]="this.safeVideoUrl.get(part.youtubeId)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

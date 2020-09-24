@@ -1,29 +1,29 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TopicService} from '../../services/topic.service';
-import {FullTopic} from '../../entities/full-topic';
+import {SubtopicService} from '../../services/subtopic.service';
+import {FullSubtopic} from '../../entities/full-subtopic';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-topic',
-  templateUrl: './topic.component.html',
-  styleUrls: ['./topic.component.scss'],
+  templateUrl: './subtopic.component.html',
+  styleUrls: ['./subtopic.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TopicComponent implements OnInit {
-  topic: FullTopic;
+export class SubtopicComponent implements OnInit {
+  subtopic: FullSubtopic;
   safeVideoUrl: Map<string, SafeUrl>;
 
   constructor(private route: ActivatedRoute,
-              private topicService: TopicService,
+              private subtopicService: SubtopicService,
               private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
-      const topicId = +map.get('topicId');
-      this.topicService.getTopicById(topicId).subscribe(fullTopic => {
-        this.topic = fullTopic;
+      const topicId = +map.get('subtopicId');
+      this.subtopicService.getSubtopicById(topicId).subscribe(fullTopic => {
+        this.subtopic = fullTopic;
         // https://github.com/ionic-team/ionic-v3/issues/605
         const videos = fullTopic.parts
           .filter(x => x.youtubeId)

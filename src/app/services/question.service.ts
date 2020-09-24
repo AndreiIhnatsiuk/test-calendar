@@ -10,8 +10,8 @@ export class QuestionService {
   constructor(private http: HttpClient) {
   }
 
-  public getQuestionsByTopicId(topicId: number): Observable<Array<Question>> {
-    return this.http.get<Array<Question>>('/api/questions?topicId=' + topicId);
+  public getQuestionsBySubtopicId(subtopicId: number): Observable<Array<Question>> {
+    return this.http.get<Array<Question>>('/api/questions?subtopicId=' + subtopicId);
   }
 
   public getQuestionById(id: number): Observable<FullQuestion> {
