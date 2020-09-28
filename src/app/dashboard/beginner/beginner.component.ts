@@ -9,6 +9,7 @@ import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 import {Question} from '../../entities/question';
 import {QuestionService} from '../../services/question.service';
+import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 
 @Component({
   selector: 'app-beginner',
@@ -21,20 +22,24 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   questions: Array<Question>;
   acceptedTasks: Set<number>;
   subtopicId: number;
+  availableSubtopics: Set<number>;
   taskId: number;
   questionId: number;
   acceptedTasksBySubtopics: Map<number, number>;
   countTasksBySubtopics: Map<number, number>;
   private acceptedTasksSubscription: Subscription;
   private acceptedTasksBySubtopicsSubscription: Subscription;
+  private availableSubtopicsSubscription: Subscription;
 
   constructor(private subtopicService: SubtopicService,
               private taskService: TaskService,
               private questionService: QuestionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
+              private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
               private route: ActivatedRoute) {
     this.acceptedTasks = new Set<number>();
+    this.availableSubtopics = new Set<number>();
   }
 
   ngOnInit() {
@@ -44,6 +49,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .subscribe(accepted => this.acceptedTasksBySubtopics = accepted);
     this.taskService.countBySubtopic()
       .subscribe(number => this.countTasksBySubtopics = number);
+    this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableTopics()
+      .subscribe(availableTopics => this.availableSubtopics = availableTopics);
 
     concat(
       of(this.route.firstChild),
@@ -54,19 +61,20 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const topicId = +paramMap.get('subtopicId');
+        const subtopicId = +paramMap.get('subtopicId');
         const taskId = +paramMap.get('taskId');
         const questionId = +paramMap.get('questionId');
-        if (topicId !== this.subtopicId) {
-          this.subtopicId = topicId;
+        if (subtopicId !== this.subtopicId) {
+          this.subtopicId = subtopicId;
           this.taskService.getTasksBySubtopicId(this.subtopicId).subscribe(tasks => {
             this.tasks = tasks;
             this.updateAccepted();
           });
           this.questionService.getQuestionsBySubtopicId(this.subtopicId).subscribe(questions => {
             this.questions = questions;
+            this.updateAccepted();
           });
-        } else if (taskId !== this.taskId) {
+        } else if (taskId !== this.taskId || questionId !== this.questionId) {
           this.updateAccepted();
         }
         this.taskId = taskId;
@@ -80,6 +88,9 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     }
     if (this.acceptedTasksBySubtopicsSubscription) {
       this.acceptedTasksBySubtopicsSubscription.unsubscribe();
+    }
+    if (this.availableSubtopicsSubscription) {
+      this.availableSubtopicsSubscription.unsubscribe();
     }
   }
 

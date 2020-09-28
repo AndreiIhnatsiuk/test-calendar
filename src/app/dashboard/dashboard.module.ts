@@ -27,6 +27,7 @@ import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {

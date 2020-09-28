@@ -1,23 +1,27 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {concat, Observable, timer} from 'rxjs';
+import {concat, Observable, Subject, timer} from 'rxjs';
 import {Submission} from '../entities/submission';
 import {SubmissionRequest} from '../entities/submission-request';
 import {FullSubmission} from '../entities/full-submission';
 import {StoredSolution} from '../entities/stored-solution';
 import {LocalStorageService} from './local-storage.service';
 import {filter, switchMap, tap} from 'rxjs/operators';
-import {AcceptedSubmissionService} from './accepted-submission.service';
 import {SubmissionStatus} from '../entities/submission-status';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
   private running: Set<number>;
+  private changes: Subject<number>;
 
   constructor(private http: HttpClient,
-              private localStorage: LocalStorageService,
-              private acceptedSubmissionService: AcceptedSubmissionService) {
+              private localStorage: LocalStorageService) {
     this.running = new Set<number>();
+    this.changes = new Subject<number>();
+  }
+
+  public getChanges(): Observable<number> {
+    return this.changes;
   }
 
   public getSubmissionsByTaskId(taskId: number, start: Date, end: Date): Observable<Array<Submission>> {
@@ -41,7 +45,7 @@ export class SubmissionService {
       if (isRunning) {
         this.running.add(taskId);
       } else if (this.running.has(taskId)) {
-        this.acceptedSubmissionService.update(taskId);
+        this.changes.next(taskId);
         this.running.delete(taskId);
       }
     }));

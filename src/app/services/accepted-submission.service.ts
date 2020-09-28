@@ -1,19 +1,14 @@
-import {EMPTY, Observable, Subject} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {concat} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {SubmissionService} from './submission.service';
 
 @Injectable({providedIn: 'root'})
 export class AcceptedSubmissionService {
-  private updateSubject: Subject<number>;
-
-  constructor(private http: HttpClient) {
-    this.updateSubject = new Subject<number>();
-  }
-
-  update(taskId: number): void {
-    this.updateSubject.next(taskId);
+  constructor(private http: HttpClient,
+              private submissionService: SubmissionService) {
   }
 
   public getAccepted(taskIds: Array<number>, start?: Date, end?: Date): Observable<Set<number>> {
@@ -27,7 +22,7 @@ export class AcceptedSubmissionService {
       }
       return concat(
         this.http.get<Array<number>>(url),
-        this.updateSubject.pipe(
+        this.submissionService.getChanges().pipe(
           filter(taskId => taskIds.indexOf(taskId) !== -1),
           switchMap(() => this.http.get<Array<number>>(url))
         )
@@ -41,7 +36,7 @@ export class AcceptedSubmissionService {
     const url = '/api/accepted-tasks?groupBy=subtopics';
     return concat(
       this.http.get<Map<number, number>>(url),
-      this.updateSubject.pipe(
+      this.submissionService.getChanges().pipe(
         switchMap(() => this.http.get<Map<number, number>>(url))
       )
     ).pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
