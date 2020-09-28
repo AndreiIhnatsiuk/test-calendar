@@ -9,7 +9,7 @@ import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 import {Question} from '../../entities/question';
 import {QuestionService} from '../../services/question.service';
-import {AvailableTopicsService} from '../../services/available-topics.service';
+import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 
 @Component({
   selector: 'app-beginner',
@@ -22,25 +22,24 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   questions: Array<Question>;
   acceptedTasks: Set<number>;
   subtopicId: number;
-  availableTopics: Set<number>;
-  topicId: number;
+  availableSubtopics: Set<number>;
   taskId: number;
   questionId: number;
   acceptedTasksBySubtopics: Map<number, number>;
   countTasksBySubtopics: Map<number, number>;
   private acceptedTasksSubscription: Subscription;
   private acceptedTasksBySubtopicsSubscription: Subscription;
-  private availableTopicsSubscription: Subscription;
+  private availableSubtopicsSubscription: Subscription;
 
   constructor(private subtopicService: SubtopicService,
               private taskService: TaskService,
               private questionService: QuestionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
-              private availableTopicsService: AvailableTopicsService,
+              private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
               private route: ActivatedRoute) {
     this.acceptedTasks = new Set<number>();
-    this.availableTopics = new Set<number>();
+    this.availableSubtopics = new Set<number>();
   }
 
   ngOnInit() {
@@ -50,8 +49,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .subscribe(accepted => this.acceptedTasksBySubtopics = accepted);
     this.taskService.countBySubtopic()
       .subscribe(number => this.countTasksBySubtopics = number);
-    this.availableTopicsSubscription = this.availableTopicsService.getAvailableTopics()
-      .subscribe(availableTopics => this.availableTopics = new Set(availableTopics));
+    this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableTopics()
+      .subscribe(availableTopics => this.availableSubtopics = availableTopics);
 
     concat(
       of(this.route.firstChild),
@@ -62,11 +61,11 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const topicId = +paramMap.get('subtopicId');
+        const subtopicId = +paramMap.get('subtopicId');
         const taskId = +paramMap.get('taskId');
         const questionId = +paramMap.get('questionId');
-        if (topicId !== this.subtopicId) {
-          this.subtopicId = topicId;
+        if (subtopicId !== this.subtopicId) {
+          this.subtopicId = subtopicId;
           this.taskService.getTasksBySubtopicId(this.subtopicId).subscribe(tasks => {
             this.tasks = tasks;
             this.updateAccepted();
@@ -90,8 +89,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     if (this.acceptedTasksBySubtopicsSubscription) {
       this.acceptedTasksBySubtopicsSubscription.unsubscribe();
     }
-    if (this.availableTopicsSubscription) {
-      this.availableTopicsSubscription.unsubscribe();
+    if (this.availableSubtopicsSubscription) {
+      this.availableSubtopicsSubscription.unsubscribe();
     }
   }
 
@@ -104,12 +103,6 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       this.acceptedTasksSubscription = this.acceptedSubmissionService.getAccepted(this.tasks.map(x => x.id))
         .subscribe(accepted => this.acceptedTasks = accepted);
     }
-    if (this.availableTopicsSubscription) {
-      this.availableTopicsSubscription.unsubscribe();
-      this.availableTopicsSubscription = undefined;
-    }
-    this.availableTopicsSubscription = this.availableTopicsService.getAvailableTopics()
-      .subscribe(availableTopics => this.availableTopics = new Set(availableTopics));
   }
 
   public getAccepted(id: number) {

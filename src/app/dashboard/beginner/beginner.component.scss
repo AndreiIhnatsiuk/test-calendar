@@ -68,19 +68,19 @@ mat-sidenav-content {
 }
 
 ::ng-deep .mat-expansion-panel-header {
-  padding: 0 16px !important;
-  font-size: 16px !important;
-  height: 48px !important;
+  padding: 0 16px;
+  font-size: 16px;
+  height: 48px;
 }
 
 ::ng-deep .mat-expansion-panel-body {
-  padding: 0 !important;
+  padding: 0;
 }
 
 ::ng-deep .mat-list-base {
-  padding-top: 0 !important;
+  padding-top: 0;
 }
 
 ::ng-deep .mat-list-item-content {
-  padding: 0 0 0 36px !important;
+  padding: 0 0 0 36px;
 }

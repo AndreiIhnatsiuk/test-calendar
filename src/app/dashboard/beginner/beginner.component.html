@@ -9,8 +9,8 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list *ngFor="let subtopic of topic.subtopics">
-          <a *ngIf="availableTopics.has(topic.id)" mat-list-item [routerLink]="'topic/' + topic.id" routerLinkActive="active-list-item">{{topic.title}} [{{getAccepted(topic.id)}} / {{getTotal(topic.id)}}]</a>
-          <a *ngIf="!availableTopics.has(topic.id)" mat-list-item title="Выполните задания предыдущего урока" class="lock">{{topic.title}}</a>
+          <a *ngIf="availableSubtopics.has(subtopic.id)" mat-list-item [routerLink]="'subtopic/' + topic.id" routerLinkActive="active-list-item">{{subtopic.name}} [{{getAccepted(subtopic.id)}} / {{getTotal(subtopic.id)}}]</a>
+          <a *ngIf="!availableSubtopics.has(subtopic.id)" mat-list-item title="Выполните задания предыдущего урока" class="lock">{{subtopic.name}}</a>
         </mat-nav-list>
       </mat-expansion-panel>
     </mat-accordion>
