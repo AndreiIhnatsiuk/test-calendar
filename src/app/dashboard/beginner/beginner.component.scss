@@ -15,6 +15,27 @@ mat-sidenav {
 
 .nav-topics {
   width: 280px;
+
+  ::ng-deep .mat-expansion-panel-spacing {
+    margin: 0;
+  }
+
+  .mat-expansion-panel-header {
+    padding: 0 16px;
+    font-size: 16px;
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0;
+  }
+
+  ::ng-deep .mat-list-base {
+    padding-top: 0;
+  }
+
+  ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
+    padding: 0 16px 0 36px;
+  }
 }
 
 .nav-tasks {
@@ -65,22 +86,4 @@ mat-sidenav-content {
 
 .lock {
   color: #808080;
-}
-
-::ng-deep .mat-expansion-panel-header {
-  padding: 0 16px;
-  font-size: 16px;
-  height: 48px;
-}
-
-::ng-deep .mat-expansion-panel-body {
-  padding: 0;
-}
-
-::ng-deep .mat-list-base {
-  padding-top: 0;
-}
-
-::ng-deep .mat-list-item-content {
-  padding: 0 0 0 36px;
 }
