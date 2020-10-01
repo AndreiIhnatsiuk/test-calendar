@@ -34,11 +34,9 @@ export class QuestionComponent implements OnInit {
         this.question = fullQuestion;
       });
       this.questionService.getAnswerUser(this.questionId).subscribe(userAnswer => {
-        if (userAnswer !== null) {
-          this.userAnswer = userAnswer;
-          this.disabledButton = false;
-          this.disabledCheckBox = true;
-        }
+        this.disabledCheckBox = userAnswer !== null;
+        this.userAnswer = userAnswer;
+        this.disabledButton = false;
       });
     });
   }

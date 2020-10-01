@@ -11,7 +11,7 @@ export class AcceptedSubmissionService {
               private submissionService: SubmissionService) {
   }
 
-  public getAccepted(taskIds: Array<number>, start?: Date, end?: Date): Observable<Set<number>> {
+  public getAccepted(taskIds: Array<number>, start?: Date, end?: Date): Observable<Map<number, boolean>> {
     if (taskIds.length) {
       let url = '/api/accepted-tasks?taskIds=' + taskIds.join(',');
       if (start) {
@@ -21,12 +21,12 @@ export class AcceptedSubmissionService {
         url += '&end=' + end.toISOString();
       }
       return concat(
-        this.http.get<Array<number>>(url),
+        this.http.get<Map<number, boolean>>(url),
         this.submissionService.getChanges().pipe(
           filter(taskId => taskIds.indexOf(taskId) !== -1),
-          switchMap(() => this.http.get<Array<number>>(url))
+          switchMap(() => this.http.get<Map<number, boolean>>(url))
         )
-      ).pipe(map(array => new Set(array)));
+      ).pipe(map(x => new Map<number, boolean>(Object.entries(x).map(y => [+y[0], y[1]]))));
     } else {
       return EMPTY;
     }

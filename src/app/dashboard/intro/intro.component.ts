@@ -17,7 +17,7 @@ export class IntroComponent implements OnInit, OnDestroy {
   registrationId: number;
   taskId: number;
   intro: Intro;
-  acceptedTasks: Set<number>;
+  acceptedTasks: Map<number, boolean>;
   time: Date;
   private timerSubscription: Subscription;
   private acceptedTasksSubscription: Subscription;
@@ -27,7 +27,7 @@ export class IntroComponent implements OnInit, OnDestroy {
               private acceptedSubmissionService: AcceptedSubmissionService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedTasks = new Set();
+    this.acceptedTasks = new Map<number, boolean>();
   }
 
   ngOnInit() {

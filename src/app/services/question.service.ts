@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {concat, Observable, Subject} from 'rxjs';
 import {Question} from '../entities/question';
 import {FullQuestion} from '../entities/full-question';
 import {UserAnswer} from '../entities/user-answer';
-import {tap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class QuestionService {
@@ -29,7 +29,7 @@ export class QuestionService {
   public sendAnswerUser(questionId: number, answers: number[]): Observable<UserAnswer> {
     return this.http.post<UserAnswer>('/api/answers/', {questionId: questionId, answer: answers})
       .pipe(tap(answer => {
-        if (answer.right) {
+        if (answer != null) {
           this.accepted.next(questionId);
         }
       }));
@@ -37,5 +37,30 @@ export class QuestionService {
 
   public getAnswerUser(questionId: number): Observable<UserAnswer> {
     return this.http.get<UserAnswer>('/api/answers?questionId=' + questionId);
+  }
+
+  public getAcceptedByQuestionIds(questionIds: Array<number>): Observable<Map<number, boolean>> {
+    const url = '/api/accepted-questions?questionIds=' + questionIds.join(',');
+    return concat(
+      this.http.get<Map<number, Boolean>>(url),
+      this.getAccepted().pipe(
+        switchMap(() => this.http.get<Map<number, boolean>>(url))
+      )
+    ).pipe(map(x => new Map<number, boolean>(Object.entries(x).map(y => [+y[0], y[1]]))));
+  }
+
+  public countBySubtopic(): Observable<Map<number, number>> {
+    return this.http.get('/api/questions?groupBy=subtopics')
+      .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
+  }
+
+  public getAcceptedBySubtopics(): Observable<Map<number, number>> {
+    const url = '/api/accepted-questions?groupBy=subtopics';
+    return concat(
+      this.http.get<Map<number, number>>(url),
+      this.getAccepted().pipe(
+        switchMap(() => this.http.get<Map<number, number>>(url))
+      )
+    ).pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
 }
