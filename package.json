@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~9.1.1",
     "@angular/platform-browser-dynamic": "~9.1.1",
     "@angular/router": "~9.1.1",
+    "@stomp/ng2-stompjs": "^7.2.0",
     "angular-gtag": "file:../angular-gtag/lib/dist/angular-gtag-1.0.3.tgz",
     "core-js": "^3.6.5",
     "marked": "^0.8.2",
