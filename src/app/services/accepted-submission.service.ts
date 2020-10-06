@@ -24,7 +24,7 @@ export class AcceptedSubmissionService {
         this.http.get<Map<number, boolean>>(url),
         this.submissionService.getChanges().pipe(
           filter(taskId => taskIds.indexOf(taskId) !== -1),
-          switchMap(() => this.http.get<Map<number, boolean>>(url))
+          switchMap(() => this.http.get<Object>(url))
         )
       ).pipe(map(x => new Map<number, boolean>(Object.entries(x).map(y => [+y[0], y[1]]))));
     } else {
@@ -37,7 +37,7 @@ export class AcceptedSubmissionService {
     return concat(
       this.http.get<Map<number, number>>(url),
       this.submissionService.getChanges().pipe(
-        switchMap(() => this.http.get<Map<number, number>>(url))
+        switchMap(() => this.http.get<Object>(url))
       )
     ).pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
