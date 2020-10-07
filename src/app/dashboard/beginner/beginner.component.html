@@ -3,44 +3,116 @@
 
     <mat-accordion>
       <mat-expansion-panel hideToggle *ngFor="let topic of topics">
-        <mat-expansion-panel-header expandedHeight="48px">
-          <mat-panel-title>
-            {{topic.name}}
+        <mat-expansion-panel-header expandedHeight="48px" class="panel-header-title-custom">
+
+          <mat-panel-title *ngIf="!hasAvailableSubtopics(topic.subtopics)" class="title-lock">
+            <div class="black">
+              {{topic.name}}
+            </div>
+            <mat-icon class="topic-icon-lock">
+              lock
+            </mat-icon>
           </mat-panel-title>
+
+          <mat-panel-title *ngIf="hasAvailableSubtopics(topic.subtopics)" class="panel-header-title-custom-available">
+            <div class="title-topic">
+              {{topic.name}}
+            </div>
+            <mat-icon *ngIf="getAcceptedInTopic(topic.subtopics)" class="green-check-topic">
+              check
+            </mat-icon>
+          </mat-panel-title>
+
         </mat-expansion-panel-header>
+
         <mat-nav-list *ngFor="let subtopic of topic.subtopics">
-          <a *ngIf="availableSubtopics.has(subtopic.id)" mat-list-item [routerLink]="'subtopic/' + topic.id" routerLinkActive="active-list-item">{{subtopic.name}} [{{getAccepted(subtopic.id)}} / {{getTotal(subtopic.id)}}]</a>
-          <a *ngIf="!availableSubtopics.has(subtopic.id)" mat-list-item title="Выполните задания предыдущего урока" class="lock">{{subtopic.name}}</a>
+
+          <mat-list-item *ngIf="availableSubtopics.has(subtopic.id)"
+                         [routerLink]="'subtopic/' + subtopic.id"
+                         routerLinkActive="active-list-item">
+            <div mat-line>
+              {{subtopic.name}}
+            </div>
+            <mat-icon *ngIf="getAcceptedInSubtopic(subtopic)" class="green-check-subtopic">
+              check
+            </mat-icon>
+          </mat-list-item>
+
+          <mat-list-item *ngIf="!availableSubtopics.has(subtopic.id)"
+                         mat-list-item title="Выполните задания предыдущего урока"
+                         class="poster">
+            <div mat-line>
+              {{subtopic.name}}
+            </div>
+            <mat-icon class="descr">
+              lock
+            </mat-icon>
+          </mat-list-item>
         </mat-nav-list>
+
       </mat-expansion-panel>
     </mat-accordion>
 
   </mat-sidenav>
 
-  <mat-sidenav class="nav-tasks" mode="side" opened disableClose position="end">
-
-    <mat-nav-list>
-      <a mat-list-item [routerLink]="'subtopic/' + subtopicId" [class.active-list-item]="!taskId">Теория</a>
-    </mat-nav-list>
-
-    <mat-nav-list *ngFor="let question of questions">
-      <a mat-list-item [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id" routerLinkActive="active-list-item">
-        {{question.title}}
-      </a>
-    </mat-nav-list>
-
-    <mat-nav-list *ngFor="let task of tasks">
-      <a mat-list-item [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id" routerLinkActive="active-list-item">
-        {{task.title}}
-        <span class="accepted" *ngIf="acceptedTasks.has(task.id)">&nbsp;OK</span>
-      </a>
-    </mat-nav-list>
-
-  </mat-sidenav>
-
-
   <mat-sidenav-content>
-    <router-outlet></router-outlet>
+    <div class="example-button-row, icons-progress">
+      <a mat-flat-button
+         class="left-icons-progress"
+         [routerLink]="'subtopic/' + subtopicId"
+         [class.active-button-item]="!taskId && !questionId">
+        <mat-icon>description</mat-icon>
+      </a>
+
+      <a *ngFor="let question of questions">
+        <a *ngIf="!acceptedQuestions.has(question.id)"
+           mat-flat-button
+           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>live_help</mat-icon>
+        </a>
+
+        <a *ngIf="acceptedQuestions.has(question.id) && acceptedQuestions.get(question.id)"
+           mat-flat-button class="green"
+           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>live_help</mat-icon>
+        </a>
+
+        <a *ngIf="acceptedQuestions.has(question.id) && !acceptedQuestions.get(question.id)"
+           mat-flat-button class="red"
+           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>live_help</mat-icon>
+        </a>
+      </a>
+
+      <a *ngFor="let task of tasks">
+        <a *ngIf="!acceptedTasks.has(task.id)"
+           mat-flat-button
+           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>extension</mat-icon>
+        </a>
+
+        <a *ngIf="acceptedTasks.has(task.id) && acceptedTasks.get(task.id)"
+           mat-flat-button class="green"
+           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>extension</mat-icon>
+        </a>
+
+        <a *ngIf="acceptedTasks.has(task.id) && !acceptedTasks.get(task.id)"
+           mat-flat-button class="red"
+           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+           routerLinkActive="active-button-item">
+          <mat-icon>extension</mat-icon>
+        </a>
+      </a>
+    </div>
+    <div class="top-text">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <app-chat></app-chat>

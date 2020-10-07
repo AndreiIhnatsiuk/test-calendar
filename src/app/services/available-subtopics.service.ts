@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {concat, Observable} from 'rxjs';
+import {concat, merge, Observable} from 'rxjs';
 import {SubmissionService} from './submission.service';
 import {QuestionService} from './question.service';
 import {map, switchMap} from 'rxjs/operators';
@@ -12,16 +12,16 @@ export class AvailableSubtopicsService {
               private questionService: QuestionService) {
   }
 
-  private getAvailableTopicsSingle(): Observable<Set<number>> {
+  private getAvailableSubtopicsSingle(): Observable<Set<number>> {
     return this.http.get<Array<number>>('/api/available-subtopics')
-      .pipe(map(topics => new Set(topics)));
+      .pipe(map(subtopics => new Set(subtopics)));
   }
 
-  public getAvailableTopics(): Observable<Set<number>> {
-    return concat(
-      this.getAvailableTopicsSingle(),
-      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableTopicsSingle())),
-      this.questionService.getAccepted().pipe(switchMap(() => this.getAvailableTopicsSingle()))
+  public getAvailableSubtopics(): Observable<Set<number>> {
+    return merge(
+      this.getAvailableSubtopicsSingle(),
+      this.questionService.getAccepted().pipe(switchMap(() => this.getAvailableSubtopicsSingle())),
+      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableSubtopicsSingle()))
     );
   }
 }
