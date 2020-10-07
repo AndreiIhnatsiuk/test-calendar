@@ -1,0 +1,74 @@
+@import '~@angular/material/theming';
+
+$config: mat-typography-config($font-family: 'Roboto Mono, monospace');
+
+.container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 5;
+}
+
+.chat {
+  height: 70vh;
+  max-width: 540px;
+  width: calc(100% - 16px);
+  margin-left: 16px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.3);
+
+  .close-button {
+    float: right;
+  }
+
+  .header {
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    text-align: center;
+    overflow: hidden;
+    border-bottom: rgba(0,0,0,.87) solid 1px;
+  }
+
+  .body {
+    height: 100%;
+    @include angular-material-typography($config);
+    font-family: mat-font-family($config);
+
+    .messages {
+      height: calc(100% - 102px);
+      overflow-y: auto;
+
+      .message {
+        padding: 0 16px;
+
+        p {
+          white-space: pre-wrap;
+        }
+      }
+
+      .message p:first-child {
+        margin-top: 12px;
+      }
+    }
+
+    .input-field {
+      padding: 0 16px;
+      height: 62px;
+      overflow: hidden;
+
+      textarea {
+        resize: none;
+      }
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+.answered {
+  background-color: green;
+}

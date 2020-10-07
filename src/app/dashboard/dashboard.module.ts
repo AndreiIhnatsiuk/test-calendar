@@ -27,7 +27,10 @@ import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ChatComponent } from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -91,7 +94,8 @@ const routes: Routes = [
     TaskComponent,
     SubmissionComponent,
     IntroComponent,
-    QuestionComponent
+    QuestionComponent,
+    ChatComponent
   ],
   entryComponents: [
     SubmissionComponent
