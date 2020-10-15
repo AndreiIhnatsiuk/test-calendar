@@ -1,0 +1,55 @@
+<div class="progress">
+  <div>
+    <a mat-flat-button
+       [routerLink]="'subtopic/' + subtopicId"
+       [class.active-button-item]="!taskId && !questionId">
+      <mat-icon>description</mat-icon>
+    </a>
+  </div>
+  <div *ngFor="let question of questions">
+    <a *ngIf="!acceptedQuestions.has(question.id)"
+       mat-flat-button
+       [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+       [class.active-button-item]="question.id === questionId">
+      <mat-icon>live_help</mat-icon>
+    </a>
+
+    <a *ngIf="acceptedQuestions.has(question.id) && acceptedQuestions.get(question.id)"
+       mat-flat-button class="green"
+       [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+       [class.active-button-item]="question.id === questionId">
+      <mat-icon>live_help</mat-icon>
+    </a>
+
+    <a *ngIf="acceptedQuestions.has(question.id) && !acceptedQuestions.get(question.id)"
+       mat-flat-button class="red"
+       [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
+       [class.active-button-item]="question.id === questionId">
+      <mat-icon>live_help</mat-icon>
+    </a>
+  </div>
+
+  <div *ngFor="let task of tasks">
+    <a *ngIf="!acceptedTasks.has(task.id)"
+       mat-flat-button
+       [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+       [class.active-button-item]="task.id === taskId">
+      <mat-icon>extension</mat-icon>
+    </a>
+
+    <a *ngIf="acceptedTasks.has(task.id) && acceptedTasks.get(task.id)"
+       mat-flat-button class="green"
+       [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+       [class.active-button-item]="task.id === taskId">
+      <mat-icon>extension</mat-icon>
+    </a>
+
+    <a *ngIf="acceptedTasks.has(task.id) && !acceptedTasks.get(task.id)"
+       mat-flat-button class="red"
+       [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
+       [class.active-button-item]="task.id === taskId">
+      <mat-icon>extension</mat-icon>
+    </a>
+  </div>
+</div>
+

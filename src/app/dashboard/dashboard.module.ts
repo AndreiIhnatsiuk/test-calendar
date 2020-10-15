@@ -31,6 +31,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ChatComponent } from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
+import { ProgressComponent } from './progress/progress.component';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -79,7 +80,7 @@ const routes: Routes = [
       {
         path: 'basic/intro/:registrationId/task/:taskId',
         component: IntroComponent
-      }
+      },
     ]
   }
 ];
@@ -95,7 +96,8 @@ const routes: Routes = [
     SubmissionComponent,
     IntroComponent,
     QuestionComponent,
-    ChatComponent
+    ChatComponent,
+    ProgressComponent
   ],
   entryComponents: [
     SubmissionComponent

@@ -7,3 +7,14 @@
   text-align: center;
 }
 
+header {
+  mat-toolbar {
+    background-color: black;
+    padding: 30px
+  }
+  span {
+    color: white;
+    font-size: 2.1rem;
+    margin-left: 15%
+  }
+}

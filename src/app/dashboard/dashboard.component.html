@@ -1,10 +1,11 @@
 <header>
-  <mat-toolbar color="primary">
-    <a routerLink="beginner" mat-button>ITman Study</a>
+  <mat-toolbar>
+    <a routerLink="beginner" mat-button class="logo"><mat-icon>home</mat-icon><a>Study ITman.by</a></a>
+    <app-progress *ngIf="href !== '/dashboard/basic'"></app-progress>
+    <a class="spacer"></a>
     <a routerLink="beginner" mat-button routerLinkActive="active-button">Начальный курс</a>
     <a routerLink="basic" mat-button routerLinkActive="active-button">Основной курс</a>
-    <span class="spacer"></span>
-    <span *ngIf="personal" class="name">Привет, {{personal.name}}</span>
+    <a *ngIf="personal" class="name">Привет, {{personal.name}}</a>
   </mat-toolbar>
 </header>
 <b class="warning" style="display: none;">Рекомендую проходить обучение на компьютере</b>
