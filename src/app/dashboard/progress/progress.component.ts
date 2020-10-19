@@ -20,6 +20,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   questions: Array<Question>;
   acceptedTasks: Map<number, boolean>;
   acceptedQuestions: Map<number, boolean>;
+  acceptedSubtopic: boolean;
   subtopicId: number;
   taskId: number;
   questionId: number;
@@ -39,10 +40,10 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     concat(
-      of(this.route.firstChild.firstChild),
+      of(this.updateFirsChild()),
       this.router.events.pipe(
-        filter(event => event instanceof NavigationEnd && this.route.firstChild.firstChild !== null),
-        map(() => this.route.firstChild.firstChild)
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.updateFirsChild())
       )
     )
       .pipe(switchMap(route => route.paramMap))
@@ -77,6 +78,13 @@ export class ProgressComponent implements OnInit, OnDestroy {
     }
   }
 
+  private updateFirsChild() {
+    if (this.route.firstChild !== null) {
+      return this.route.firstChild.firstChild ? this.route.firstChild.firstChild : this.route.firstChild;
+    }
+    return this.route;
+  }
+
   private updateAccepted() {
     if (this.acceptedTasksSubscription) {
       this.acceptedTasksSubscription.unsubscribe();
@@ -88,11 +96,33 @@ export class ProgressComponent implements OnInit, OnDestroy {
     }
     if (this.tasks) {
       this.acceptedTasksSubscription = this.acceptedSubmissionService.getAccepted(this.tasks.map(x => x.id))
-        .subscribe(accepted => this.acceptedTasks = accepted);
+        .subscribe(accepted => {
+          this.acceptedTasks = accepted;
+          this.updateAcceptedSubtopic();
+        });
     }
     if (this.questions) {
       this.acceptedQuestionsSubscription = this.questionService.getAcceptedByQuestionIds(this.questions.map(x => x.id))
-        .subscribe(questions => this.acceptedQuestions = questions);
+        .subscribe(questions => {
+          this.acceptedQuestions = questions;
+          this.updateAcceptedSubtopic();
+        });
     }
+  }
+
+  private updateAcceptedSubtopic() {
+    for (const task of this.tasks) {
+      if (!this.acceptedTasks.get(task.id)) {
+        this.acceptedSubtopic = false;
+        return;
+      }
+    }
+    for (const question of this.questions) {
+      if (!this.acceptedQuestions.get(question.id)) {
+        this.acceptedSubtopic = false;
+        return;
+      }
+    }
+    this.acceptedSubtopic = true;
   }
 }

@@ -137,6 +137,9 @@ mat-sidenav-content {
   mat-sidenav-container {
     position: relative;
     top: 0;
+    .nav-topics {
+      width: 100%;
+    }
   }
 
   mat-sidenav {
@@ -151,11 +154,7 @@ mat-sidenav-content {
     overflow: visible;
     clear: both;
     padding: 16px;
-  }
-
-  .nav-topics, .nav-tasks {
-    max-width: 300px;
-    min-width: 250px;
+    margin-left: 0 !important;
   }
 
   .nav-tasks {

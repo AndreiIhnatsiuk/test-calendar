@@ -14,11 +14,8 @@ import {filter} from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   personal: Personal;
-  public href = '';
 
   constructor(private authService: AuthService,
-              private router: Router,
-              private route: ActivatedRoute,
               private gtag: Gtag) {
   }
 
@@ -29,15 +26,6 @@ export class DashboardComponent implements OnInit {
       this.gtag.event('set', {
         event_category: 'userId'
       });
-    });
-    this.href = this.router.url;
-    concat(
-      of(this.route.firstChild),
-      this.router.events.pipe(
-        filter(event => event instanceof NavigationEnd),
-      )
-    ).subscribe(event => {
-      this.href = this.router.url;
     });
   }
 }

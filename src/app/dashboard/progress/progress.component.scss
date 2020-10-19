@@ -1,9 +1,11 @@
 .progress {
   display: flex;
   margin-left: 190px;
-  margin-top: -3px;
 
   div {
+    display: flex;
+    align-items: center;
+
     a {
       background-color: #828282;
     }
@@ -21,9 +23,11 @@
       border: 2px solid rgba(255, 255, 255, 0.6);
     }
   }
+}
 
-  mat-icon {
-    font-size: 24px;
+@media screen and (max-width: 600px) {
+  .progress {
+    margin-left: 10px;
   }
 }
 
