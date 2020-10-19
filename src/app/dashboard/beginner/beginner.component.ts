@@ -19,15 +19,9 @@ import {AvailableSubtopicsService} from '../../services/available-subtopics.serv
 })
 export class BeginnerComponent implements OnInit, OnDestroy {
   topics: Array<Topic>;
-  tasks: Array<Task>;
-  questions: Array<Question>;
-  acceptedTasks: Map<number, boolean>;
-  acceptedQuestions: Map<number, boolean>;
   subtopicId: number;
   availableSubtopics: Set<number>;
   acceptedSubtopics: Set<number>;
-  taskId: number;
-  questionId: number;
   acceptedTasksBySubtopics: Map<number, number>;
   countTasksBySubtopics: Map<number, number>;
   acceptedQuestionsBySubtopics: Map<number, number>;
@@ -43,10 +37,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
               private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedTasks = new Map<number, boolean>();
     this.acceptedSubtopics = new Set<number>();
     this.availableSubtopics = new Set<number>();
-    this.acceptedQuestions = new Map<number, boolean>();
   }
 
   ngOnInit() {
@@ -73,19 +65,9 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
         const subtopicId = +paramMap.get('subtopicId');
-        const taskId = +paramMap.get('taskId');
-        const questionId = +paramMap.get('questionId');
         if (subtopicId !== this.subtopicId) {
           this.subtopicId = subtopicId;
-          this.taskService.getTasksBySubtopicId(this.subtopicId).subscribe(tasks => {
-            this.tasks = tasks;
-          });
-          this.questionService.getQuestionsBySubtopicId(this.subtopicId).subscribe(questions => {
-            this.questions = questions;
-          });
         }
-        this.taskId = taskId;
-        this.questionId = questionId;
       });
   }
 
