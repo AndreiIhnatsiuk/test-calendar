@@ -1,8 +1,4 @@
-.active-button {
-  color: lightgrey;
-}
-
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 640px) {
   .warning {
     padding: 16px 16px;
     display: block !important;
@@ -13,13 +9,43 @@
   flex: 1 1 auto;
 }
 
-.name {
-  font-size: 16px;
+@media screen and (max-width: 700px) {
+  .mat-button {
+    display: none;
+  }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 992px) {
   .name {
     display: none;
+  }
+}
+
+mat-toolbar {
+  padding: 0;
+  background-color: black;
+  color: grey;
+  height: 40px;
+  .name {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+  .mat-button:hover {
+    color: lightgrey;
+  }
+  .active-button {
+    color: lightgrey;
+  }
+  .mat-button {
+    font-size: 15px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    mat-icon {
+      margin-right: 2px;
+    }
   }
 }
 

@@ -56,63 +56,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div class="example-button-row, icons-progress">
-      <a mat-flat-button
-         class="left-icons-progress"
-         [routerLink]="'subtopic/' + subtopicId"
-         [class.active-button-item]="!taskId && !questionId">
-        <mat-icon>description</mat-icon>
-      </a>
-
-      <a *ngFor="let question of questions">
-        <a *ngIf="!acceptedQuestions.has(question.id)"
-           mat-flat-button
-           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>live_help</mat-icon>
-        </a>
-
-        <a *ngIf="acceptedQuestions.has(question.id) && acceptedQuestions.get(question.id)"
-           mat-flat-button class="green"
-           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>live_help</mat-icon>
-        </a>
-
-        <a *ngIf="acceptedQuestions.has(question.id) && !acceptedQuestions.get(question.id)"
-           mat-flat-button class="red"
-           [routerLink]="'subtopic/' + subtopicId + '/question/' + question.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>live_help</mat-icon>
-        </a>
-      </a>
-
-      <a *ngFor="let task of tasks">
-        <a *ngIf="!acceptedTasks.has(task.id)"
-           mat-flat-button
-           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>extension</mat-icon>
-        </a>
-
-        <a *ngIf="acceptedTasks.has(task.id) && acceptedTasks.get(task.id)"
-           mat-flat-button class="green"
-           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>extension</mat-icon>
-        </a>
-
-        <a *ngIf="acceptedTasks.has(task.id) && !acceptedTasks.get(task.id)"
-           mat-flat-button class="red"
-           [routerLink]="'subtopic/' + subtopicId + '/task/' + task.id"
-           routerLinkActive="active-button-item">
-          <mat-icon>extension</mat-icon>
-        </a>
-      </a>
-    </div>
-    <div class="top-text">
-      <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <app-chat></app-chat>

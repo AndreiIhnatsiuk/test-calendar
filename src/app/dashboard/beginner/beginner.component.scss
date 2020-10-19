@@ -1,6 +1,6 @@
 mat-sidenav-container {
   position: absolute;
-  top: 64px;
+  top: 40px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -11,22 +11,6 @@ mat-sidenav {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.mat-flat-button {
-  color: rgba(0, 0, 0, .87);
-  background-color: #ebebeb;
-  border-radius: 0;
-  min-width: 50px;
-  line-height: 50px;
-  padding: 0;
-  margin-right: 5px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.right-icon {
-  display: table-cell;
 }
 
 .mat-nav-list:hover {
@@ -54,45 +38,6 @@ mat-sidenav {
 
 .mat-expansion-panel-header:hover {
   color: black;
-}
-
-mat-sidenav-content {
-  .icons-progress {
-    position: fixed;
-    background-color: #ffffff;
-    margin-left: -32px;
-    width: 100%;
-    z-index: 999999;
-    height: 70px;
-    margin-top: -16px;
-
-    .red {
-      background-color: #cd6666;
-    }
-
-    .green {
-      background-color: #66cd66;
-    }
-
-    .active-button-item {
-      padding: 0;
-      min-width: 50px;
-      line-height: 40px;
-      border: 5px solid rgba(0, 0, 0, 0.3);
-    }
-
-    .left-icons-progress {
-      margin-left: 32px;
-    }
-
-    .example-button-row {
-      position: fixed;
-    }
-  }
-
-  .top-text {
-    margin-top: 80px;
-  }
 }
 
 mat-expansion-panel {
@@ -192,6 +137,9 @@ mat-sidenav-content {
   mat-sidenav-container {
     position: relative;
     top: 0;
+    .nav-topics {
+      width: 100%;
+    }
   }
 
   mat-sidenav {
@@ -206,11 +154,7 @@ mat-sidenav-content {
     overflow: visible;
     clear: both;
     padding: 16px;
-  }
-
-  .nav-topics, .nav-tasks {
-    max-width: 300px;
-    min-width: 250px;
+    margin-left: 0 !important;
   }
 
   .nav-tasks {

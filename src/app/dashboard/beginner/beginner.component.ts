@@ -19,21 +19,13 @@ import {AvailableSubtopicsService} from '../../services/available-subtopics.serv
 })
 export class BeginnerComponent implements OnInit, OnDestroy {
   topics: Array<Topic>;
-  tasks: Array<Task>;
-  questions: Array<Question>;
-  acceptedTasks: Map<number, boolean>;
-  acceptedQuestions: Map<number, boolean>;
   subtopicId: number;
   availableSubtopics: Set<number>;
   acceptedSubtopics: Set<number>;
-  taskId: number;
-  questionId: number;
   acceptedTasksBySubtopics: Map<number, number>;
   countTasksBySubtopics: Map<number, number>;
   acceptedQuestionsBySubtopics: Map<number, number>;
   countQuestionsBySubtopics: Map<number, number>;
-  private acceptedTasksSubscription: Subscription;
-  private acceptedQuestionsSubscription: Subscription;
   private acceptedTasksBySubtopicsSubscription: Subscription;
   private acceptedQuestionsBySubtopicsSubscription: Subscription;
   private availableSubtopicsSubscription: Subscription;
@@ -45,10 +37,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
               private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedTasks = new Map<number, boolean>();
     this.acceptedSubtopics = new Set<number>();
     this.availableSubtopics = new Set<number>();
-    this.acceptedQuestions = new Map<number, boolean>();
   }
 
   ngOnInit() {
@@ -75,33 +65,13 @@ export class BeginnerComponent implements OnInit, OnDestroy {
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
         const subtopicId = +paramMap.get('subtopicId');
-        const taskId = +paramMap.get('taskId');
-        const questionId = +paramMap.get('questionId');
         if (subtopicId !== this.subtopicId) {
           this.subtopicId = subtopicId;
-          this.taskService.getTasksBySubtopicId(this.subtopicId).subscribe(tasks => {
-            this.tasks = tasks;
-            this.updateAccepted();
-          });
-          this.questionService.getQuestionsBySubtopicId(this.subtopicId).subscribe(questions => {
-            this.questions = questions;
-            this.updateAccepted();
-          });
-        } else if (taskId !== this.taskId || questionId !== this.questionId) {
-          this.updateAccepted();
         }
-        this.taskId = taskId;
-        this.questionId = questionId;
       });
   }
 
   ngOnDestroy(): void {
-    if (this.acceptedTasksSubscription) {
-      this.acceptedTasksSubscription.unsubscribe();
-    }
-    if (this.acceptedQuestionsSubscription) {
-      this.acceptedQuestionsSubscription.unsubscribe();
-    }
     if (this.acceptedTasksBySubtopicsSubscription) {
       this.acceptedTasksBySubtopicsSubscription.unsubscribe();
     }
@@ -110,25 +80,6 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     }
     if (this.availableSubtopicsSubscription) {
       this.availableSubtopicsSubscription.unsubscribe();
-    }
-  }
-
-  private updateAccepted() {
-    if (this.acceptedTasksSubscription) {
-      this.acceptedTasksSubscription.unsubscribe();
-      this.acceptedTasksSubscription = undefined;
-    }
-    if (this.acceptedQuestionsSubscription) {
-      this.acceptedQuestionsSubscription.unsubscribe();
-      this.acceptedQuestionsSubscription = undefined;
-    }
-    if (this.tasks) {
-      this.acceptedTasksSubscription = this.acceptedSubmissionService.getAccepted(this.tasks.map(x => x.id))
-        .subscribe(accepted => this.acceptedTasks = accepted);
-    }
-    if (this.questions) {
-      this.acceptedQuestionsSubscription = this.questionService.getAcceptedByQuestionIds(this.questions.map(x => x.id))
-        .subscribe(questions => this.acceptedQuestions = questions);
     }
   }
 
