@@ -13,27 +13,8 @@ mat-sidenav {
   justify-content: center;
 }
 
-.mat-nav-list:hover {
-  color: black;
-}
-
-.mat-list-item:hover {
-  color: black;
-}
-
-.poster {
-  position: relative;
-  color: #808080;
-}
-
 .descr {
   display: none;
-}
-
-.poster:hover .descr {
-  color: #000000;
-  display: block;
-  margin-right: 16px;
 }
 
 .mat-expansion-panel-header:hover {
@@ -53,16 +34,6 @@ mat-expansion-panel {
     width: 24px;
   }
 
-  .panel-header-title-custom:hover {
-    .title-lock {
-      color: black;
-    }
-    .topic-icon-lock {
-      color: black;
-      display: block;
-    }
-  }
-
   .panel-header-title-custom {
     position: relative;
 
@@ -79,12 +50,34 @@ mat-expansion-panel {
       }
     }
 
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
 
-    .panel-header-title-custom:hover .topic-icon-lock {
-      color: black;
-      display: block;
+      .title-lock {
+        color: black;
+      }
+
+      .topic-icon-lock {
+        color: black;
+        display: block;
+      }
     }
+  }
 
+  mat-nav-list {
+    .poster {
+      position: relative;
+      color: #808080;
+
+      &:hover {
+        color: black;
+      }
+
+      &:hover .descr {
+        display: block;
+        margin-right: 16px;
+      }
+    }
   }
 }
 
@@ -116,6 +109,7 @@ mat-expansion-panel {
 
   ::ng-deep .mat-nav-list .mat-list-item .mat-list-item-content {
     padding: 0 0 0 36px;
+
     .mat-line {
       white-space: normal;
     }
@@ -142,6 +136,7 @@ mat-sidenav-content {
   mat-sidenav-container {
     position: relative;
     top: 0;
+
     .nav-topics {
       width: 100%;
     }

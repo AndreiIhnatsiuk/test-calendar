@@ -25,6 +25,8 @@
 
         </mat-expansion-panel-header>
 
+        <mat-divider></mat-divider>
+
         <mat-nav-list *ngFor="let subtopic of topic.subtopics">
 
           <mat-list-item *ngIf="availableSubtopics.has(subtopic.id)"
@@ -49,6 +51,8 @@
             </mat-icon>
           </mat-list-item>
         </mat-nav-list>
+
+        <mat-divider></mat-divider>
 
       </mat-expansion-panel>
     </mat-accordion>
