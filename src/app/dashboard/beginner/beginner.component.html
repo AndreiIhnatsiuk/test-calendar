@@ -2,7 +2,7 @@
   <mat-sidenav class="nav-topics" mode="side" opened disableClose>
 
     <mat-accordion>
-      <mat-expansion-panel hideToggle *ngFor="let topic of topics">
+      <mat-expansion-panel [expanded]="isOpened(topic)" hideToggle *ngFor="let topic of topics">
         <mat-expansion-panel-header expandedHeight="48px" class="panel-header-title-custom">
 
           <mat-panel-title *ngIf="!hasAvailableSubtopics(topic.subtopics)" class="title-lock">
