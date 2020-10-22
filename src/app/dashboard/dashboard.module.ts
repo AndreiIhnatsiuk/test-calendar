@@ -32,6 +32,7 @@ import { ChatComponent } from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ProgressComponent } from './progress/progress.component';
+import { DashboardContentComponent } from './dashboard-content/dashboard-content.component';
 
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -45,7 +46,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'beginner',
+        component: DashboardContentComponent,
       },
       {
         path: 'beginner',
@@ -97,7 +98,8 @@ const routes: Routes = [
     IntroComponent,
     QuestionComponent,
     ChatComponent,
-    ProgressComponent
+    ProgressComponent,
+    DashboardContentComponent
   ],
   entryComponents: [
     SubmissionComponent
