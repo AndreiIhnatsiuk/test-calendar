@@ -57,10 +57,9 @@
       </mat-accordion>
 
       <div *ngIf="hints.length !== 0" class="button-hint-bottom">
-        <button *ngIf="this.task.hintsCount !== this.hints.length" mat-raised-button color="accent"
-                (click)="sendHint();">{{panelOpenState ? 'Взять подсказку' : 'Открыть подсказки'}}
-        </button>
-        <button *ngIf="this.task.hintsCount === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок
+        <button mat-raised-button color="accent" (click)="sendHint();"
+                [disabled]="this.task.hintsCount === this.hints.length && panelOpenState">
+          {{panelOpenState ? 'Взять подсказку' : 'Открыть подсказки'}}
         </button>
       </div>
     </div>
