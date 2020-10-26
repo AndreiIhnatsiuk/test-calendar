@@ -138,4 +138,13 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+
+  public isOpened(topic: Topic) {
+    for (const subtopic of topic.subtopics) {
+      if (subtopic.id === this.subtopicId) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

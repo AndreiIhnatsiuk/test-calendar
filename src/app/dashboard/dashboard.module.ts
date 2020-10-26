@@ -27,11 +27,10 @@ import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ChatComponent } from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
-import {MatBadgeModule} from '@angular/material/badge';
 import { ProgressComponent } from './progress/progress.component';
+import { DashboardContentComponent } from './dashboard-content/dashboard-content.component';
 import { NextStepComponent } from './next-step/next-step.component';
 import * as url from './routes';
 
@@ -46,7 +45,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: url.JAVA,
+        component: DashboardContentComponent,
       },
       {
         path: url.JAVA,
@@ -99,6 +98,7 @@ const routes: Routes = [
     QuestionComponent,
     ChatComponent,
     ProgressComponent,
+    DashboardContentComponent,
     NextStepComponent
   ],
   entryComponents: [

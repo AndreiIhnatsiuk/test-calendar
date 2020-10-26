@@ -1,0 +1,43 @@
+<div class="wrapper">
+  <div>
+    <div>
+      <div>
+
+        <div routerLink="beginner/subtopic/{{getLastOpenedSubtopics()}}" class="card">
+          <div class="card-img" style="background: url('assets/342.jpg'); background-size: cover;">
+            <div>Основы алгоритмизации</div>
+          </div>
+          <div class="card-content">
+            <div>Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные
+              операторы
+              и циклы.
+            </div>
+            <div style="color: gray;">11 тем 10 ч</div>
+          </div>
+        </div>
+
+        <div (click)="send()" *ngFor="let content of getDashboardContent()" class="card">
+          <div class="card-img" style="background: url({{content[1]}}); background-size: cover;">
+            <div>
+              {{content[0]}}
+            </div>
+          </div>
+          <div class="card-content">
+            <div>
+              {{content[2]}}
+            </div>
+            <div>
+              <div>В разработке</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sponsor">
+      images are provided by &nbsp;<a href="https://www.freepik.com/photos/technology">Freepik</a>
+    </div>
+  </div>
+</div>
