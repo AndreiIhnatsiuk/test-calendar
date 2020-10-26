@@ -13,6 +13,7 @@ import {UserAnswer} from '../../entities/user-answer';
 })
 export class QuestionComponent implements OnInit {
   questionId: number;
+  subtopicId: number;
   question: FullQuestion;
   userAnswer: UserAnswer = null;
   disabledButton = true;
@@ -30,13 +31,16 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.questionId = +map.get('questionId');
+      this.subtopicId = +map.get('subtopicId');
       this.questionService.getQuestionById(this.questionId).subscribe(fullQuestion => {
         this.question = fullQuestion;
       });
       this.questionService.getAnswerUser(this.questionId).subscribe(userAnswer => {
         this.disabledCheckBox = userAnswer !== null;
         this.userAnswer = userAnswer;
-        this.disabledButton = false;
+        if (userAnswer === null) {
+          this.disabledButton = true;
+        }
       });
     });
   }

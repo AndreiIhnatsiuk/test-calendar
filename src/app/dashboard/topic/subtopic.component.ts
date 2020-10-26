@@ -13,6 +13,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 export class SubtopicComponent implements OnInit {
   subtopic: FullSubtopic;
   safeVideoUrl: Map<string, SafeUrl>;
+  subtopicId: number;
 
   constructor(private route: ActivatedRoute,
               private subtopicService: SubtopicService,
@@ -21,8 +22,8 @@ export class SubtopicComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
-      const topicId = +map.get('subtopicId');
-      this.subtopicService.getSubtopicById(topicId).subscribe(fullTopic => {
+      this.subtopicId = +map.get('subtopicId');
+      this.subtopicService.getSubtopicById(this.subtopicId).subscribe(fullTopic => {
         this.subtopic = fullTopic;
         // https://github.com/ionic-team/ionic-v3/issues/605
         const videos = fullTopic.parts

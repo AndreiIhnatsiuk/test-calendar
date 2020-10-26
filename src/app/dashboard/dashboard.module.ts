@@ -32,7 +32,8 @@ import { ChatComponent } from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ProgressComponent } from './progress/progress.component';
-
+import { NextStepComponent } from './next-step/next-step.component';
+import * as url from './routes';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -45,40 +46,40 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'beginner',
+        redirectTo: url.JAVA,
       },
       {
-        path: 'beginner',
+        path: url.JAVA,
         component: BeginnerComponent,
         children: [
           {
             path: '',
-            redirectTo: 'subtopic/1'
+            redirectTo: url.SUBTOPIC + '/1'
           },
           {
-            path: 'subtopic/:subtopicId',
+            path: url.SUBTOPIC + '/:subtopicId',
             component: SubtopicComponent
           },
           {
-            path: 'subtopic/:subtopicId/task/:taskId',
+            path: url.SUBTOPIC + '/:subtopicId/' + url.TASK + '/:taskId',
             component: TaskComponent
           },
           {
-            path: 'subtopic/:subtopicId/question/:questionId',
+            path: url.SUBTOPIC + '/:subtopicId/' + url.QUESTION + '/:questionId',
             component: QuestionComponent
           }
         ]
       },
       {
-        path: 'basic',
+        path: url.BASIC,
         component: BasicComponent
       },
       {
-        path: 'basic/intro/:registrationId',
+        path: url.BASIC + '/' + url.INTRO + '/:registrationId',
         component: IntroComponent
       },
       {
-        path: 'basic/intro/:registrationId/task/:taskId',
+        path: url.BASIC + '/' + url.INTRO + '/:registrationId/' + url.TASK + '/:taskId',
         component: IntroComponent
       },
     ]
@@ -97,7 +98,8 @@ const routes: Routes = [
     IntroComponent,
     QuestionComponent,
     ChatComponent,
-    ProgressComponent
+    ProgressComponent,
+    NextStepComponent
   ],
   entryComponents: [
     SubmissionComponent

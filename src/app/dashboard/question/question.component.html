@@ -10,12 +10,14 @@
       </mat-checkbox>
     </li>
   </ul>
+  <div style="height: 35px">
+    <div class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
+      {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
+    </div>
+  </div>
 
-  <span class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
-    {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
-  </span>
-
+  <app-next-step *ngIf="userAnswer && userAnswer.right" [questionId]="questionId" [subtopicId]="subtopicId"></app-next-step>
   <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">Отправить</button>
-  <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Попробовать снова</button>
+  <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
 
 </div>

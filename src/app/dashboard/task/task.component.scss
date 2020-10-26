@@ -1,5 +1,5 @@
 .task {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .test .data {
@@ -35,16 +35,19 @@
   }
 }
 
-.card {
-  margin-bottom: 5px;
+.content > ol {
+  font-family: monospace;
+  background-color: #fff;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.example-form {
-  margin-top: 10px;
+.mat-expansion-panel-body {
+  background-color: white;
+}
+
+.button-hint-bottom {
   display: flex;
-  flex-direction: column;
-}
-
-.example-form > * {
-  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 10px
 }

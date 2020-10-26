@@ -21,6 +21,7 @@ import {debounceTime} from 'rxjs/operators';
 import {StoredSolution} from '../../entities/stored-solution';
 import {HintService} from '../../services/hint.services';
 import {Hint} from '../../entities/hint';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-task',
@@ -32,8 +33,10 @@ export class TaskComponent implements OnInit, OnDestroy {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
 
   taskId: number;
+  subtopicId: number;
   displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
   task: FullTask;
   submissions: Array<Submission>;
@@ -42,6 +45,8 @@ export class TaskComponent implements OnInit, OnDestroy {
   editSubject: Subject<string>;
   storedSolution: StoredSolution;
   submissionsSubscription: Subscription;
+  status: boolean = null;
+  panelOpenState = false;
 
   sending = false;
   running: boolean;
@@ -63,6 +68,10 @@ export class TaskComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.taskId = +map.get('taskId');
+      this.subtopicId = +map.get('subtopicId');
+      this.acceptedSubmissionService.getAccepted([this.taskId]).subscribe(answerOnTasks => {
+        this.status = answerOnTasks.get(this.taskId);
+      });
       this.taskService.getTaskById(this.taskId).subscribe(fullTask => {
         this.task = fullTask;
         if (this.storedSolution == null || !this.storedSolution.solution) {
@@ -133,9 +142,17 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   sendHint() {
-    this.hintService.postNextHintByTaskId(this.taskId).subscribe(hint => {
-      this.hints.push(hint);
-    });
+    if (this.panelOpenState || this.hints.length === 0) {
+      this.hintService.postNextHintByTaskId(this.taskId).subscribe(hint => {
+        this.hints.push(hint);
+        this.accordion.openAll();
+      });
+      if (this.accordion) {
+        this.accordion.openAll();
+      }
+    } else {
+      this.accordion.openAll();
+    }
   }
 
   send() {
