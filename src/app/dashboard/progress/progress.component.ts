@@ -9,6 +9,7 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
+import * as routes from '../routes';
 
 @Component({
   selector: 'app-progress',
@@ -26,6 +27,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
   questionId: number;
   private acceptedTasksSubscription: Subscription;
   private acceptedQuestionsSubscription: Subscription;
+  urlToSubtopic: string;
+  url = routes;
 
   constructor(private subtopicService: SubtopicService,
               private taskService: TaskService,
@@ -36,6 +39,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute) {
     this.acceptedTasks = new Map<number, boolean>();
     this.acceptedQuestions = new Map<number, boolean>();
+    this.urlToSubtopic = routes.JAVA + '/' + routes.SUBTOPIC + '/';
   }
 
   ngOnInit() {
