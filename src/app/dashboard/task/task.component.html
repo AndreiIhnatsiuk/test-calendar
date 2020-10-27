@@ -18,50 +18,50 @@
              [(value)]="solution"
              (valueChange)="editSubject.next($event)"></ace>
       </div>
+    </div>
 
-      <div style="margin-bottom: 10px; display: flex; justify-content: space-between">
-        <div *ngIf="!(sending || running)">
-          <app-next-step *ngIf="status" [taskId]="taskId" [subtopicId]="subtopicId"></app-next-step>
-          <button *ngIf="!status || !submissions" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
-                  color="primary">Отправить
-          </button>
-          <button *ngIf="status || !submissions" mat-raised-button color="primary" (click)="status = null">Решить
-            снова
-          </button>
-        </div>
-        <div *ngIf="(sending || running)">
-          <mat-spinner diameter="35"></mat-spinner>
-        </div>
-        <div *ngIf="hints.length === 0">
-          <button *ngIf="this.task.hintsCount !== this.hints.length" mat-raised-button color="accent"
-                  (click)="sendHint();">Взять подсказку
-          </button>
-          <button *ngIf="this.task.hintsCount === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок
-          </button>
-        </div>
-      </div>
-
-      <mat-accordion multi style="margin-bottom: 10px; " [style.display]="hints.length > 0?'block':'none'">
-        <mat-expansion-panel style="box-shadow: none; background: none"
-                             (opened)="panelOpenState = true"
-                             (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title style="display: flex; justify-content: flex-end">
-              подсказки
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div *ngFor="let hint of hints" class="hint">
-            <p [innerHTML]="hint.text | marked"></p>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <div *ngIf="hints.length !== 0" class="button-hint-bottom">
-        <button mat-raised-button color="accent" (click)="sendHint();"
-                [disabled]="this.task.hintsCount === this.hints.length && panelOpenState">
-          {{panelOpenState ? 'Взять подсказку' : 'Открыть подсказки'}}
+    <div style="display: flex; justify-content: space-between">
+      <div *ngIf="!(sending || running)">
+        <app-next-step *ngIf="status" [taskId]="taskId" [subtopicId]="subtopicId"></app-next-step>
+        <button *ngIf="!status || !submissions" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
+                color="primary">Отправить
+        </button>
+        <button *ngIf="status || !submissions" mat-raised-button color="primary" (click)="status = null">Решить
+          снова
         </button>
       </div>
+      <div *ngIf="(sending || running)">
+        <mat-spinner diameter="35"></mat-spinner>
+      </div>
+      <div *ngIf="hints.length === 0">
+        <button *ngIf="this.task.hintsCount !== this.hints.length" mat-raised-button color="accent"
+                (click)="sendHint();">Взять подсказку
+        </button>
+        <button *ngIf="this.task.hintsCount === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок
+        </button>
+      </div>
+    </div>
+
+    <mat-accordion multi [style.display]="hints.length > 0 ? 'block' : 'none'">
+      <mat-expansion-panel style="margin: 10px 0; box-shadow: none; background: none;"
+                           (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title style="display: flex; justify-content: flex-end; ">
+            подсказки
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngFor="let hint of hints" class="hint">
+          <p [innerHTML]="hint.text | marked"></p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div *ngIf="hints.length !== 0" class="button-hint-bottom">
+      <button mat-raised-button color="accent" (click)="sendHint();"
+              [disabled]="this.task.hintsCount === this.hints.length && panelOpenState">
+        {{panelOpenState ? 'Взять подсказку' : 'Открыть подсказки'}}
+      </button>
     </div>
 
     <div class="submissions" *ngIf="submissions && submissions.length">
