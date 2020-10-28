@@ -18,6 +18,7 @@ export class QuestionComponent implements OnInit {
   userAnswer: UserAnswer = null;
   disabledButton = true;
   disabledCheckBox = false;
+  sending = false;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -46,14 +47,14 @@ export class QuestionComponent implements OnInit {
   }
 
   send() {
-    this.disabledButton = true;
+    this.sending = true;
     const selectedAnswers = this.question.answers
       .filter(answer => answer.selected)
       .map(answer => answer.id);
     this.questionService.sendAnswerUser(this.questionId, selectedAnswers).subscribe(userAnswer => {
       this.userAnswer = userAnswer;
-      this.disabledButton = false;
       this.disabledCheckBox = true;
+      this.sending = false;
     });
   }
 

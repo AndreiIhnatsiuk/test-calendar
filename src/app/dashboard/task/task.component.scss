@@ -48,11 +48,13 @@
   justify-content: flex-end;
 }
 
-.hint {
-  pre {
-    font-family: monospace;
-    background-color: white;
-    padding: 10px;
-  }
+pre {
+  font-family: monospace;
+  background-color: white;
+  padding: 10px;
 }
 
+.panel-button {
+  display: flex;
+  justify-content: space-between
+}

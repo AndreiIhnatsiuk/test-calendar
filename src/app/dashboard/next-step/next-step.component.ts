@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {Task} from '../../entities/task';
 import {Question} from '../../entities/question';
 import {TaskService} from '../../services/task.service';
@@ -8,13 +8,14 @@ import {Topic} from '../../entities/topic';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 import {SubtopicService} from '../../services/subtopic.service';
 import * as routes from '../routes';
+import {forkJoin, Subscription, zip} from 'rxjs';
 
 @Component({
   selector: 'app-next-step',
   templateUrl: './next-step.component.html',
   styleUrls: ['./next-step.component.scss']
 })
-export class NextStepComponent implements OnInit {
+export class NextStepComponent implements OnChanges, OnDestroy {
   tasks: Array<Task>;
   questions: Array<Question>;
   @Input() questionId: number;
@@ -23,6 +24,8 @@ export class NextStepComponent implements OnInit {
   topics: Array<Topic>;
   availableSubtopics: Set<number>;
   urlToSubtopic: string;
+  availableSubtopicsSubscription: Subscription;
+  urlToNextStep: Array<any>;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -35,15 +38,28 @@ export class NextStepComponent implements OnInit {
     this.urlToSubtopic = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.SUBTOPIC;
   }
 
-  ngOnInit() {
-    this.subtopicService.getTopics()
-      .subscribe(topics => this.topics = topics);
-    this.taskService.getTasksBySubtopicId(this.subtopicId)
-      .subscribe(tasks => this.tasks = tasks);
-    this.questionService.getQuestionsBySubtopicId(this.subtopicId)
-      .subscribe(questions => this.questions = questions);
-    this.availableTopicsService.getAvailableSubtopics()
-      .subscribe(availableTopics => this.availableSubtopics = availableTopics);
+  ngOnChanges() {
+    zip(
+      this.subtopicService.getTopics(),
+      this.taskService.getTasksBySubtopicId(this.subtopicId),
+      this.questionService.getQuestionsBySubtopicId(this.subtopicId),
+    ).subscribe(([topics, tasks, questions]) => {
+      this.topics = topics;
+      this.tasks = tasks;
+      this.questions = questions;
+      this.urlToNextStep = this.getNextStepLink();
+    });
+    this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableSubtopics()
+      .subscribe(availableTopics => {
+        this.availableSubtopics = availableTopics;
+        this.urlToNextStep = this.getNextStepLink();
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.availableSubtopicsSubscription) {
+      this.availableSubtopicsSubscription.unsubscribe();
+    }
   }
 
   getNextStepLink() {
@@ -117,6 +133,6 @@ export class NextStepComponent implements OnInit {
         }
       }
     }
-    return 0;
+    return null;
   }
 }

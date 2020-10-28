@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between">
+    <div class="panel-button">
       <div *ngIf="!(sending || running)">
         <app-next-step *ngIf="status" [taskId]="taskId" [subtopicId]="subtopicId"></app-next-step>
         <button *ngIf="!status || !submissions" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
@@ -47,11 +47,11 @@
                            (opened)="panelOpenState = true"
                            (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
-          <mat-panel-title style="display: flex; justify-content: flex-end; ">
+          <mat-panel-title class="button-hint-bottom">
             подсказки
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div *ngFor="let hint of hints" class="hint">
+        <div *ngFor="let hint of hints">
           <p [innerHTML]="hint.text | marked"></p>
         </div>
       </mat-expansion-panel>
