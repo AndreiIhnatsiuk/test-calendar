@@ -15,7 +15,7 @@ import {forkJoin, Subscription, zip} from 'rxjs';
   templateUrl: './next-step.component.html',
   styleUrls: ['./next-step.component.scss']
 })
-export class NextStepComponent implements OnChanges, OnDestroy {
+export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   tasks: Array<Task>;
   questions: Array<Question>;
   @Input() questionId: number;
@@ -38,7 +38,7 @@ export class NextStepComponent implements OnChanges, OnDestroy {
     this.urlToSubtopic = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.SUBTOPIC;
   }
 
-  ngOnChanges() {
+  ngOnInit() {
     zip(
       this.subtopicService.getTopics(),
       this.taskService.getTasksBySubtopicId(this.subtopicId),
@@ -54,6 +54,10 @@ export class NextStepComponent implements OnChanges, OnDestroy {
         this.availableSubtopics = availableTopics;
         this.urlToNextStep = this.getNextStepLink();
       });
+  }
+
+  ngOnChanges() {
+    this.urlToNextStep = this.getNextStepLink();
   }
 
   ngOnDestroy() {

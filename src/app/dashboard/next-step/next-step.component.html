@@ -3,5 +3,5 @@
         [disabled]="urlToNextStep === null"
         mat-raised-button
         style="margin-right: 10px"
-        title="Выполните все задания текущего урока">Следующий шаг</button>
+        title="{{urlToNextStep === null ? 'Выполните все задания текущего урока' : 'Перейти к следующему шагу'}}">Следующий шаг</button>
 
