@@ -1,5 +1,5 @@
 .task {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .test .data {
@@ -14,6 +14,7 @@
 }
 
 .submissions table {
+  margin-top: 10px;
   width: 100%;
 }
 
@@ -35,16 +36,25 @@
   }
 }
 
-.card {
-  margin-bottom: 5px;
+.content > ol {
+  font-family: monospace;
+  background-color: #fff;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.example-form {
-  margin-top: 10px;
+.button-hint-bottom {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.example-form > * {
-  width: 100%;
+pre {
+  font-family: monospace;
+  background-color: white;
+  padding: 10px;
+}
+
+.panel-button {
+  display: flex;
+  justify-content: space-between
 }

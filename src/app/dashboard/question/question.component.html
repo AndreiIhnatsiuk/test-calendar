@@ -1,5 +1,6 @@
 <div class="question" *ngIf="question">
   <div class="question-content" [innerHTML]="question.text | marked"></div>
+  <h2>Выберите все правильные варианты ответа:</h2>
   <ul class="answers">
     <li *ngFor="let answer of question.answers">
       <mat-checkbox [(ngModel)]="answer.selected"
@@ -10,12 +11,17 @@
       </mat-checkbox>
     </li>
   </ul>
-
-  <span class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
-    {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
-  </span>
-
-  <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">Отправить</button>
-  <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Попробовать снова</button>
-
+  <div style="height: 35px">
+    <div class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'" *ngIf="userAnswer != null">
+      {{userAnswer.right ? 'Правильно' : 'Неверный ответ'}}
+    </div>
+  </div>
+  <div *ngIf="!sending">
+    <app-next-step *ngIf="userAnswer && userAnswer.right" [questionId]="questionId" [subtopicId]="subtopicId"></app-next-step>
+    <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">Отправить</button>
+    <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
+  </div>
+  <div *ngIf="sending">
+    <mat-spinner diameter="35"></mat-spinner>
+  </div>
 </div>

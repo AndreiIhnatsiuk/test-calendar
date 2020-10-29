@@ -1,21 +1,16 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config(
+  $subheading-1:  mat-typography-level(16px, 24px),
+  $body-1:        mat-typography-level(16px, 24px),
+  $button:        mat-typography-level(16px, 24px),
+);
+
+@include mat-base-typography($custom-typography);
+@include angular-material-typography($custom-typography);
+@include mat-core($custom-typography);
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-
-code {
-  padding: 5px;
-}
-
-code, pre {
-  background-color: #fff;
-}
-
-pre {
-  margin-top: 0;
-  padding: 10px;
-  code {
-    padding: 0;
-  }
-}

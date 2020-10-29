@@ -1,0 +1,7 @@
+<button color="primary"
+        [routerLink]="urlToNextStep"
+        [disabled]="urlToNextStep === null"
+        mat-raised-button
+        style="margin-right: 10px"
+        title="{{urlToNextStep === null ? 'Выполните все задания текущего урока' : 'Перейти к следующему шагу'}}">Следующий шаг</button>
+

@@ -1,5 +1,5 @@
 .topic {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .topic-part-youtube {
@@ -16,4 +16,10 @@
   background-color: lightblue;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+pre {
+  font-family: monospace;
+  padding: 10px;
+  background-color: white;
 }

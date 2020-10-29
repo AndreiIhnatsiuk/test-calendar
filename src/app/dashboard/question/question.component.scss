@@ -1,5 +1,5 @@
 .question {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .verdict {
@@ -23,7 +23,7 @@ ul.answers {
 
   li {
     label {
-      padding-top: 1em;
+      padding: 1em 0;
     }
 
     label, .answer-content {
@@ -35,4 +35,10 @@ ul.answers {
       margin: 4px 0 auto 0;
     }
   }
+}
+
+pre {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
 }
