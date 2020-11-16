@@ -1,0 +1,13 @@
+.center {
+  margin: 10% auto auto;
+  max-width: 550px;
+  padding: 0 5%;
+}
+
+.left-align {
+  text-align: center;
+}
+
+::ng-deep.mat-tab-header {
+  margin-bottom: 20px;
+}

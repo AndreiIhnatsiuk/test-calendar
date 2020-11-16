@@ -70,4 +70,11 @@ export class AuthService {
   updatePhone(phone: String): Observable<any> {
     return this.http.patch('/api/users/me', {phone: phone});
   }
+
+  create(name: string, email: string, password: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Basic ' + btoa('web:web'));
+
+    return this.http.post('/api/users', { name, email, level: 'BEGINNER', password}, {headers: headers});
+  }
 }

@@ -1,0 +1,25 @@
+<form>
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="name" name="name" placeholder="Имя" text="text">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="email" name="email" placeholder="Email" type="email">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [(ngModel)]="password" name="password" placeholder="Пароль" type="password">
+  </mat-form-field>
+
+  <div>
+    <p>
+      Регистрируясь вы принимаете <a class="dialog" (click)="openDialog()">пользовательское
+      соглашение</a>
+    </p>
+    <button (click)="create()" mat-raised-button color="primary" [disabled]="!(email && password && name)" *ngIf="(!sending)">
+      Зарегистрироваться
+    </button>
+    <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+  </div>
+</form>
+
