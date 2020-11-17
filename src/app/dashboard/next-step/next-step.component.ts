@@ -21,6 +21,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   @Input() questionId: number;
   @Input() taskId: number;
   @Input() subtopicId: number;
+  oldSubtopicId: number;
   topics: Array<Topic>;
   availableSubtopics: Set<number>;
   urlToSubtopic: string;
@@ -57,7 +58,16 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges() {
-    this.urlToNextStep = this.getNextStepLink();
+    if (this.oldSubtopicId !== this.subtopicId) {
+      zip(
+        this.taskService.getTasksBySubtopicId(this.subtopicId),
+        this.questionService.getQuestionsBySubtopicId(this.subtopicId),
+      ).subscribe(([tasks, questions]) => {
+        this.tasks = tasks;
+        this.questions = questions;
+        this.urlToNextStep = this.getNextStepLink();
+      });
+    }
   }
 
   ngOnDestroy() {
