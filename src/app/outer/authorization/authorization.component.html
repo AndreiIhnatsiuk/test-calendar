@@ -1,13 +1,15 @@
 <div class="center">
   <mat-card>
-    <mat-tab-group dynamicHeight >
-      <mat-tab label="Войти">
-        <app-login></app-login>
-      </mat-tab>
-      <mat-tab label="Зарегистрироваться">
-        <app-registration></app-registration>
-      </mat-tab>
-    </mat-tab-group>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.link"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
   </mat-card>
 
   <br>

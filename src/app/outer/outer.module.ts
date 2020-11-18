@@ -27,7 +27,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: AuthorizationComponent
+        component: AuthorizationComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'sign-in'
+          },
+          {
+            path: 'sign-in',
+            component: LoginComponent
+          },
+          {
+            path: 'sign-up',
+            component: RegistrationComponent
+          }
+        ]
       },
       {
         path: 'reset',
