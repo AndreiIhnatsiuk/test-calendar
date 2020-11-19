@@ -1,18 +1,20 @@
-<mat-card>
-  <h2>
-    Восстановление пароля
-  </h2>
-  <form class="login-form">
-    <mat-form-field class="full-width">
-      <input matInput [(ngModel)]="email" placeholder="Email" type="email" name="email">
-    </mat-form-field>
+<div class="center">
+  <mat-card>
+    <h2>
+      Восстановление пароля
+    </h2>
+    <form class="login-form">
+      <mat-form-field class="full-width">
+        <input matInput [(ngModel)]="email" placeholder="Email" type="email" name="email">
+      </mat-form-field>
 
-    <div>
-      <button mat-raised-button color="primary" [disabled]="!(email)"  *ngIf="!sending" (click)="reset()">Восстановить</button>
-      <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
-    </div>
+      <div>
+        <button mat-raised-button color="primary" [disabled]="!(email)"  *ngIf="!sending" (click)="reset()">Восстановить</button>
+        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+      </div>
 
-    <br>
-    <a routerLink="/">Вход</a>
-  </form>
-</mat-card>
+      <br>
+      <a routerLink="/">Вход</a>
+    </form>
+  </mat-card>
+</div>

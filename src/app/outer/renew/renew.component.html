@@ -1,22 +1,24 @@
-<mat-card>
-  <h2>
-    Задайте новый пароль
-  </h2>
-  <form class="login-form">
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Новый пароль" type="password" name="password" [(ngModel)]="password">
-    </mat-form-field>
+<div class="center">
+  <mat-card>
+    <h2>
+      Задайте новый пароль
+    </h2>
+    <form class="login-form">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Новый пароль" type="password" name="password" [(ngModel)]="password">
+      </mat-form-field>
 
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Повторите новый пароль" type="password" name="password2" [(ngModel)]="password2">
-    </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Повторите новый пароль" type="password" name="password2" [(ngModel)]="password2">
+      </mat-form-field>
 
-    <div>
-      <button mat-raised-button color="primary" *ngIf="!sending" [disabled]="!(password && password2)" (click)="renew()">Отправить</button>
-      <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
-    </div>
+      <div>
+        <button mat-raised-button color="primary" *ngIf="!sending" [disabled]="!(password && password2)" (click)="renew()">Отправить</button>
+        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+      </div>
 
-    <br>
-    <a routerLink="/">Вход</a>
-  </form>
-</mat-card>
+      <br>
+      <a routerLink="/">Вход</a>
+    </form>
+  </mat-card>
+</div>
