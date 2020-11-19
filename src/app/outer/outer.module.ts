@@ -1,17 +1,24 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ResetComponent } from './reset/reset.component';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { OuterComponent } from './outer.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { RenewComponent } from './renew/renew.component';
-import { FormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ResetComponent} from './reset/reset.component';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {OuterComponent} from './outer.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {RenewComponent} from './renew/renew.component';
+import {FormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {RegistrationComponent} from './registration/registration.component';
+import {UserAgreementComponent} from './user-agreement/user-agreement.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs';
+import {AuthorizationComponent} from './authorization/authorization.component';
+import {UserAgreementContentComponent} from './user-agreement-content/user-agreement-content.component';
+import {UserAgreementDialogComponent} from './user-agreement-dialog/user-agreement-dialog.component';
 
 const routes: Routes = [
   {
@@ -20,7 +27,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: LoginComponent
+        component: AuthorizationComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'sign-in'
+          },
+          {
+            path: 'sign-in',
+            component: LoginComponent
+          },
+          {
+            path: 'sign-up',
+            component: RegistrationComponent
+          }
+        ]
       },
       {
         path: 'reset',
@@ -29,6 +50,10 @@ const routes: Routes = [
       {
         path: 'reset/:id',
         component: RenewComponent
+      },
+      {
+        path: 'user-agreement',
+        component: UserAgreementComponent
       }
     ]
   }
@@ -39,7 +64,12 @@ const routes: Routes = [
     OuterComponent,
     ResetComponent,
     LoginComponent,
-    RenewComponent
+    RenewComponent,
+    RegistrationComponent,
+    UserAgreementComponent,
+    AuthorizationComponent,
+    UserAgreementContentComponent,
+    UserAgreementDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +80,9 @@ const routes: Routes = [
     MatButtonModule,
     FormsModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatTabsModule
   ]
 })
 export class OuterModule { }

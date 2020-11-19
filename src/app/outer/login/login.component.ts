@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.sending = true;
-    this.authService.login(this.email, this.password, () => {
+    this.authService.login(this.email, this.password).subscribe(() => {
       this.router.navigate(['/dashboard']);
     }, () => {
       this.sending = false;

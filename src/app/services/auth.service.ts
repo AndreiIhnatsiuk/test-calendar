@@ -3,10 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TokenInfo } from '../entities/token-info';
 import { LocalStorageService } from './local-storage.service';
-import {SubmissionRequest} from '../entities/submission-request';
 import {Personal} from '../entities/personal';
-import {Course} from '../entities/course';
-import {Gtag} from 'angular-gtag';
+import {map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -23,7 +21,7 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(email: string, password: string, callback: (data: any) => void, errorCallback: (error: any) => void) {
+  login(email: string, password: string): Observable<TokenInfo> {
     const body = new HttpParams()
       .append('username', email)
       .append('password', password)
@@ -32,22 +30,18 @@ export class AuthService {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa('web:web'));
 
-    this.http.post('/oauth/token', body, {
+    return this.http.post('/oauth/token', body, {
       headers: headers
-    }).subscribe(
-      data => {
-        const userData = <any>data;
-        const token = <string>userData.access_token;
-        if (token) {
-          const user = new TokenInfo(token);
-          this.localStorageService.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          callback(userData);
-        }
-      },
-      error => {
-        errorCallback(error);
-      });
+    }).pipe(map(data => {
+      const userData = <any>data;
+      const token = <string>userData.access_token;
+      if (token) {
+        const user = new TokenInfo(token);
+        this.localStorageService.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
+      }
+    }));
   }
 
   public resetPassword(email: string): Observable<any> {
@@ -69,5 +63,12 @@ export class AuthService {
 
   updatePhone(phone: String): Observable<any> {
     return this.http.patch('/api/users/me', {phone: phone});
+  }
+
+  create(name: string, email: string, password: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Basic ' + btoa('web:web'));
+
+    return this.http.post('/api/users', { name, email, level: 'BEGINNER', password}, {headers: headers});
   }
 }
