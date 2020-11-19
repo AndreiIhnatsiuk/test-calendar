@@ -30,6 +30,12 @@ export class RenewComponent implements OnInit {
       });
       return;
     }
+    if (this.password.length < 7) {
+      this.snackBar.open('Минимальная длина пароля 7 символов.', undefined, {
+        duration: 5000
+      });
+      return;
+    }
     this.sending = true;
     this.authService.updatePassword(this.route.snapshot.paramMap.get('id'), this.password).subscribe(() => {
       this.snackBar.open('Пароль изменен.', undefined, {
