@@ -3,5 +3,5 @@ export interface Intro {
   courseRegistrationId: number;
   start: Date;
   end: Date;
-  taskIds: Array<number>;
+  problemIds: Array<number>;
 }

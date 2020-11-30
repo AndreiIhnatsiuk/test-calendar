@@ -1,8 +1,5 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TaskService} from '../../services/task.service';
-import {FullTask} from '../../entities/full-task';
-import {Submission} from '../../entities/submission';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
 import {MatDialog} from '@angular/material/dialog';
@@ -22,6 +19,10 @@ import {StoredSolution} from '../../entities/stored-solution';
 import {HintService} from '../../services/hint.services';
 import {Hint} from '../../entities/hint';
 import {MatAccordion} from '@angular/material/expansion';
+import {ProblemService} from '../../services/problem.service';
+import {FullProblem} from '../../entities/full-problem';
+import {FullSubmission} from '../../entities/full-submission';
+import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 
 @Component({
   selector: 'app-task',
@@ -35,11 +36,12 @@ export class TaskComponent implements OnInit, OnDestroy {
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
-  taskId: number;
+  problemId: number;
   subtopicId: number;
-  displayedColumns = ['status', 'wrongTest', 'maxExecutionTime', 'actions'];
-  task: FullTask;
-  submissions: Array<Submission>;
+  problem: FullProblem;
+  submissions: BestLastFullSubmission;
+  displayedColumns = ['type', 'status', 'wrongTest', 'maxExecutionTime', 'maxUsedMemory', 'date', 'actions'];
+  listSubmissions: Array<FullSubmission>;
   hints: Array<Hint> = [];
   solution: string;
   editSubject: Subject<string>;
@@ -52,7 +54,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   running: boolean;
 
   constructor(private route: ActivatedRoute,
-              private taskService: TaskService,
+              private problemService: ProblemService,
               private hintService: HintService,
               private submissionService: SubmissionService,
               private acceptedSubmissionService: AcceptedSubmissionService,
@@ -67,22 +69,22 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
-      this.taskId = +map.get('taskId');
+      this.problemId = +map.get('problemId');
       this.subtopicId = +map.get('subtopicId');
-      this.acceptedSubmissionService.getAccepted([this.taskId]).subscribe(answerOnTasks => {
-        this.status = answerOnTasks.get(this.taskId);
+      this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
+        this.status = answerOnTasks.get(this.problemId);
       });
-      this.taskService.getTaskById(this.taskId).subscribe(fullTask => {
-        this.task = fullTask;
+      this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
+        this.problem = fullProblem;
         if (this.storedSolution == null || !this.storedSolution.solution) {
           this.initDefaultSolution();
         }
       });
-      this.hintService.getAllOpenedHints(this.taskId).subscribe(hints => {
+      this.hintService.getAllOpenedHints(this.problemId).subscribe(hints => {
         this.hints = hints;
       });
       if (!this.endDate) {
-        this.storedSolution = this.submissionService.getSolution(this.taskId);
+        this.storedSolution = this.submissionService.getSolution(this.problemId);
         if (this.storedSolution) {
           this.solution = this.storedSolution.solution;
         }
@@ -91,15 +93,21 @@ export class TaskComponent implements OnInit, OnDestroy {
         this.submissionsSubscription.unsubscribe();
       }
       this.submissionsSubscription = this.submissionService
-        .getSubmissionsByTaskId(this.taskId, this.startDate, this.endDate)
+        .getSubmissionsByProblemId(this.problemId)
         .subscribe(submissions => {
           this.submissions = submissions;
-          this.running = submissions.findIndex(x => this.isRunning(x)) !== -1;
-          if (this.storedSolution && this.storedSolution.submissionId) {
-            const index = submissions.findIndex(x => x.id === this.storedSolution.submissionId);
-            if (index !== -1 && SubmissionStatus[this.submissions[index].status] === SubmissionStatus.COMPILATION_ERROR) {
-              this.submissionService.getSubmissionById(submissions[index].id)
-                .subscribe(fullSubmission => this.parseErrors(fullSubmission.errorString));
+          this.parseBestAndLastInList(submissions);
+          if (submissions.last != null) {
+            this.running = this.isRunning(this.submissions.last);
+            if (this.storedSolution && this.storedSolution.submissionId) {
+              let index;
+              if (submissions.last.id === this.storedSolution.submissionId) {
+                index = 0;
+              }
+              if (index !== -1 && SubmissionStatus[submissions.last.status] === SubmissionStatus.COMPILATION_ERROR) {
+                this.submissionService.getSubmissionsByProblemId(submissions.last.problemId)
+                  .subscribe(fullSubmission => this.parseErrors(fullSubmission.last.errorString));
+              }
             }
           }
         });
@@ -113,26 +121,26 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   initDefaultSolution() {
-    if (this.task.tests && this.task.tests.length && this.task.tests[0].input) {
-      if (this.task.method.resultIndex === -1 &&
-        this.task.method.returnType === 'void' &&
-        this.task.method.name === 'main' &&
-        this.task.method.arguments[0] === 'String[]') {
-        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.taskId +
+    if (this.problem.tests && this.problem.tests.length && this.problem.tests[0].input) {
+      if (this.problem.method.resultIndex === -1 &&
+        this.problem.method.returnType === 'void' &&
+        this.problem.method.name === 'main' &&
+        this.problem.method.arguments[0] === 'String[]') {
+        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.problemId +
           ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
       } else {
-        this.solution = 'public class Task' + this.taskId + ' {\n    \n}\n';
+        this.solution = 'public class Task' + this.problemId + ' {\n    \n}\n';
       }
     } else {
-      this.solution = 'public class Task' + this.taskId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+      this.solution = 'public class Task' + this.problemId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
     }
   }
 
   storeSolution(solution: string, submissionId?: string) {
-    const old = submissionId ? null : this.submissionService.getSolution(this.taskId);
-    if (!old || old.taskId !== this.taskId || old.solution !== solution) {
+    const old = submissionId ? null : this.submissionService.getSolution(this.problemId);
+    if (!old || old.problemId !== this.problemId || old.solution !== solution) {
       const storedSolution: StoredSolution = {
-        taskId: this.taskId,
+        problemId: this.problemId,
         solution: solution,
         submissionId: submissionId
       };
@@ -143,7 +151,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   sendHint() {
     if (this.panelOpenState || this.hints.length === 0) {
-      this.hintService.postNextHintByTaskId(this.taskId).subscribe(hint => {
+      this.hintService.postNextHintByTaskId(this.problemId).subscribe(hint => {
         this.hints.push(hint);
         this.accordion.openAll();
       });
@@ -158,25 +166,25 @@ export class TaskComponent implements OnInit, OnDestroy {
   send() {
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
-    const submission = new SubmissionRequest(this.taskId, this.solution);
+    const submission = new SubmissionRequest(this.problemId, this.solution);
     this.submissionService.postSubmission(submission).subscribe(added => {
       this.gtag.event('sent', {
         event_category: 'submission',
-        event_label: this.taskId.toString()
+        event_label: this.problemId.toString()
       });
       this.sending = false;
       this.running = true;
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 5000
       });
-      this.submissions = [added, ...this.submissions];
+      // this.submissions = [added, ...this.submissions];
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }
     }, error => {
       this.gtag.event('sending-error', {
         event_category: 'submission',
-        event_label: this.taskId.toString()
+        event_label: this.problemId.toString()
       });
       this.sending = false;
       this.snackBar.open(error.error.message, undefined, {
@@ -185,20 +193,20 @@ export class TaskComponent implements OnInit, OnDestroy {
     });
   }
 
-  isRunning(submission: Submission): boolean {
+  isRunning(submission: FullSubmission): boolean {
     return this.submissionService.isRunning(submission);
   }
 
-  showMore(submission: Submission): boolean {
+  showMore(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
-    return !(status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING || status === SubmissionStatus.ACCEPTED);
+    return !(status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
-  seeMore(submission: Submission) {
+  seeMore(submission: FullSubmission) {
     if (!this.showMore(submission)) {
       return;
     }
-    this.dialog.open(SubmissionComponent, {data: submission.id});
+    this.dialog.open(SubmissionComponent, {data: submission});
   }
 
   isSendDisabled(): boolean {
@@ -222,5 +230,19 @@ export class TaskComponent implements OnInit, OnDestroy {
     }
 
     this.ace.directiveRef.ace().getSession().setAnnotations(annotations);
+  }
+
+  private parseBestAndLastInList(submissions: BestLastFullSubmission): void {
+    if (submissions.last !== null) {
+      this.listSubmissions = new Array<FullSubmission>();
+      this.listSubmissions.push(submissions.last);
+      this.listSubmissions.push(submissions.best);
+    } else {
+      this.listSubmissions = null;
+    }
+  }
+
+  getType(index: number): string {
+    return index === 1 ? 'Лучший результат' : 'Последний результат';
   }
 }

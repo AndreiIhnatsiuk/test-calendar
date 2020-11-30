@@ -10,7 +10,7 @@
     </div>
   </div>
   <div *ngIf="!submission.test">
-    <p>Тест не доступен для просмотра.</p>
+    <p>{{submission.solution}}</p>
   </div>
 </div>
 <button mat-raised-button color="primary" (click)="close()">Закрыть</button>

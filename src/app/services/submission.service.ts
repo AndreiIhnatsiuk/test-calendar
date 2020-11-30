@@ -8,6 +8,9 @@ import {StoredSolution} from '../entities/stored-solution';
 import {LocalStorageService} from './local-storage.service';
 import {filter, switchMap, tap} from 'rxjs/operators';
 import {SubmissionStatus} from '../entities/submission-status';
+import {UserAnswer} from '../entities/user-answer';
+import {BestLastUserAnswer} from '../entities/best-last-user-answer';
+import {BestLastFullSubmission} from '../entities/best-last-full-submission';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
@@ -24,53 +27,57 @@ export class SubmissionService {
     return this.changes;
   }
 
-  public getSubmissionsByTaskId(taskId: number, start: Date, end: Date): Observable<Array<Submission>> {
-    let params = new HttpParams()
-      .append('taskId', '' + taskId);
-    if (start) {
-      params = params.append('start', start.toISOString());
-    }
-    if (end) {
-      params = params.append('end', end.toISOString());
-    }
-    const result = this.http.get<Array<Submission>>('/api/submissions', {params: params});
+  public getSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+    const params = new HttpParams().append('problemId', '' + problemId);
+    const result = this.http.get<BestLastFullSubmission>('/api/task-submissions', {params});
     return concat(
       result,
       timer(2500, 2500).pipe(
-        filter(() => this.running.has(taskId)),
-        switchMap(() => this.http.get<Array<Submission>>('/api/submissions', {params: params}))
+        filter(() => this.running.has(problemId)),
+        switchMap(() => this.http.get<BestLastFullSubmission>('/api/task-submissions', {params}))
       )
     ).pipe(tap(submissions => {
-      const isRunning = submissions.findIndex(submission => this.isRunning(submission)) !== -1;
-      if (isRunning) {
-        this.running.add(taskId);
-      } else if (this.running.has(taskId)) {
-        this.changes.next(taskId);
-        this.running.delete(taskId);
+      if (submissions.last !== null) {
+        const isRunning = this.isRunning(submissions.last);
+        if (isRunning) {
+          this.running.add(problemId);
+        } else if (this.running.has(problemId)) {
+          this.changes.next(problemId);
+          this.running.delete(problemId);
+        }
       }
     }));
   }
 
-  public isRunning(submission: Submission): boolean {
+  public isRunning(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
-  public getSubmissionById(id: string): Observable<FullSubmission> {
-    return this.http.get<FullSubmission>('/api/submissions/' + id);
-  }
-
   public postSubmission(submissionRequest: SubmissionRequest): Observable<Submission> {
-    return this.http.post<Submission>('/api/submissions', submissionRequest)
-      .pipe(tap(() => this.running.add(submissionRequest.taskId)));
+    return this.http.post<Submission>('/api/task-submissions', submissionRequest)
+      .pipe(tap(() => this.running.add(submissionRequest.problemId)));
   }
 
   public storeSolution(storedSolution: StoredSolution): void {
-    this.localStorage.setItem('solution-' + storedSolution.taskId, JSON.stringify(storedSolution));
+    this.localStorage.setItem('solution-' + storedSolution.problemId, JSON.stringify(storedSolution));
   }
 
-  public getSolution(taskId: number): StoredSolution {
-    const json = this.localStorage.getItem('solution-' + taskId);
+  public getSolution(problemId: number): StoredSolution {
+    const json = this.localStorage.getItem('solution-' + problemId);
     return json ? JSON.parse(json) as StoredSolution : null;
+  }
+
+  public sendAnswerUser(problemId: number, answer: number[]): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/question-submissions/', {problemId, answer})
+      .pipe(tap(answers => {
+        if (answers != null) {
+          this.changes.next(problemId);
+        }
+      }));
+  }
+
+  public getAnswerUser(problemId: number): Observable<BestLastUserAnswer> {
+    return this.http.get<BestLastUserAnswer>('/api/question-submissions?problemId=' + problemId);
   }
 }

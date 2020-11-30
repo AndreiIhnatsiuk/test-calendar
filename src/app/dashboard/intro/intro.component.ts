@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {TaskService} from '../../services/task.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Intro} from '../../entities/intro';
 import {IntroService} from '../../services/intro.service';
@@ -7,6 +6,7 @@ import {concat, Observable, of, Subscription} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
 import { timer } from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
+import {ProblemService} from '../../services/problem.service';
 
 @Component({
   selector: 'app-intro',
@@ -22,7 +22,7 @@ export class IntroComponent implements OnInit, OnDestroy {
   private timerSubscription: Subscription;
   private acceptedTasksSubscription: Subscription;
 
-  constructor(private taskService: TaskService,
+  constructor(private problemService: ProblemService,
               private introService: IntroService,
               private acceptedSubmissionService: AcceptedSubmissionService,
               private router: Router,

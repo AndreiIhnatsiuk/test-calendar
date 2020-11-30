@@ -3,7 +3,7 @@
     <a *ngIf="acceptedSubtopic"
        mat-flat-button class="green"
        [routerLink]="urlToSubtopic + subtopicId"
-       [class.active-button-item]="!taskId && !questionId"
+       [class.active-button-item]="!problemId"
        title="Теория">
       <mat-icon>description</mat-icon>
     </a>
@@ -11,60 +11,38 @@
     <a *ngIf="!acceptedSubtopic"
        mat-flat-button
        [routerLink]="urlToSubtopic + subtopicId"
-       [class.active-button-item]="!taskId && !questionId"
+       [class.active-button-item]="!problemId"
        title="Теория">
       <mat-icon>description</mat-icon>
     </a>
   </div>
-  <div *ngFor="let question of questions">
-    <a *ngIf="!acceptedQuestions.has(question.id)"
+
+  <div *ngFor="let problem of problems">
+    <a *ngIf="!acceptedProblems.has(problem.id)"
        mat-flat-button
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.QUESTION + '/' + question.id"
-       [class.active-button-item]="question.id === questionId"
-       title="Вопрос">
-      <mat-icon>live_help</mat-icon>
+       [routerLink]="urlToSubtopic + subtopicId + '/' + url.PROBLEM + '/' + problem.id"
+       [class.active-button-item]="problem.id === problemId"
+       title="Задание">
+      <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
+      <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
     </a>
 
-    <a *ngIf="acceptedQuestions.has(question.id) && acceptedQuestions.get(question.id)"
+    <a *ngIf="acceptedProblems.has(problem.id) && acceptedProblems.get(problem.id)"
        mat-flat-button class="green"
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.QUESTION + '/' + question.id"
-       [class.active-button-item]="question.id === questionId"
-       title="Вопрос">
-      <mat-icon>live_help</mat-icon>
+       [routerLink]="urlToSubtopic + subtopicId + '/' + url.PROBLEM + '/' + problem.id"
+       [class.active-button-item]="problem.id === problemId"
+       title="Задание">
+      <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
+      <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
     </a>
 
-    <a *ngIf="acceptedQuestions.has(question.id) && !acceptedQuestions.get(question.id)"
+    <a *ngIf="acceptedProblems.has(problem.id) && !acceptedProblems.get(problem.id)"
        mat-flat-button class="red"
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.QUESTION + '/' + question.id"
-       [class.active-button-item]="question.id === questionId"
-       title="Вопрос">
-      <mat-icon>live_help</mat-icon>
-    </a>
-  </div>
-
-  <div *ngFor="let task of tasks">
-    <a *ngIf="!acceptedTasks.has(task.id)"
-       mat-flat-button
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.TASK + '/' + task.id"
-       [class.active-button-item]="task.id === taskId"
-       title="Задача">
-      <mat-icon>extension</mat-icon>
-    </a>
-
-    <a *ngIf="acceptedTasks.has(task.id) && acceptedTasks.get(task.id)"
-       mat-flat-button class="green"
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.TASK + '/' + task.id"
-       [class.active-button-item]="task.id === taskId"
-       title="Задача">
-      <mat-icon>extension</mat-icon>
-    </a>
-
-    <a *ngIf="acceptedTasks.has(task.id) && !acceptedTasks.get(task.id)"
-       mat-flat-button class="red"
-       [routerLink]="urlToSubtopic + subtopicId + '/' + url.TASK + '/' + task.id"
-       [class.active-button-item]="task.id === taskId"
-       title="Задача">
-      <mat-icon>extension</mat-icon>
+       [routerLink]="urlToSubtopic + subtopicId + '/' + url.PROBLEM + '/' + problem.id"
+       [class.active-button-item]="problem.id === problemId"
+       title="Задание">
+      <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
+      <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
     </a>
   </div>
 </div>

@@ -1,14 +1,12 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {Task} from '../../entities/task';
-import {Question} from '../../entities/question';
-import {TaskService} from '../../services/task.service';
-import {QuestionService} from '../../services/question.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Topic} from '../../entities/topic';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 import {SubtopicService} from '../../services/subtopic.service';
 import * as routes from '../routes';
-import {forkJoin, Subscription, zip} from 'rxjs';
+import {Subscription, zip} from 'rxjs';
+import {Problem} from '../../entities/problem';
+import {ProblemService} from '../../services/problem.service';
 
 @Component({
   selector: 'app-next-step',
@@ -16,10 +14,8 @@ import {forkJoin, Subscription, zip} from 'rxjs';
   styleUrls: ['./next-step.component.scss']
 })
 export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
-  tasks: Array<Task>;
-  questions: Array<Question>;
-  @Input() questionId: number;
-  @Input() taskId: number;
+  problems: Array<Problem>;
+  @Input() problemId: number;
   @Input() subtopicId: number;
   oldSubtopicId: number;
   topics: Array<Topic>;
@@ -29,11 +25,9 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   urlToNextStep: Array<any>;
 
   constructor(private route: ActivatedRoute,
-              private taskService: TaskService,
+              private problemService: ProblemService,
               private availableTopicsService: AvailableSubtopicsService,
-              private subtopicService: SubtopicService,
-              private router: Router,
-              private questionService: QuestionService) {
+              private subtopicService: SubtopicService) {
     this.topics = new Array<Topic>();
     this.availableSubtopics = new Set<number>();
     this.urlToSubtopic = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.SUBTOPIC;
@@ -42,12 +36,10 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   ngOnInit() {
     zip(
       this.subtopicService.getTopics(),
-      this.taskService.getTasksBySubtopicId(this.subtopicId),
-      this.questionService.getQuestionsBySubtopicId(this.subtopicId),
-    ).subscribe(([topics, tasks, questions]) => {
+      this.problemService.getProblemsBySubtopicId(this.subtopicId),
+    ).subscribe(([topics, problems]) => {
       this.topics = topics;
-      this.tasks = tasks;
-      this.questions = questions;
+      this.problems = problems;
       this.urlToNextStep = this.getNextStepLink();
     });
     this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableSubtopics()
@@ -60,11 +52,9 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges() {
     if (this.oldSubtopicId !== this.subtopicId) {
       zip(
-        this.taskService.getTasksBySubtopicId(this.subtopicId),
-        this.questionService.getQuestionsBySubtopicId(this.subtopicId),
-      ).subscribe(([tasks, questions]) => {
-        this.tasks = tasks;
-        this.questions = questions;
+        this.problemService.getProblemsBySubtopicId(this.subtopicId),
+      ).subscribe(([problems]) => {
+        this.problems = problems;
         this.urlToNextStep = this.getNextStepLink();
       });
     }
@@ -77,51 +67,25 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   getNextStepLink() {
-    if (!this.questionId && !this.taskId) {
-      if (this.questions && this.questions.length > 0) {
-        return [this.urlToSubtopic, this.subtopicId, routes.QUESTION, this.questions[0].id];
-      }
-      if (this.tasks && this.tasks.length > 0) {
-        return [this.urlToSubtopic, this.subtopicId, routes.TASK, this.tasks[0].id];
+    if (!this.problemId) {
+      if (this.problems && this.problems.length > 0) {
+        return [this.urlToSubtopic, this.subtopicId, routes.PROBLEM, this.problems[0].id];
       }
     } else {
-      if (this.questionId && this.questions) {
-        return this.getNextQuestionLink();
-      }
-      if (this.taskId && this.tasks && this.tasks[this.tasks.length - 1].id !== this.taskId) {
-        return this.getNextTaskLink();
+      if (this.problemId && this.problems && this.problems[this.problems.length - 1].id !== this.problemId) {
+        return this.getNextProblemLink();
       }
     }
     return this.getNextSubtopicLink();
   }
 
-  getNextQuestionLink() {
-    if (this.questions[this.questions.length - 1].id !== this.questionId) {
-      let isCurrentQuestion = false;
-      for (const question of this.questions) {
-        if (isCurrentQuestion) {
-          return [this.urlToSubtopic, this.subtopicId, routes.QUESTION, question.id];
-        }
-        if (this.questionId === question.id) {
-          isCurrentQuestion = true;
-        }
-      }
-    } else {
-      if (this.tasks && this.tasks.length > 0) {
-        return [this.urlToSubtopic, this.subtopicId, routes.TASK, this.tasks[0].id];
-      } else {
-        return this.getNextSubtopicLink();
-      }
-    }
-  }
-
-  getNextTaskLink() {
+  getNextProblemLink() {
     let isCurrentTask = false;
-    for (const task of this.tasks) {
+    for (const problem of this.problems) {
       if (isCurrentTask) {
-        return [this.urlToSubtopic, this.subtopicId, routes.TASK, task.id];
+        return [this.urlToSubtopic, this.subtopicId, routes.PROBLEM, problem.id];
       }
-      if (this.taskId === task.id) {
+      if (this.problemId === problem.id) {
         isCurrentTask = true;
       }
     }

@@ -1,5 +1,5 @@
 export interface UserAnswer {
-  questionId: number;
+  problemId: number;
   right: boolean;
   userAnswer: Set<number>;
   createdDate: Date;

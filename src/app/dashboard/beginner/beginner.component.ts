@@ -1,16 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SubtopicService} from '../../services/subtopic.service';
 import {Topic} from '../../entities/topic';
-import {Task} from '../../entities/task';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {TaskService} from '../../services/task.service';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
-import {Question} from '../../entities/question';
-import {QuestionService} from '../../services/question.service';
 import {Subtopic} from '../../entities/subtopic';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
+import {ProblemService} from '../../services/problem.service';
 
 @Component({
   selector: 'app-beginner',
@@ -22,17 +19,13 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   subtopicId: number;
   availableSubtopics: Set<number>;
   acceptedSubtopics: Set<number>;
-  acceptedTasksBySubtopics: Map<number, number>;
-  countTasksBySubtopics: Map<number, number>;
-  acceptedQuestionsBySubtopics: Map<number, number>;
-  countQuestionsBySubtopics: Map<number, number>;
-  private acceptedTasksBySubtopicsSubscription: Subscription;
-  private acceptedQuestionsBySubtopicsSubscription: Subscription;
+  acceptedProblemsBySubtopics: Map<number, number>;
+  countProblemsBySubtopics: Map<number, number>;
+  private acceptedProblemsBySubtopicsSubscription: Subscription;
   private availableSubtopicsSubscription: Subscription;
 
   constructor(private subtopicService: SubtopicService,
-              private taskService: TaskService,
-              private questionService: QuestionService,
+              private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
               private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
@@ -44,14 +37,10 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subtopicService.getTopics()
       .subscribe(topics => this.topics = topics);
-    this.acceptedTasksBySubtopicsSubscription = this.acceptedSubmissionService.getAcceptedBySubtopics()
-      .subscribe(accepted => this.acceptedTasksBySubtopics = accepted);
-    this.taskService.countBySubtopic()
-      .subscribe(number => this.countTasksBySubtopics = number);
-    this.acceptedQuestionsBySubtopicsSubscription = this.questionService.getAcceptedBySubtopics()
-      .subscribe(accepted => this.acceptedQuestionsBySubtopics = accepted);
-    this.questionService.countBySubtopic()
-      .subscribe(number => this.countQuestionsBySubtopics = number);
+    this.acceptedProblemsBySubtopicsSubscription = this.acceptedSubmissionService.getAcceptedBySubtopics()
+      .subscribe(accepted => this.acceptedProblemsBySubtopics = accepted);
+    this.problemService.countBySubtopic()
+      .subscribe(number => this.countProblemsBySubtopics = number);
     this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableSubtopics()
       .subscribe(availableTopics => this.availableSubtopics = availableTopics);
 
@@ -72,53 +61,33 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.acceptedTasksBySubtopicsSubscription) {
-      this.acceptedTasksBySubtopicsSubscription.unsubscribe();
-    }
-    if (this.acceptedQuestionsBySubtopicsSubscription) {
-      this.acceptedQuestionsBySubtopicsSubscription.unsubscribe();
+    if (this.acceptedProblemsBySubtopicsSubscription) {
+      this.acceptedProblemsBySubtopicsSubscription.unsubscribe();
     }
     if (this.availableSubtopicsSubscription) {
       this.availableSubtopicsSubscription.unsubscribe();
     }
   }
 
-  public getAcceptedTask(id: number) {
-    if (!this.acceptedTasksBySubtopics) {
+  public getAcceptedProblem(id: number) {
+    if (!this.acceptedProblemsBySubtopics) {
       return '';
     }
-    const accepted = this.acceptedTasksBySubtopics.get(id);
+    const accepted = this.acceptedProblemsBySubtopics.get(id);
     return accepted ? accepted : 0;
   }
 
-  public getAcceptedQuestion(id: number) {
-    if (!this.acceptedQuestionsBySubtopics) {
+  public getTotalProblem(id: number) {
+    if (!this.countProblemsBySubtopics) {
       return '';
     }
-    const accepted = this.acceptedQuestionsBySubtopics.get(id);
-    return accepted ? accepted : 0;
-  }
-
-  public getTotalTask(id: number) {
-    if (!this.countTasksBySubtopics) {
-      return '';
-    }
-    const count = this.countTasksBySubtopics.get(id);
-    return count ? count : 0;
-  }
-
-  public getTotalQuestion(id: number) {
-    if (!this.countQuestionsBySubtopics) {
-      return '';
-    }
-    const count = this.countQuestionsBySubtopics.get(id);
+    const count = this.countProblemsBySubtopics.get(id);
     return count ? count : 0;
   }
 
   public getAcceptedInTopic(subtopics: Array<Subtopic>): boolean {
     for (const subtopic of subtopics) {
-      if (this.getAcceptedTask(subtopic.id) !== this.getTotalTask(subtopic.id)
-        || this.getAcceptedQuestion(subtopic.id) !== this.getTotalQuestion(subtopic.id)) {
+      if (this.getAcceptedProblem(subtopic.id) !== this.getTotalProblem(subtopic.id)) {
         return false;
       }
     }
@@ -126,8 +95,7 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   }
 
   public getAcceptedInSubtopic(subtopic: Subtopic): boolean {
-    return this.getAcceptedTask(subtopic.id) === this.getTotalTask(subtopic.id)
-      && this.getAcceptedQuestion(subtopic.id) === this.getTotalQuestion(subtopic.id);
+    return this.getAcceptedProblem(subtopic.id) === this.getTotalProblem(subtopic.id);
   }
 
   public hasAvailableSubtopics(subtopics: Array<Subtopic>) {
