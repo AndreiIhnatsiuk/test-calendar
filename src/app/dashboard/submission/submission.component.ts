@@ -1,8 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SubmissionService} from '../../services/submission.service';
 import {FullSubmission} from '../../entities/full-submission';
-import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 
 @Component({
   selector: 'app-submission',
