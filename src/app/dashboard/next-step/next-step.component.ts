@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Topic} from '../../entities/topic';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 import {SubtopicService} from '../../services/subtopic.service';
@@ -29,6 +29,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
               private problemService: ProblemService,
               private availableTopicsService: AvailableSubtopicsService,
               private subtopicService: SubtopicService) {
+    this.oldSubtopicId = this.subtopicId;
     this.topics = new Array<Topic>();
     this.availableSubtopics = new Set<number>();
     this.urlToSubtopic = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.SUBTOPIC;
@@ -52,6 +53,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges() {
     if (this.oldSubtopicId !== this.subtopicId) {
+      this.oldSubtopicId = this.subtopicId;
       zip(
         this.problemService.getProblemsBySubtopicId(this.subtopicId),
       ).subscribe(([problems]) => {

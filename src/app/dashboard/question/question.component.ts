@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
@@ -13,7 +13,7 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
   styleUrls: ['./question.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnChanges {
   @Input() problemId: number;
   @Input() subtopicId: number;
 
@@ -34,7 +34,7 @@ export class QuestionComponent implements OnInit {
     this.disabledButton = this.problem.answers.findIndex(answer => answer.selected) === -1;
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
     });

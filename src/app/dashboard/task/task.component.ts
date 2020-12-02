@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
@@ -13,7 +13,7 @@ import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
-import {Subject, Subscription} from 'rxjs';
+import {Subject, Subscription, zip} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {StoredSolution} from '../../entities/stored-solution';
 import {HintService} from '../../services/hint.services';
@@ -30,7 +30,7 @@ import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
   styleUrls: ['./task.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskComponent implements OnInit, OnDestroy {
+export class TaskComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
   @Input() subtopicId: number;
   @Input() startDate: Date;
@@ -67,7 +67,7 @@ export class TaskComponent implements OnInit, OnDestroy {
       .subscribe(solution => this.storeSolution(solution));
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
       this.status = answerOnTasks.get(this.problemId);
     });
