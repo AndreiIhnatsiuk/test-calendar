@@ -1,9 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {FullQuestion} from '../../entities/full-question';
-import {QuestionService} from '../../services/question.service';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
+import {ProblemService} from '../../services/problem.service';
+import {FullProblem} from '../../entities/full-problem';
+import {SubmissionService} from '../../services/submission.service';
+import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 
 @Component({
   selector: 'app-question',
@@ -11,47 +13,51 @@ import {UserAnswer} from '../../entities/user-answer';
   styleUrls: ['./question.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class QuestionComponent implements OnInit {
-  questionId: number;
-  subtopicId: number;
-  question: FullQuestion;
+export class QuestionComponent implements OnChanges {
+  @Input() problemId: number;
+  @Input() subtopicId: number;
+
+  problem: FullProblem;
   userAnswer: UserAnswer = null;
+  bestLastUserAnswer: BestLastUserAnswer;
   disabledButton = true;
   disabledCheckBox = false;
   sending = false;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
-              private questionService: QuestionService) {
+              private submissionService: SubmissionService,
+              private problemService: ProblemService) {
   }
 
   onSelectAnswer() {
-    this.disabledButton = this.question.answers.findIndex(answer => answer.selected) === -1;
+    this.disabledButton = this.problem.answers.findIndex(answer => answer.selected) === -1;
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(map => {
-      this.questionId = +map.get('questionId');
-      this.subtopicId = +map.get('subtopicId');
-      this.questionService.getQuestionById(this.questionId).subscribe(fullQuestion => {
-        this.question = fullQuestion;
-      });
-      this.questionService.getAnswerUser(this.questionId).subscribe(userAnswer => {
-        this.disabledCheckBox = userAnswer !== null;
-        this.userAnswer = userAnswer;
-        if (userAnswer === null) {
-          this.disabledButton = true;
-        }
-      });
+  ngOnChanges() {
+    this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
+      this.problem = fullProblem;
+    });
+    this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
+      this.bestLastUserAnswer = bestLastUserAnswer;
+      this.disabledCheckBox = bestLastUserAnswer.last !== null;
+      this.userAnswer = bestLastUserAnswer.last;
+      if (bestLastUserAnswer.last === null) {
+        this.disabledButton = true;
+      }
     });
   }
 
   send() {
     this.sending = true;
-    const selectedAnswers = this.question.answers
+    const selectedAnswers = this.problem.answers
       .filter(answer => answer.selected)
       .map(answer => answer.id);
-    this.questionService.sendAnswerUser(this.questionId, selectedAnswers).subscribe(userAnswer => {
+    this.submissionService.sendAnswerUser(this.problemId, selectedAnswers).subscribe(userAnswer => {
+      if (this.bestLastUserAnswer.best === null || userAnswer.right) {
+        this.bestLastUserAnswer.best = userAnswer;
+      }
+      this.bestLastUserAnswer.last = userAnswer;
       this.userAnswer = userAnswer;
       this.disabledCheckBox = true;
       this.sending = false;
@@ -60,7 +66,7 @@ export class QuestionComponent implements OnInit {
 
   reset() {
     this.userAnswer = null;
-    this.question.answers.forEach(answer => answer.selected = false);
+    this.problem.answers.forEach(answer => answer.selected = false);
     this.disabledButton = true;
     this.disabledCheckBox = false;
   }

@@ -1,15 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Task} from '../../entities/task';
-import {Question} from '../../entities/question';
 import {concat, of, Subscription} from 'rxjs';
 import {SubtopicService} from '../../services/subtopic.service';
-import {TaskService} from '../../services/task.service';
-import {QuestionService} from '../../services/question.service';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
 import * as routes from '../routes';
+import {Problem} from '../../entities/problem';
+import {ProblemService} from '../../services/problem.service';
 
 @Component({
   selector: 'app-progress',
@@ -17,28 +15,22 @@ import * as routes from '../routes';
   styleUrls: ['./progress.component.scss']
 })
 export class ProgressComponent implements OnInit, OnDestroy {
-  tasks: Array<Task>;
-  questions: Array<Question>;
-  acceptedTasks: Map<number, boolean>;
-  acceptedQuestions: Map<number, boolean>;
+  problems: Array<Problem>;
+  acceptedProblems: Map<number, boolean>;
   acceptedSubtopic: boolean;
   subtopicId: number;
-  taskId: number;
-  questionId: number;
-  private acceptedTasksSubscription: Subscription;
-  private acceptedQuestionsSubscription: Subscription;
+  problemId: number;
+  private acceptedProblemsSubscription: Subscription;
   urlToSubtopic: string;
   url = routes;
 
   constructor(private subtopicService: SubtopicService,
-              private taskService: TaskService,
-              private questionService: QuestionService,
+              private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
               private availableTopicsService: AvailableSubtopicsService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedTasks = new Map<number, boolean>();
-    this.acceptedQuestions = new Map<number, boolean>();
+    this.acceptedProblems = new Map<number, boolean>();
     this.urlToSubtopic = routes.JAVA + '/' + routes.SUBTOPIC + '/';
   }
 
@@ -53,32 +45,23 @@ export class ProgressComponent implements OnInit, OnDestroy {
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
         const subtopicId = +paramMap.get('subtopicId');
-        const taskId = +paramMap.get('taskId');
-        const questionId = +paramMap.get('questionId');
+        const problemId = +paramMap.get('problemId');
         if (subtopicId !== this.subtopicId) {
           this.subtopicId = subtopicId;
-          this.taskService.getTasksBySubtopicId(this.subtopicId).subscribe(tasks => {
-            this.tasks = tasks;
+          this.problemService.getProblemsBySubtopicId(this.subtopicId).subscribe(problems => {
+            this.problems = problems;
             this.updateAccepted();
           });
-          this.questionService.getQuestionsBySubtopicId(this.subtopicId).subscribe(questions => {
-            this.questions = questions;
-            this.updateAccepted();
-          });
-        } else if (taskId !== this.taskId || questionId !== this.questionId) {
+        } else if (problemId !== this.problemId) {
           this.updateAccepted();
         }
-        this.taskId = taskId;
-        this.questionId = questionId;
+        this.problemId = problemId;
       });
   }
 
   ngOnDestroy(): void {
-    if (this.acceptedTasksSubscription) {
-      this.acceptedTasksSubscription.unsubscribe();
-    }
-    if (this.acceptedQuestionsSubscription) {
-      this.acceptedQuestionsSubscription.unsubscribe();
+    if (this.acceptedProblemsSubscription) {
+      this.acceptedProblemsSubscription.unsubscribe();
     }
   }
 
@@ -90,39 +73,22 @@ export class ProgressComponent implements OnInit, OnDestroy {
   }
 
   private updateAccepted() {
-    if (this.acceptedTasksSubscription) {
-      this.acceptedTasksSubscription.unsubscribe();
-      this.acceptedTasksSubscription = undefined;
+    if (this.acceptedProblemsSubscription) {
+      this.acceptedProblemsSubscription.unsubscribe();
+      this.acceptedProblemsSubscription = undefined;
     }
-    if (this.acceptedQuestionsSubscription) {
-      this.acceptedQuestionsSubscription.unsubscribe();
-      this.acceptedQuestionsSubscription = undefined;
-    }
-    if (this.tasks) {
-      this.acceptedTasksSubscription = this.acceptedSubmissionService.getAccepted(this.tasks.map(x => x.id))
+    if (this.problems) {
+      this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.problems.map(x => x.id))
         .subscribe(accepted => {
-          this.acceptedTasks = accepted;
-          this.updateAcceptedSubtopic();
-        });
-    }
-    if (this.questions) {
-      this.acceptedQuestionsSubscription = this.questionService.getAcceptedByQuestionIds(this.questions.map(x => x.id))
-        .subscribe(questions => {
-          this.acceptedQuestions = questions;
+          this.acceptedProblems = accepted;
           this.updateAcceptedSubtopic();
         });
     }
   }
 
   private updateAcceptedSubtopic() {
-    for (const task of this.tasks) {
-      if (!this.acceptedTasks.get(task.id)) {
-        this.acceptedSubtopic = false;
-        return;
-      }
-    }
-    for (const question of this.questions) {
-      if (!this.acceptedQuestions.get(question.id)) {
+    for (const problem of this.problems) {
+      if (!this.acceptedProblems.get(problem.id)) {
         this.acceptedSubtopic = false;
         return;
       }

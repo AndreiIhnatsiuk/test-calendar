@@ -8,7 +8,10 @@ import {NotFoundComponent} from './not-found/not-found.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {GtagModule} from 'angular-gtag';
-import {BeginnerComponent} from './dashboard/beginner/beginner.component';
+import {registerLocaleData} from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [

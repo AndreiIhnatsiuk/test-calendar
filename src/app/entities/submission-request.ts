@@ -1,9 +1,9 @@
 export class SubmissionRequest {
-  taskId: number;
+  problemId: number;
   solution: string;
 
-  constructor(taskId: number, solution: string) {
-    this.taskId = taskId;
+  constructor(problemId: number, solution: string) {
+    this.problemId = problemId;
     this.solution = solution;
   }
 }

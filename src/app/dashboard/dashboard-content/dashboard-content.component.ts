@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
-import {Subtopic} from '../../entities/subtopic';
 import {SubtopicService} from '../../services/subtopic.service';
 import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import * as routes from '../routes';
 
 @Component({
   selector: 'app-dashboard-content',

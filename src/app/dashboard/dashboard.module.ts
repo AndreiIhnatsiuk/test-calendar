@@ -5,7 +5,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {SubtopicComponent} from './topic/subtopic.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
-import {BasicComponent} from './basic/basic.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
@@ -21,18 +20,18 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AceModule} from 'ngx-ace-wrapper';
 import {ACE_CONFIG} from 'ngx-ace-wrapper';
 import {AceConfigInterface} from 'ngx-ace-wrapper';
-import {IntroComponent} from './intro/intro.component';
 import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { ChatComponent } from './chat/chat.component';
+import {ChatComponent} from './chat/chat.component';
 import {MatIconModule} from '@angular/material/icon';
-import { ProgressComponent } from './progress/progress.component';
-import { DashboardContentComponent } from './dashboard-content/dashboard-content.component';
-import { NextStepComponent } from './next-step/next-step.component';
+import {ProgressComponent} from './progress/progress.component';
+import {DashboardContentComponent} from './dashboard-content/dashboard-content.component';
+import {NextStepComponent} from './next-step/next-step.component';
 import * as url from './routes';
+import { ProblemComponent } from './problem/problem.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -60,27 +59,11 @@ const routes: Routes = [
             component: SubtopicComponent
           },
           {
-            path: url.SUBTOPIC + '/:subtopicId/' + url.TASK + '/:taskId',
-            component: TaskComponent
+            path: url.SUBTOPIC + '/:subtopicId/' + url.PROBLEM + '/:problemId',
+            component: ProblemComponent
           },
-          {
-            path: url.SUBTOPIC + '/:subtopicId/' + url.QUESTION + '/:questionId',
-            component: QuestionComponent
-          }
         ]
-      },
-      {
-        path: url.BASIC,
-        component: BasicComponent
-      },
-      {
-        path: url.BASIC + '/' + url.INTRO + '/:registrationId',
-        component: IntroComponent
-      },
-      {
-        path: url.BASIC + '/' + url.INTRO + '/:registrationId/' + url.TASK + '/:taskId',
-        component: IntroComponent
-      },
+      }
     ]
   }
 ];
@@ -89,17 +72,16 @@ const routes: Routes = [
   declarations: [
     DashboardComponent,
     SubtopicComponent,
-    BasicComponent,
     MarkedPipe,
     BeginnerComponent,
     TaskComponent,
     SubmissionComponent,
-    IntroComponent,
     QuestionComponent,
     ChatComponent,
     ProgressComponent,
     DashboardContentComponent,
-    NextStepComponent
+    NextStepComponent,
+    ProblemComponent
   ],
   entryComponents: [
     SubmissionComponent

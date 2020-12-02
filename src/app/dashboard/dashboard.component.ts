@@ -1,11 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Personal} from '../entities/personal';
-import {LocalStorageService} from '../services/local-storage.service';
-import {Gtag, GtagEventDirective} from 'angular-gtag';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {concat, of} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-dashboard',

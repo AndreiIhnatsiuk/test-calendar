@@ -1,5 +1,5 @@
 export interface StoredSolution {
-  taskId: number;
+  problemId: number;
   solution: string;
   submissionId?: string;
 }

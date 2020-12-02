@@ -11,9 +11,9 @@ export class AcceptedSubmissionService {
               private submissionService: SubmissionService) {
   }
 
-  public getAccepted(taskIds: Array<number>, start?: Date, end?: Date): Observable<Map<number, boolean>> {
-    if (taskIds.length) {
-      let url = '/api/accepted-tasks?taskIds=' + taskIds.join(',');
+  public getAccepted(problemIds: Array<number>, start?: Date, end?: Date): Observable<Map<number, boolean>> {
+    if (problemIds.length) {
+      let url = '/api/accepted-problems?problemIds=' + problemIds.join(',');
       if (start) {
         url += '&start=' + start.toISOString();
       }
@@ -23,8 +23,8 @@ export class AcceptedSubmissionService {
       return concat(
         this.http.get<Map<number, boolean>>(url),
         this.submissionService.getChanges().pipe(
-          filter(taskId => taskIds.indexOf(taskId) !== -1),
-          switchMap(() => this.http.get<Object>(url))
+          filter(problemId => problemIds.indexOf(problemId) !== -1),
+          switchMap(() => this.http.get<Map<number, boolean>>(url))
         )
       ).pipe(map(x => new Map<number, boolean>(Object.entries(x).map(y => [+y[0], y[1]]))));
     } else {
@@ -33,7 +33,7 @@ export class AcceptedSubmissionService {
   }
 
   public getAcceptedBySubtopics(): Observable<Map<number, number>> {
-    const url = '/api/accepted-tasks?groupBy=subtopics';
+    const url = '/api/accepted-problems?groupBy=subtopics';
     return concat(
       this.http.get<Map<number, number>>(url),
       this.submissionService.getChanges().pipe(

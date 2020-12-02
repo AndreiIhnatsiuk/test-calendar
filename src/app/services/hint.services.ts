@@ -8,11 +8,11 @@ export class HintService {
   constructor(private http: HttpClient) {
   }
 
-  public getAllOpenedHints(taskId: number): Observable<Array<Hint>> {
-    return this.http.get<Array<Hint>>('/api/used-hints?taskId=' + taskId);
+  public getAllOpenedHints(problemId: number): Observable<Array<Hint>> {
+    return this.http.get<Array<Hint>>('/api/used-hints?problemId=' + problemId);
   }
 
-  public postNextHintByTaskId(taskId: number): Observable<Hint> {
-    return this.http.post<Hint>('/api/used-hints/', {taskId: taskId});
+  public postNextHintByTaskId(problemId: number): Observable<Hint> {
+    return this.http.post<Hint>('/api/used-hints/', {problemId});
   }
 }

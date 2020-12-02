@@ -3,12 +3,20 @@
 }
 
 .verdict {
-  padding-right: 16px;
-  font-weight: 500;
+  div {
+    font-weight: 500;
+
+    span {
+      font-weight: 400;
+      color: #828282;
+    }
+  }
 }
+
 .verdict.true {
   color: green;
 }
+
 .verdict.false {
   color: red;
 }
@@ -18,7 +26,7 @@ ul.answers {
   padding: 0;
 
   li:not(:last-child) {
-    border-bottom: 1px solid rgba(0,0,0,.20);
+    border-bottom: 1px solid rgba(0, 0, 0, .20);
   }
 
   li {
