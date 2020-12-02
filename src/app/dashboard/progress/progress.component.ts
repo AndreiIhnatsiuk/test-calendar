@@ -8,6 +8,7 @@ import {filter, map, switchMap} from 'rxjs/operators';
 import * as routes from '../routes';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
+import {AvailableProblemsService} from '../../services/available-problem.service';
 
 @Component({
   selector: 'app-progress',
@@ -17,20 +18,23 @@ import {ProblemService} from '../../services/problem.service';
 export class ProgressComponent implements OnInit, OnDestroy {
   problems: Array<Problem>;
   acceptedProblems: Map<number, boolean>;
+  availableProblemIds: Set<number>;
   acceptedSubtopic: boolean;
   subtopicId: number;
   problemId: number;
   private acceptedProblemsSubscription: Subscription;
+  private availableProblemsSubscription: Subscription;
   urlToSubtopic: string;
   url = routes;
 
-  constructor(private subtopicService: SubtopicService,
-              private problemService: ProblemService,
+  constructor(private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
-              private availableTopicsService: AvailableSubtopicsService,
+              private availableProblemsService: AvailableProblemsService,
               private router: Router,
               private route: ActivatedRoute) {
+    this.problems = new Array<Problem>();
     this.acceptedProblems = new Map<number, boolean>();
+    this.availableProblemIds = new Set<number>();
     this.urlToSubtopic = routes.JAVA + '/' + routes.SUBTOPIC + '/';
   }
 
@@ -63,6 +67,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
     if (this.acceptedProblemsSubscription) {
       this.acceptedProblemsSubscription.unsubscribe();
     }
+    if (this.availableProblemsSubscription) {
+      this.availableProblemsSubscription.unsubscribe();
+    }
   }
 
   private updateFirsChild() {
@@ -84,6 +91,16 @@ export class ProgressComponent implements OnInit, OnDestroy {
           this.updateAcceptedSubtopic();
         });
     }
+    if (this.availableProblemsSubscription) {
+      this.availableProblemsSubscription.unsubscribe();
+      this.availableProblemsSubscription = undefined;
+    }
+    if (this.subtopicId) {
+      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblems(this.subtopicId)
+        .subscribe(problemIds => {
+          this.availableProblemIds = problemIds;
+        });
+    }
   }
 
   private updateAcceptedSubtopic() {
@@ -94,5 +111,18 @@ export class ProgressComponent implements OnInit, OnDestroy {
       }
     }
     this.acceptedSubtopic = true;
+  }
+
+  getStatus(problem: Problem): string {
+    if (this.acceptedProblems.has(problem.id) && this.acceptedProblems.get(problem.id)) {
+      return 'green';
+    }
+    if (this.acceptedProblems.has(problem.id) && !this.acceptedProblems.get(problem.id)) {
+      return 'red';
+    }
+    if (this.availableProblemIds.has(problem.id)) {
+      return 'blue';
+    }
+    return;
   }
 }

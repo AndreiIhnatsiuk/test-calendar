@@ -19,18 +19,19 @@ export class ProblemComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(map => {
-      this.problemId = +map.get('problemId');
       this.subtopicId = +map.get('subtopicId');
+      const problemId = +map.get('problemId');
       this.problemService.getProblemsBySubtopicId(this.subtopicId).subscribe(problems => {
         this.problems = problems;
-        this.type = this.getTypeByProblemId();
+        this.type = this.getTypeByProblemId(problemId);
+        this.problemId = problemId;
       });
     });
   }
 
-  public getTypeByProblemId(): string {
+  public getTypeByProblemId(problemId: number): string {
     for (const problem of this.problems) {
-      if (problem.id === this.problemId) {
+      if (problem.id === problemId) {
         return problem.type;
       }
     }
