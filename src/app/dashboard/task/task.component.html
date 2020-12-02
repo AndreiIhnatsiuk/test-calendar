@@ -23,10 +23,10 @@
     <div class="panel-button">
       <div *ngIf="!(sending || running)">
         <app-next-step *ngIf="status" [problemId]="problemId" [subtopicId]="subtopicId"></app-next-step>
-        <button *ngIf="!status || !submissions" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
+        <button *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
                 color="primary">Отправить
         </button>
-        <button *ngIf="status || !submissions" mat-raised-button color="primary" (click)="status = null">
+        <button *ngIf="status || !bestLastSubmission" mat-raised-button color="primary" (click)="status = null">
           Решить снова
         </button>
       </div>

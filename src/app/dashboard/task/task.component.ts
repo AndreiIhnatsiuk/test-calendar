@@ -31,15 +31,15 @@ import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit, OnDestroy {
+  @Input() problemId: number;
+  @Input() subtopicId: number;
   @Input() startDate: Date;
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
-  problemId: number;
-  subtopicId: number;
   problem: FullProblem;
-  submissions: BestLastFullSubmission;
+  bestLastSubmission: BestLastFullSubmission;
   displayedColumns = ['type', 'status', 'wrongTest', 'maxExecutionTime', 'maxUsedMemory', 'date', 'actions'];
   listSubmissions: Array<FullSubmission>;
   hints: Array<Hint> = [];
@@ -68,50 +68,46 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(map => {
-      this.problemId = +map.get('problemId');
-      this.subtopicId = +map.get('subtopicId');
-      this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
-        this.status = answerOnTasks.get(this.problemId);
-      });
-      this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
-        this.problem = fullProblem;
-        if (this.storedSolution == null || !this.storedSolution.solution) {
-          this.initDefaultSolution();
-        }
-      });
-      this.hintService.getAllOpenedHints(this.problemId).subscribe(hints => {
-        this.hints = hints;
-      });
-      if (!this.endDate) {
-        this.storedSolution = this.submissionService.getSolution(this.problemId);
-        if (this.storedSolution) {
-          this.solution = this.storedSolution.solution;
-        }
+    this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
+      this.status = answerOnTasks.get(this.problemId);
+    });
+    this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
+      this.problem = fullProblem;
+      if (this.storedSolution == null || !this.storedSolution.solution) {
+        this.initDefaultSolution();
       }
-      if (this.submissionsSubscription) {
-        this.submissionsSubscription.unsubscribe();
+    });
+    this.hintService.getAllOpenedHints(this.problemId).subscribe(hints => {
+      this.hints = hints;
+    });
+    if (!this.endDate) {
+      this.storedSolution = this.submissionService.getSolution(this.problemId);
+      if (this.storedSolution) {
+        this.solution = this.storedSolution.solution;
       }
-      this.submissionsSubscription = this.submissionService
-        .getSubmissionsByProblemId(this.problemId)
-        .subscribe(submissions => {
-          this.submissions = submissions;
-          this.parseBestAndLastInList(submissions);
-          if (submissions.last != null) {
-            this.running = this.isRunning(this.submissions.last);
-            if (this.storedSolution && this.storedSolution.submissionId) {
-              let index;
-              if (submissions.last.id === this.storedSolution.submissionId) {
-                index = 0;
-              }
-              if (index !== -1 && SubmissionStatus[submissions.last.status] === SubmissionStatus.COMPILATION_ERROR) {
-                this.submissionService.getSubmissionsByProblemId(submissions.last.problemId)
-                  .subscribe(fullSubmission => this.parseErrors(fullSubmission.last.errorString));
-              }
+    }
+    if (this.submissionsSubscription) {
+      this.submissionsSubscription.unsubscribe();
+    }
+    this.submissionsSubscription = this.submissionService
+      .getSubmissionsByProblemId(this.problemId)
+      .subscribe(bestLastSubmission => {
+        this.bestLastSubmission = bestLastSubmission;
+        this.parseBestAndLastInList(bestLastSubmission);
+        if (bestLastSubmission.last != null) {
+          this.running = this.isRunning(this.bestLastSubmission.last);
+          if (this.storedSolution && this.storedSolution.submissionId) {
+            let index;
+            if (bestLastSubmission.last.id === this.storedSolution.submissionId) {
+              index = 0;
+            }
+            if (index !== -1 && SubmissionStatus[bestLastSubmission.last.status] === SubmissionStatus.COMPILATION_ERROR) {
+              this.submissionService.getSubmissionsByProblemId(bestLastSubmission.last.problemId)
+                .subscribe(fullSubmission => this.parseErrors(fullSubmission.last.errorString));
             }
           }
-        });
-    });
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -177,7 +173,7 @@ export class TaskComponent implements OnInit, OnDestroy {
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 5000
       });
-      // this.submissions = [added, ...this.submissions];
+      this.bestLastSubmission.last = added;
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }

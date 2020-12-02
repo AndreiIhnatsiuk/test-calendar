@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
@@ -14,8 +14,9 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
   encapsulation: ViewEncapsulation.None
 })
 export class QuestionComponent implements OnInit {
-  problemId: number;
-  subtopicId: number;
+  @Input() problemId: number;
+  @Input() subtopicId: number;
+
   problem: FullProblem;
   userAnswer: UserAnswer = null;
   bestLastUserAnswer: BestLastUserAnswer;
@@ -34,20 +35,16 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(map => {
-      this.problemId = +map.get('problemId');
-      this.subtopicId = +map.get('subtopicId');
-      this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
-        this.problem = fullProblem;
-      });
-      this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
-        this.bestLastUserAnswer = bestLastUserAnswer;
-        this.disabledCheckBox = bestLastUserAnswer.last !== null;
-        this.userAnswer = bestLastUserAnswer.last;
-        if (bestLastUserAnswer.last === null) {
-          this.disabledButton = true;
-        }
-      });
+    this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
+      this.problem = fullProblem;
+    });
+    this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
+      this.bestLastUserAnswer = bestLastUserAnswer;
+      this.disabledCheckBox = bestLastUserAnswer.last !== null;
+      this.userAnswer = bestLastUserAnswer.last;
+      if (bestLastUserAnswer.last === null) {
+        this.disabledButton = true;
+      }
     });
   }
 

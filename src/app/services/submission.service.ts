@@ -54,8 +54,8 @@ export class SubmissionService {
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
-  public postSubmission(submissionRequest: SubmissionRequest): Observable<Submission> {
-    return this.http.post<Submission>('/api/task-submissions', submissionRequest)
+  public postSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
+    return this.http.post<FullSubmission>('/api/task-submissions', submissionRequest)
       .pipe(tap(() => this.running.add(submissionRequest.problemId)));
   }
 

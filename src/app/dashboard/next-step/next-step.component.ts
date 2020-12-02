@@ -14,9 +14,10 @@ import {ProblemService} from '../../services/problem.service';
   styleUrls: ['./next-step.component.scss']
 })
 export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
-  problems: Array<Problem>;
   @Input() problemId: number;
   @Input() subtopicId: number;
+
+  problems: Array<Problem>;
   oldSubtopicId: number;
   topics: Array<Topic>;
   availableSubtopics: Set<number>;
