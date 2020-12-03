@@ -1,15 +1,6 @@
 <div *ngIf="subtopicId" class="progress">
   <div>
-    <a *ngIf="acceptedSubtopic"
-       mat-flat-button class="green"
-       [routerLink]="urlToSubtopic + subtopicId"
-       [class.active-button-item]="!problemId"
-       title="Теория">
-      <mat-icon>description</mat-icon>
-    </a>
-
-    <a *ngIf="!acceptedSubtopic"
-       mat-flat-button class="blue"
+    <a mat-flat-button [ngClass]="acceptedSubtopic ? 'green' : 'blue'"
        [routerLink]="urlToSubtopic + subtopicId"
        [class.active-button-item]="!problemId"
        title="Теория">
