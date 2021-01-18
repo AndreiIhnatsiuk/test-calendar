@@ -4,21 +4,14 @@ import {ResetComponent} from './reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {OuterComponent} from './outer.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
 import {RenewComponent} from './renew/renew.component';
-import {FormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {RegistrationComponent} from './registration/registration.component';
 import {UserAgreementComponent} from './user-agreement/user-agreement.component';
-import {MatDialogModule} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {AuthorizationComponent} from './authorization/authorization.component';
 import {UserAgreementContentComponent} from './user-agreement-content/user-agreement-content.component';
 import {UserAgreementDialogComponent} from './user-agreement-dialog/user-agreement-dialog.component';
+import {SharedModule} from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -74,15 +67,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    MatToolbarModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    SharedModule
   ]
 })
 export class OuterModule { }
