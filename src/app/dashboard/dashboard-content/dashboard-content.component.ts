@@ -17,6 +17,7 @@ export class DashboardContentComponent implements OnInit {
               private subtopicService: SubtopicService,
               private snackBar: MatSnackBar) {
     this.availableSubtopics = new Set<number>();
+    this.topics = [];
   }
 
   ngOnInit(): void {

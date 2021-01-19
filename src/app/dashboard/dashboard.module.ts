@@ -3,24 +3,15 @@ import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
 import {SubtopicComponent} from './topic/subtopic.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
-import {MatCardModule} from '@angular/material/card';
-import {MarkedPipe} from '../pipes/marked.pipe';
 import {BeginnerComponent} from './beginner/beginner.component';
 import {TaskComponent} from './task/task.component';
 import {MatTableModule} from '@angular/material/table';
-import {FormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatDialogModule} from '@angular/material/dialog';
 import {SubmissionComponent} from './submission/submission.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AceModule} from 'ngx-ace-wrapper';
 import {ACE_CONFIG} from 'ngx-ace-wrapper';
 import {AceConfigInterface} from 'ngx-ace-wrapper';
-import {MatInputModule} from '@angular/material/input';
 import {NgxMaskModule} from 'ngx-mask';
 import {QuestionComponent} from './question/question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -31,7 +22,8 @@ import {ProgressComponent} from './progress/progress.component';
 import {DashboardContentComponent} from './dashboard-content/dashboard-content.component';
 import {NextStepComponent} from './next-step/next-step.component';
 import * as url from './routes';
-import { ProblemComponent } from './problem/problem.component';
+import {ProblemComponent} from './problem/problem.component';
+import {SharedModule} from '../shared/shared.module';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -72,7 +64,6 @@ const routes: Routes = [
   declarations: [
     DashboardComponent,
     SubtopicComponent,
-    MarkedPipe,
     BeginnerComponent,
     TaskComponent,
     SubmissionComponent,
@@ -89,22 +80,15 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    MatToolbarModule,
-    MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    MatCardModule,
     MatTableModule,
-    FormsModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
     AceModule,
-    MatInputModule,
     NgxMaskModule.forRoot(),
     MatCheckboxModule,
     MatExpansionModule,
-    MatIconModule
+    MatIconModule,
+    SharedModule
   ],
   providers: [
     {

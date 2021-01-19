@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-agreement-content',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-agreement-content.component.scss']
 })
 export class UserAgreementContentComponent implements OnInit {
+  text: string;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.http.get('/assets/user-agreement.md', {responseType: 'text'}).subscribe(data => {
+      console.log(data);
+      this.text = data;
+    });
   }
 
 }
