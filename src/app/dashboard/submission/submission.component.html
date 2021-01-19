@@ -1,16 +1,21 @@
 <div class="submission" *ngIf="submission">
+  <div>
+    <pre class="data">{{submission.solution}}</pre>
+  </div>
   <div *ngIf="submission.test">
     <i>Входные данные</i>
     <pre class="data">{{submission.test.input}}</pre>
     <i>Выходные данные</i>
     <pre class="data">{{submission.test.output}}</pre>
-    <div>
-      <i>Вывод программы</i>
-      <pre class="data">{{submission.errorString}}</pre>
-    </div>
+    <i>Вывод программы</i>
+    <pre class="data">{{submission.errorString}}</pre>
   </div>
-  <div *ngIf="!submission.test">
-    <p>{{submission.solution}}</p>
+  <div>
+    <b style="font-size: 15px; font-weight: 500">
+      Статус: {{submission.status}},
+      время: {{submission.maxExecutionTime}}ms,
+      память: {{submission.maxUsedMemory}}kb
+    </b>
   </div>
 </div>
-<button mat-raised-button color="primary" (click)="close()">Закрыть</button>
+<button style="margin-top: 10px" mat-raised-button color="primary" (click)="close()">Закрыть</button>

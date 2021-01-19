@@ -23,6 +23,7 @@
     "@angular/router": "~9.1.1",
     "@stomp/ng2-stompjs": "^7.2.0",
     "angular-gtag": "file:../angular-gtag/lib/dist/angular-gtag-1.0.3.tgz",
+    "angular-split": "^5.0.0",
     "core-js": "^3.6.5",
     "marked": "^0.8.2",
     "ngx-ace-wrapper": "^9.0.1",
