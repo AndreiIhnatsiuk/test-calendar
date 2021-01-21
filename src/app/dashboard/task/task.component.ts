@@ -26,7 +26,7 @@ import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 import {RunSubmissionRequest} from '../../entities/run-submission-request';
 import {SplitAreaDirective, SplitComponent} from 'angular-split';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {TaskPageConfig} from '../../entities/task-page-config';
+import {TaskPageAreas} from '../../entities/task-page-areas';
 
 @Component({
   selector: 'app-task',
@@ -41,16 +41,8 @@ export class TaskComponent implements OnChanges, OnDestroy {
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
   @ViewChild(MatAccordion) accordion: MatAccordion;
-
-  @ViewChild('split') split: SplitComponent;
-  @ViewChild('area1') area1: SplitAreaDirective;
-  @ViewChild('area2') area2: SplitAreaDirective;
-  @ViewChild('area3') area3: SplitAreaDirective;
-  @ViewChild('area4') area4: SplitAreaDirective;
-  @ViewChild('area5') area5: SplitAreaDirective;
-  @ViewChild('area6') area6: SplitAreaDirective;
-  @ViewChild('area7') area7: SplitAreaDirective;
-  @ViewChild('area8') area8: SplitAreaDirective;
+  @ViewChild('areaTask') areaTask: SplitAreaDirective;
+  @ViewChild('areaHint') areaHint: SplitAreaDirective;
 
   problem: FullProblem;
   bestLastSubmission: BestLastFullSubmission;
@@ -67,7 +59,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   sending = false;
   running: boolean;
   size = window.innerHeight;
-  taskPageConfig: TaskPageConfig = new TaskPageConfig();
+  taskPageAreas: TaskPageAreas = new TaskPageAreas();
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -82,47 +74,47 @@ export class TaskComponent implements OnChanges, OnDestroy {
     this.editSubject
       .pipe(debounceTime(1000))
       .subscribe(solution => this.storeSolution(solution));
-
-    if (localStorage.getItem('taskPageConfig')) {
-      this.taskPageConfig = JSON.parse(this.localStorage.getItem('taskPageConfig'));
-      if (!this.taskPageConfig.areaAce) {
-        this.taskPageConfig.areaAce = 70;
-        this.taskPageConfig.areaInputAndOutput = 30;
+    const taskPageAreas: string = localStorage.getItem('taskPageAreas');
+    if (taskPageAreas) {
+      this.taskPageAreas = JSON.parse(taskPageAreas);
+      if (!this.taskPageAreas.ace) {
+        this.taskPageAreas.ace = 70;
+        this.taskPageAreas.inputAndOutput = 30;
       }
     }
   }
 
   closedPanelHints() {
     this.panelOpenState = false;
-    this.area3.size = 90;
-    this.area4.size = 10;
+    this.areaTask.size = 90;
+    this.areaHint.size = 10;
   }
 
   openedPanelHints() {
     this.panelOpenState = true;
-    this.area3.size = this.taskPageConfig.areaTask;
-    this.area4.size = this.taskPageConfig.areaHint;
+    this.areaTask.size = this.taskPageAreas.task;
+    this.areaHint.size = this.taskPageAreas.hint;
   }
 
   dragEndLeft(unit, {sizes}) {
-    this.taskPageConfig.areaTask = sizes[0];
-    this.taskPageConfig.areaHint = sizes[1];
+    this.taskPageAreas.task = sizes[0];
+    this.taskPageAreas.hint = sizes[1];
   }
 
   dragEnd(unit, {sizes}) {
     this.ace.directiveRef.ace().resize();
-    this.taskPageConfig.areaAce = sizes[0];
-    this.taskPageConfig.areaInputAndOutput = sizes[1];
+    this.taskPageAreas.ace = sizes[0];
+    this.taskPageAreas.inputAndOutput = sizes[1];
   }
 
   dragEndWindow(unit, {sizes}) {
-    this.taskPageConfig.areaWindowLeft = sizes[0];
-    this.taskPageConfig.areaWindowRight = sizes[1];
+    this.taskPageAreas.windowLeft = sizes[0];
+    this.taskPageAreas.windowRight = sizes[1];
   }
 
   dragEndInputAndOutput(unit, {sizes}) {
-    this.taskPageConfig.areaInput = sizes[0];
-    this.taskPageConfig.areaOutput = sizes[1];
+    this.taskPageAreas.input = sizes[0];
+    this.taskPageAreas.output = sizes[1];
   }
 
   @HostListener('window:resize', ['$event'])
@@ -132,7 +124,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler() {
-    this.localStorage.setItem('taskPageConfig', JSON.stringify(this.taskPageConfig));
+    this.localStorage.setItem('taskPageAreas', JSON.stringify(this.taskPageAreas));
   }
 
   ngOnChanges() {

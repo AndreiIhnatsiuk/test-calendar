@@ -12,7 +12,7 @@ export class LocalStorageService {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  getItem(key: string): any {
+  getItem(key: string): string {
     return this.isBrowser ? localStorage.getItem(key) : null;
   }
 
