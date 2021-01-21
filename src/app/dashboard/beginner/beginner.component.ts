@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SubtopicService} from '../../services/subtopic.service';
 import {Topic} from '../../entities/topic';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {concat, of, Subscription} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
-import {Subtopic} from '../../entities/subtopic';
-import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
+import {Lesson} from '../../entities/lesson';
+import {AvailableLessonsService} from '../../services/available-lessons.service';
 import {ProblemService} from '../../services/problem.service';
+import {TopicService} from '../../services/topic.service';
 
 @Component({
   selector: 'app-beginner',
@@ -16,33 +16,33 @@ import {ProblemService} from '../../services/problem.service';
 })
 export class BeginnerComponent implements OnInit, OnDestroy {
   topics: Array<Topic>;
-  subtopicId: number;
-  availableSubtopics: Set<number>;
-  acceptedSubtopics: Set<number>;
-  acceptedProblemsBySubtopics: Map<number, number>;
-  countProblemsBySubtopics: Map<number, number>;
-  private acceptedProblemsBySubtopicsSubscription: Subscription;
-  private availableSubtopicsSubscription: Subscription;
+  lessonId: number;
+  availableLessons: Set<number>;
+  acceptedLessons: Set<number>;
+  acceptedProblemsByLessons: Map<number, number>;
+  countProblemsByLessons: Map<number, number>;
+  private acceptedProblemsByLessonsSubscription: Subscription;
+  private availableLessonsSubscription: Subscription;
 
-  constructor(private subtopicService: SubtopicService,
+  constructor(private topicService: TopicService,
               private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
-              private availableTopicsService: AvailableSubtopicsService,
+              private availableTopicsService: AvailableLessonsService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedSubtopics = new Set<number>();
-    this.availableSubtopics = new Set<number>();
+    this.acceptedLessons = new Set<number>();
+    this.availableLessons = new Set<number>();
   }
 
   ngOnInit() {
-    this.subtopicService.getTopics()
+    this.topicService.getTopics()
       .subscribe(topics => this.topics = topics);
-    this.acceptedProblemsBySubtopicsSubscription = this.acceptedSubmissionService.getAcceptedBySubtopics()
-      .subscribe(accepted => this.acceptedProblemsBySubtopics = accepted);
-    this.problemService.countBySubtopic()
-      .subscribe(number => this.countProblemsBySubtopics = number);
-    this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableSubtopics()
-      .subscribe(availableTopics => this.availableSubtopics = availableTopics);
+    this.acceptedProblemsByLessonsSubscription = this.acceptedSubmissionService.getAcceptedByLessons()
+      .subscribe(accepted => this.acceptedProblemsByLessons = accepted);
+    this.problemService.countByLesson()
+      .subscribe(number => this.countProblemsByLessons = number);
+    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons()
+      .subscribe(availableTopics => this.availableLessons = availableTopics);
 
     concat(
       of(this.route.firstChild),
@@ -53,54 +53,54 @@ export class BeginnerComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const subtopicId = +paramMap.get('subtopicId');
-        if (subtopicId !== this.subtopicId) {
-          this.subtopicId = subtopicId;
+        const lessonId = +paramMap.get('lessonId');
+        if (lessonId !== this.lessonId) {
+          this.lessonId = lessonId;
         }
       });
   }
 
   ngOnDestroy(): void {
-    if (this.acceptedProblemsBySubtopicsSubscription) {
-      this.acceptedProblemsBySubtopicsSubscription.unsubscribe();
+    if (this.acceptedProblemsByLessonsSubscription) {
+      this.acceptedProblemsByLessonsSubscription.unsubscribe();
     }
-    if (this.availableSubtopicsSubscription) {
-      this.availableSubtopicsSubscription.unsubscribe();
+    if (this.availableLessonsSubscription) {
+      this.availableLessonsSubscription.unsubscribe();
     }
   }
 
   public getAcceptedProblem(id: number) {
-    if (!this.acceptedProblemsBySubtopics) {
+    if (!this.acceptedProblemsByLessons) {
       return '';
     }
-    const accepted = this.acceptedProblemsBySubtopics.get(id);
+    const accepted = this.acceptedProblemsByLessons.get(id);
     return accepted ? accepted : 0;
   }
 
   public getTotalProblem(id: number) {
-    if (!this.countProblemsBySubtopics) {
+    if (!this.countProblemsByLessons) {
       return '';
     }
-    const count = this.countProblemsBySubtopics.get(id);
+    const count = this.countProblemsByLessons.get(id);
     return count ? count : 0;
   }
 
-  public getAcceptedInTopic(subtopics: Array<Subtopic>): boolean {
-    for (const subtopic of subtopics) {
-      if (this.getAcceptedProblem(subtopic.id) !== this.getTotalProblem(subtopic.id)) {
+  public getAcceptedInTopic(lessons: Array<Lesson>): boolean {
+    for (const lesson of lessons) {
+      if (this.getAcceptedProblem(lesson.id) !== this.getTotalProblem(lesson.id)) {
         return false;
       }
     }
     return true;
   }
 
-  public getAcceptedInSubtopic(subtopic: Subtopic): boolean {
-    return this.getAcceptedProblem(subtopic.id) === this.getTotalProblem(subtopic.id);
+  public getAcceptedInLesson(lesson: Lesson): boolean {
+    return this.getAcceptedProblem(lesson.id) === this.getTotalProblem(lesson.id);
   }
 
-  public hasAvailableSubtopics(subtopics: Array<Subtopic>) {
-    for (const subtopic of subtopics) {
-      if (this.availableSubtopics.has(subtopic.id)) {
+  public hasAvailableLessons(lessons: Array<Lesson>) {
+    for (const lesson of lessons) {
+      if (this.availableLessons.has(lesson.id)) {
         return true;
       }
     }
@@ -108,8 +108,8 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   }
 
   public isOpened(topic: Topic) {
-    for (const subtopic of topic.subtopics) {
-      if (subtopic.id === this.subtopicId) {
+    for (const lesson of topic.lessons) {
+      if (lesson.id === this.lessonId) {
         return true;
       }
     }

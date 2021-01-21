@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
-import {SubtopicComponent} from './topic/subtopic.component';
+import {LessonComponent} from './lesson/lesson.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {BeginnerComponent} from './beginner/beginner.component';
@@ -45,14 +45,14 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: url.SUBTOPIC + '/1'
+            redirectTo: url.LESSON + '/1'
           },
           {
-            path: url.SUBTOPIC + '/:subtopicId',
-            component: SubtopicComponent
+            path: url.LESSON + '/:lessonId',
+            component: LessonComponent
           },
           {
-            path: url.SUBTOPIC + '/:subtopicId/' + url.PROBLEM + '/:problemId',
+            path: url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
             component: ProblemComponent
           },
         ]
@@ -64,7 +64,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardComponent,
-    SubtopicComponent,
+    LessonComponent,
     BeginnerComponent,
     TaskComponent,
     SubmissionComponent,

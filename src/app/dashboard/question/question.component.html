@@ -36,7 +36,7 @@
   </div>
   <div *ngIf="!sending">
     <app-next-step *ngIf="userAnswer && userAnswer.right" [problemId]="problemId"
-                   [subtopicId]="subtopicId"></app-next-step>
+                   [lessonId]="lessonId"></app-next-step>
     <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">
       Отправить
     </button>

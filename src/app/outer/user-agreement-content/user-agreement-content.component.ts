@@ -13,7 +13,6 @@ export class UserAgreementContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get('/assets/user-agreement.md', {responseType: 'text'}).subscribe(data => {
-      console.log(data);
       this.text = data;
     });
   }

@@ -1,12 +1,12 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Topic} from '../../entities/topic';
-import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
-import {SubtopicService} from '../../services/subtopic.service';
+import {AvailableLessonsService} from '../../services/available-lessons.service';
 import * as routes from '../routes';
 import {Subscription, zip} from 'rxjs';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
+import {TopicService} from '../../services/topic.service';
 
 @Component({
   selector: 'app-next-step',
@@ -15,47 +15,47 @@ import {ProblemService} from '../../services/problem.service';
 })
 export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   @Input() problemId: number;
-  @Input() subtopicId: number;
+  @Input() lessonId: number;
 
   problems: Array<Problem>;
-  oldSubtopicId: number;
+  oldLessonId: number;
   topics: Array<Topic>;
-  availableSubtopics: Set<number>;
-  urlToSubtopic: string;
-  availableSubtopicsSubscription: Subscription;
+  availableLessons: Set<number>;
+  urlToLesson: string;
+  availableLessonsSubscription: Subscription;
   urlToNextStep: Array<any>;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
-              private availableTopicsService: AvailableSubtopicsService,
-              private subtopicService: SubtopicService) {
-    this.oldSubtopicId = this.subtopicId;
+              private availableTopicsService: AvailableLessonsService,
+              private topicService: TopicService) {
+    this.oldLessonId = this.lessonId;
     this.topics = new Array<Topic>();
-    this.availableSubtopics = new Set<number>();
-    this.urlToSubtopic = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.SUBTOPIC;
+    this.availableLessons = new Set<number>();
+    this.urlToLesson = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.LESSON;
   }
 
   ngOnInit() {
     zip(
-      this.subtopicService.getTopics(),
-      this.problemService.getProblemsBySubtopicId(this.subtopicId),
+      this.topicService.getTopics(),
+      this.problemService.getProblemsByLessonId(this.lessonId),
     ).subscribe(([topics, problems]) => {
       this.topics = topics;
       this.problems = problems;
       this.urlToNextStep = this.getNextStepLink();
     });
-    this.availableSubtopicsSubscription = this.availableTopicsService.getAvailableSubtopics()
+    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons()
       .subscribe(availableTopics => {
-        this.availableSubtopics = availableTopics;
+        this.availableLessons = availableTopics;
         this.urlToNextStep = this.getNextStepLink();
       });
   }
 
   ngOnChanges() {
-    if (this.oldSubtopicId !== this.subtopicId) {
-      this.oldSubtopicId = this.subtopicId;
+    if (this.oldLessonId !== this.lessonId) {
+      this.oldLessonId = this.lessonId;
       zip(
-        this.problemService.getProblemsBySubtopicId(this.subtopicId),
+        this.problemService.getProblemsByLessonId(this.lessonId),
       ).subscribe(([problems]) => {
         this.problems = problems;
         this.urlToNextStep = this.getNextStepLink();
@@ -64,29 +64,29 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.availableSubtopicsSubscription) {
-      this.availableSubtopicsSubscription.unsubscribe();
+    if (this.availableLessonsSubscription) {
+      this.availableLessonsSubscription.unsubscribe();
     }
   }
 
   getNextStepLink() {
     if (!this.problemId) {
       if (this.problems && this.problems.length > 0) {
-        return [this.urlToSubtopic, this.subtopicId, routes.PROBLEM, this.problems[0].id];
+        return [this.urlToLesson, this.lessonId, routes.PROBLEM, this.problems[0].id];
       }
     } else {
       if (this.problemId && this.problems && this.problems[this.problems.length - 1].id !== this.problemId) {
         return this.getNextProblemLink();
       }
     }
-    return this.getNextSubtopicLink();
+    return this.getNextLessonLink();
   }
 
   getNextProblemLink() {
     let isCurrentTask = false;
     for (const problem of this.problems) {
       if (isCurrentTask) {
-        return [this.urlToSubtopic, this.subtopicId, routes.PROBLEM, problem.id];
+        return [this.urlToLesson, this.lessonId, routes.PROBLEM, problem.id];
       }
       if (this.problemId === problem.id) {
         isCurrentTask = true;
@@ -94,22 +94,22 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  getNextSubtopicLink() {
-    const nextSubtopicId = this.getNextSubtopicId();
-    if (this.availableSubtopics.has(nextSubtopicId)) {
-      return [this.urlToSubtopic, nextSubtopicId];
+  getNextLessonLink() {
+    const nextLessonId = this.getNextLessonId();
+    if (this.availableLessons.has(nextLessonId)) {
+      return [this.urlToLesson, nextLessonId];
     }
     return null;
   }
 
-  getNextSubtopicId() {
+  getNextLessonId() {
     let isCurrentTopic = false;
     for (const topic of this.topics) {
-      for (const subtopic of topic.subtopics) {
+      for (const lesson of topic.lessons) {
         if (isCurrentTopic) {
-          return subtopic.id;
+          return lesson.id;
         }
-        if (subtopic.id === this.subtopicId) {
+        if (lesson.id === this.lessonId) {
           isCurrentTopic = true;
         }
       }

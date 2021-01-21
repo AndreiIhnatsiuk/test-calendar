@@ -5,7 +5,7 @@
       <mat-expansion-panel [expanded]="isOpened(topic)" hideToggle *ngFor="let topic of topics">
         <mat-expansion-panel-header expandedHeight="48px" class="panel-header-title-custom">
 
-          <mat-panel-title *ngIf="!hasAvailableSubtopics(topic.subtopics)" class="title-lock">
+          <mat-panel-title *ngIf="!hasAvailableLessons(topic.lessons)" class="title-lock">
             <div class="black">
               {{topic.name}}
             </div>
@@ -14,35 +14,35 @@
             </mat-icon>
           </mat-panel-title>
 
-          <mat-panel-title *ngIf="hasAvailableSubtopics(topic.subtopics)" class="panel-header-title-custom-available">
+          <mat-panel-title *ngIf="hasAvailableLessons(topic.lessons)" class="panel-header-title-custom-available">
             <div class="title-topic">
               {{topic.name}}
             </div>
-            <mat-icon *ngIf="getAcceptedInTopic(topic.subtopics)" class="green-check-topic">
+            <mat-icon *ngIf="getAcceptedInTopic(topic.lessons)" class="green-check-topic">
               check
             </mat-icon>
           </mat-panel-title>
 
         </mat-expansion-panel-header>
 
-        <mat-nav-list *ngFor="let subtopic of topic.subtopics">
+        <mat-nav-list *ngFor="let lesson of topic.lessons">
 
-          <mat-list-item *ngIf="availableSubtopics.has(subtopic.id)"
-                         [routerLink]="'subtopic/' + subtopic.id"
+          <mat-list-item *ngIf="availableLessons.has(lesson.id)"
+                         [routerLink]="'lesson/' + lesson.id"
                          routerLinkActive="active-list-item">
             <div mat-line>
-              {{subtopic.name}}
+              {{lesson.name}}
             </div>
-            <mat-icon *ngIf="getAcceptedInSubtopic(subtopic)" class="green-check-subtopic">
+            <mat-icon *ngIf="getAcceptedInLesson(lesson)" class="green-check-lesson">
               check
             </mat-icon>
           </mat-list-item>
 
-          <mat-list-item *ngIf="!availableSubtopics.has(subtopic.id)"
+          <mat-list-item *ngIf="!availableLessons.has(lesson.id)"
                          mat-list-item title="Выполните задания предыдущего урока"
                          class="poster">
             <div mat-line>
-              {{subtopic.name}}
+              {{lesson.name}}
             </div>
             <mat-icon class="descr">
               lock

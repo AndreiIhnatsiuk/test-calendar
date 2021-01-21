@@ -1,18 +1,18 @@
-<div class="topic" *ngIf="subtopic">
-  <h1>{{subtopic.title}}</h1>
-  <div class="topic-part" *ngFor="let part of subtopic.parts">
+<div class="topic" *ngIf="lesson">
+  <h1>{{lesson.title}}</h1>
+  <div class="topic-part" *ngFor="let part of lesson.parts">
     <div class="topic-part-text" *ngIf="part.text" [innerHTML]="part.text | marked"></div>
     <div class="topic-part-youtube" *ngIf="part.youtubeId">
       <iframe width="800" height="450" [src]="this.safeVideoUrl.get(part.youtubeId)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <div class="topic-part-tasks" *ngIf="part.taskIds">
+    <div class="topic-part-tasks" *ngIf="part.problemIds">
       <p>Ты уже можешь решить следующие задачи:</p>
       <ul>
-        <li *ngFor="let id of part.taskIds"><a [routerLink]="'task/' + id">Задача #{{id}}</a></li>
+        <li *ngFor="let id of part.problemIds"><a [routerLink]="'task/' + id">Задача #{{id}}</a></li>
       </ul>
     </div>
   </div>
   <div style="margin-top: 10px">
-    <app-next-step [subtopicId]="subtopicId"></app-next-step>
+    <app-next-step [lessonId]="lessonId"></app-next-step>
   </div>
 </div>

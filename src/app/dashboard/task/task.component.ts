@@ -13,7 +13,7 @@ import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
-import {Subject, Subscription, zip} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {StoredSolution} from '../../entities/stored-solution';
 import {HintService} from '../../services/hint.services';
@@ -36,7 +36,7 @@ import {TaskPageAreas} from '../../entities/task-page-areas';
 })
 export class TaskComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
-  @Input() subtopicId: number;
+  @Input() lessonId: number;
   @Input() startDate: Date;
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
