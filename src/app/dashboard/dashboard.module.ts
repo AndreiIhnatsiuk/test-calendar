@@ -24,6 +24,7 @@ import {NextStepComponent} from './next-step/next-step.component';
 import * as url from './routes';
 import {ProblemComponent} from './problem/problem.component';
 import {SharedModule} from '../shared/shared.module';
+import {AngularSplitModule} from 'angular-split';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -88,7 +89,8 @@ const routes: Routes = [
     MatCheckboxModule,
     MatExpansionModule,
     MatIconModule,
-    SharedModule
+    SharedModule,
+    AngularSplitModule
   ],
   providers: [
     {

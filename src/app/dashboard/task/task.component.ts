@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
@@ -23,6 +23,10 @@ import {ProblemService} from '../../services/problem.service';
 import {FullProblem} from '../../entities/full-problem';
 import {FullSubmission} from '../../entities/full-submission';
 import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
+import {RunSubmissionRequest} from '../../entities/run-submission-request';
+import {SplitAreaDirective, SplitComponent} from 'angular-split';
+import {LocalStorageService} from '../../services/local-storage.service';
+import {TaskPageAreas} from '../../entities/task-page-areas';
 
 @Component({
   selector: 'app-task',
@@ -37,10 +41,11 @@ export class TaskComponent implements OnChanges, OnDestroy {
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('areaTask') areaTask: SplitAreaDirective;
+  @ViewChild('areaHint') areaHint: SplitAreaDirective;
 
   problem: FullProblem;
   bestLastSubmission: BestLastFullSubmission;
-  displayedColumns = ['type', 'status', 'wrongTest', 'maxExecutionTime', 'maxUsedMemory', 'date', 'actions'];
   listSubmissions: Array<FullSubmission>;
   hints: Array<Hint> = [];
   solution: string;
@@ -49,9 +54,12 @@ export class TaskComponent implements OnChanges, OnDestroy {
   submissionsSubscription: Subscription;
   status: boolean = null;
   panelOpenState = false;
-
+  input: string;
+  output: string;
   sending = false;
   running: boolean;
+  size = window.innerHeight;
+  taskPageAreas: TaskPageAreas = new TaskPageAreas();
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -60,11 +68,63 @@ export class TaskComponent implements OnChanges, OnDestroy {
               private acceptedSubmissionService: AcceptedSubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private gtag: Gtag) {
+              private gtag: Gtag,
+              private localStorage: LocalStorageService) {
     this.editSubject = new Subject<string>();
     this.editSubject
       .pipe(debounceTime(1000))
       .subscribe(solution => this.storeSolution(solution));
+    const taskPageAreas: string = localStorage.getItem('taskPageAreas');
+    if (taskPageAreas) {
+      this.taskPageAreas = JSON.parse(taskPageAreas);
+      if (!this.taskPageAreas.ace) {
+        this.taskPageAreas.ace = 70;
+        this.taskPageAreas.inputAndOutput = 30;
+      }
+    }
+  }
+
+  closedPanelHints() {
+    this.panelOpenState = false;
+    this.areaTask.size = 90;
+    this.areaHint.size = 10;
+  }
+
+  openedPanelHints() {
+    this.panelOpenState = true;
+    this.areaTask.size = this.taskPageAreas.task;
+    this.areaHint.size = this.taskPageAreas.hint;
+  }
+
+  dragEndLeft(unit, {sizes}) {
+    this.taskPageAreas.task = sizes[0];
+    this.taskPageAreas.hint = sizes[1];
+  }
+
+  dragEnd(unit, {sizes}) {
+    this.ace.directiveRef.ace().resize();
+    this.taskPageAreas.ace = sizes[0];
+    this.taskPageAreas.inputAndOutput = sizes[1];
+  }
+
+  dragEndWindow(unit, {sizes}) {
+    this.taskPageAreas.windowLeft = sizes[0];
+    this.taskPageAreas.windowRight = sizes[1];
+  }
+
+  dragEndInputAndOutput(unit, {sizes}) {
+    this.taskPageAreas.input = sizes[0];
+    this.taskPageAreas.output = sizes[1];
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.size = event.target.innerHeight;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler() {
+    this.localStorage.setItem('taskPageAreas', JSON.stringify(this.taskPageAreas));
   }
 
   ngOnChanges() {
@@ -122,13 +182,31 @@ export class TaskComponent implements OnChanges, OnDestroy {
         this.problem.method.returnType === 'void' &&
         this.problem.method.name === 'main' &&
         this.problem.method.arguments[0] === 'String[]') {
-        this.solution = 'import java.util.Scanner;\n\npublic class Task' + this.problemId +
-          ' {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n    }\n}\n';
+        this.solution =
+          'import java.util.Scanner;\n' +
+          '\n' +
+          'public class Program {\n' +
+          '    public static void main(String[] args) {\n' +
+          '        Scanner scanner = new Scanner(System.in);\n' +
+          '        \n' +
+          '    }\n' +
+          '}\n' +
+          '';
       } else {
-        this.solution = 'public class Task' + this.problemId + ' {\n    \n}\n';
+        this.solution =
+          'public class Program {\n' +
+          '    \n' +
+          '}\n' +
+          '';
       }
     } else {
-      this.solution = 'public class Task' + this.problemId + ' {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+      this.solution =
+        'public class Program {\n' +
+        '    public static void main(String[] args) {\n' +
+        '        \n' +
+        '    }\n' +
+        '}\n' +
+        '';
     }
   }
 
@@ -174,6 +252,38 @@ export class TaskComponent implements OnChanges, OnDestroy {
         duration: 5000
       });
       this.bestLastSubmission.last = added;
+      if (this.solution === submission.solution) {
+        this.storeSolution(this.solution, added.id);
+      }
+    }, error => {
+      this.gtag.event('sending-error', {
+        event_category: 'submission',
+        event_label: this.problemId.toString()
+      });
+      this.sending = false;
+      this.snackBar.open(error.error.message, undefined, {
+        duration: 5000
+      });
+    });
+  }
+
+  run() {
+    this.sending = true;
+    this.ace.directiveRef.ace().getSession().setAnnotations([]);
+    console.log(this.input);
+    const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
+    this.submissionService.postRunSubmission(submission).subscribe(added => {
+      this.gtag.event('sent', {
+        event_category: 'submission',
+        event_label: this.problemId.toString()
+      });
+      this.sending = false;
+      this.running = true;
+      this.snackBar.open('Решение отправлено.', undefined, {
+        duration: 5000
+      });
+      this.output = added.output;
+      console.log(this.output);
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }
@@ -236,9 +346,5 @@ export class TaskComponent implements OnChanges, OnDestroy {
     } else {
       this.listSubmissions = null;
     }
-  }
-
-  getType(index: number): string {
-    return index === 1 ? 'Лучший результат' : 'Последний результат';
   }
 }
