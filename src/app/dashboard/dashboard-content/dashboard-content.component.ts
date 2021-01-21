@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
-import {SubtopicService} from '../../services/subtopic.service';
+import {AvailableLessonsService} from '../../services/available-lessons.service';
 import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {TopicService} from '../../services/topic.service';
 
 @Component({
   selector: 'app-dashboard-content',
@@ -11,27 +11,27 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class DashboardContentComponent implements OnInit {
   topics: Array<Topic>;
-  availableSubtopics: Set<number>;
+  availableLessons: Set<number>;
 
-  constructor(private availableTopicsService: AvailableSubtopicsService,
-              private subtopicService: SubtopicService,
+  constructor(private availableTopicsService: AvailableLessonsService,
+              private topicService: TopicService,
               private snackBar: MatSnackBar) {
-    this.availableSubtopics = new Set<number>();
+    this.availableLessons = new Set<number>();
     this.topics = [];
   }
 
   ngOnInit(): void {
-    this.availableTopicsService.getAvailableSubtopics()
-      .subscribe(availableTopics => this.availableSubtopics = availableTopics);
-    this.subtopicService.getTopics()
+    this.availableTopicsService.getAvailableLessons()
+      .subscribe(availableTopics => this.availableLessons = availableTopics);
+    this.topicService.getTopics()
       .subscribe(topics => this.topics = topics);
   }
 
-  public getLastOpenedSubtopics() {
+  public getLastOpenedLessons() {
     for (const topic of this.topics.reverse()) {
-      for (const subtopic of topic.subtopics.reverse()) {
-        if (this.availableSubtopics.has(subtopic.id)) {
-          return subtopic.id;
+      for (const lesson of topic.lessons.reverse()) {
+        if (this.availableLessons.has(lesson.id)) {
+          return lesson.id;
         }
       }
     }

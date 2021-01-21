@@ -11,7 +11,7 @@ import {ProblemService} from '../../services/problem.service';
 export class ProblemComponent implements OnInit {
   problems: Array<Problem>;
   problemId: number;
-  subtopicId: number;
+  lessonId: number;
   type: string;
 
   constructor(private route: ActivatedRoute,
@@ -19,9 +19,9 @@ export class ProblemComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(map => {
-      this.subtopicId = +map.get('subtopicId');
+      this.lessonId = +map.get('lessonId');
       const problemId = +map.get('problemId');
-      this.problemService.getProblemsBySubtopicId(this.subtopicId).subscribe(problems => {
+      this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
         this.problems = problems;
         this.type = this.getTypeByProblemId(problemId);
         this.problemId = problemId;

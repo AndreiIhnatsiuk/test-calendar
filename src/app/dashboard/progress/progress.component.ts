@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {concat, of, Subscription} from 'rxjs';
-import {SubtopicService} from '../../services/subtopic.service';
+import {LessonService} from '../../services/lesson.service';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
-import {AvailableSubtopicsService} from '../../services/available-subtopics.service';
+import {AvailableLessonsService} from '../../services/available-lessons.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
 import * as routes from '../routes';
@@ -19,12 +19,12 @@ export class ProgressComponent implements OnInit, OnDestroy {
   problems: Array<Problem>;
   acceptedProblems: Map<number, boolean>;
   availableProblemIds: Set<number>;
-  acceptedSubtopic: boolean;
-  subtopicId: number;
+  acceptedLesson: boolean;
+  lessonId: number;
   problemId: number;
   private acceptedProblemsSubscription: Subscription;
   private availableProblemsSubscription: Subscription;
-  urlToSubtopic: string;
+  urlToLesson: string;
   url = routes;
 
   constructor(private problemService: ProblemService,
@@ -35,7 +35,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
     this.problems = new Array<Problem>();
     this.acceptedProblems = new Map<number, boolean>();
     this.availableProblemIds = new Set<number>();
-    this.urlToSubtopic = routes.JAVA + '/' + routes.SUBTOPIC + '/';
+    this.urlToLesson = routes.JAVA + '/' + routes.LESSON + '/';
   }
 
   ngOnInit() {
@@ -48,11 +48,11 @@ export class ProgressComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const subtopicId = +paramMap.get('subtopicId');
+        const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
-        if (subtopicId !== this.subtopicId) {
-          this.subtopicId = subtopicId;
-          this.problemService.getProblemsBySubtopicId(this.subtopicId).subscribe(problems => {
+        if (lessonId !== this.lessonId) {
+          this.lessonId = lessonId;
+          this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
             this.problems = problems;
             this.updateAccepted();
           });
@@ -88,29 +88,29 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.problems.map(x => x.id))
         .subscribe(accepted => {
           this.acceptedProblems = accepted;
-          this.updateAcceptedSubtopic();
+          this.updateAcceptedLesson();
         });
     }
     if (this.availableProblemsSubscription) {
       this.availableProblemsSubscription.unsubscribe();
       this.availableProblemsSubscription = undefined;
     }
-    if (this.subtopicId) {
-      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblems(this.subtopicId)
+    if (this.lessonId) {
+      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblems(this.lessonId)
         .subscribe(problemIds => {
           this.availableProblemIds = problemIds;
         });
     }
   }
 
-  private updateAcceptedSubtopic() {
+  private updateAcceptedLesson() {
     for (const problem of this.problems) {
       if (!this.acceptedProblems.get(problem.id)) {
-        this.acceptedSubtopic = false;
+        this.acceptedLesson = false;
         return;
       }
     }
-    this.acceptedSubtopic = true;
+    this.acceptedLesson = true;
   }
 
   getStatus(problem: Problem): string {

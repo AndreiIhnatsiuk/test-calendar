@@ -15,7 +15,7 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 })
 export class QuestionComponent implements OnChanges {
   @Input() problemId: number;
-  @Input() subtopicId: number;
+  @Input() lessonId: number;
 
   problem: FullProblem;
   userAnswer: UserAnswer = null;

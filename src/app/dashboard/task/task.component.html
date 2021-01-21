@@ -22,7 +22,7 @@
 
     <div class="panel-button">
       <div *ngIf="!(sending || running)">
-        <app-next-step *ngIf="status" [problemId]="problemId" [subtopicId]="subtopicId"></app-next-step>
+        <app-next-step *ngIf="status" [problemId]="problemId" [lessonId]="lessonId"></app-next-step>
         <button *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
                 color="primary">Отправить
         </button>

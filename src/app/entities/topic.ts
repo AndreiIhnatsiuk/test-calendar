@@ -1,7 +1,7 @@
-import {Subtopic} from './subtopic';
+import {Lesson} from './lesson';
 
 export interface Topic {
   id: number;
   name: string;
-  subtopics: Array<Subtopic>;
+  lessons: Array<Lesson>;
 }
