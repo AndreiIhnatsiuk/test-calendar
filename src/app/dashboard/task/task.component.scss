@@ -1,5 +1,6 @@
 .task {
   max-width: 1000px;
+  width: 100%;
 }
 
 .test .data {
@@ -16,11 +17,6 @@
 .submissions table {
   margin-top: 10px;
   width: 100%;
-}
-
-.ace-container {
-  height: 300px;
-  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 992px) {
@@ -70,6 +66,69 @@ pre {
 }
 
 .panel-button {
+  margin-top: 10px;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
+}
+
+.as-split-gutter {
+  height: revert !important;
+}
+
+.giveMeEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1;
+  max-height: 32px;
+}
+
+.area-task {
+  margin-left: 10px;
+}
+
+.hint {
+  display: flex;
+  justify-content: flex-end;
+
+  .hint__inner {
+    bottom: 10px;
+    position: absolute;
+  }
+}
+
+.code {
+  padding-left: 21px;
+  background-color: #e8e8e8;
+  height: 36px;
+}
+
+.ace {
+  height: 100%;
+}
+
+.area-input-and-output {
+  height: 100%;
+  background-color: white;
+}
+
+.result {
+  bottom: 10px;
+  position: absolute;
+
+  a {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #673ab7;
+  }
+}
+
+.bottom-run {
+  margin-left: 10px;
+}
+
+.closed {
+  overflow: hidden !important;
 }

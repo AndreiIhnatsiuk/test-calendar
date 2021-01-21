@@ -1,114 +1,141 @@
-<div class="task" *ngIf="problem">
-  <div class="content" [innerHTML]="problem.text | marked"></div>
-  <div class="tests" *ngIf="problem.tests.length">
-    <h2>Примеры</h2>
-    <div class="test" *ngFor="let test of problem.tests, let i = index">
-      <p *ngIf="problem.tests.length > 1"><b>Пример {{i + 1}}</b></p>
-      <i>Входные данные</i>
-      <pre class="data">{{test.input}}</pre>
-      <i>Выходные данные</i>
-      <pre class="data">{{test.output}}</pre>
-      <hr>
-    </div>
+<div>
+  <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndWindow('percent', $event)">
+    <as-split-area minSize="30" size="{{taskPageAreas.windowLeft}}">
+      <div class="task" *ngIf="problem">
 
-    <div class="send">
-      <h2>Отправить решение</h2>
-      <div class="ace-container">
-        <ace mode="java" theme="github"
-             [(value)]="solution"
-             (valueChange)="editSubject.next($event)"></ace>
-      </div>
-    </div>
+        <div style="height: {{size - 85}}px;">
+          <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical" (dragEnd)="dragEndLeft('percent', $event)">
+            <as-split-area  minSize="20" size="90" #areaTask="asSplitArea">
+              <div class="area-task">
+                <div class="content" [innerHTML]="problem.text | marked"></div>
+                <div class="tests" *ngIf="problem.tests.length">
+                  <h2>Примеры</h2>
+                  <div class="test" *ngFor="let test of problem.tests, let i = index">
+                    <p *ngIf="problem.tests.length > 1"><b>Пример {{i + 1}}</b></p>
+                    <i>Входные данные</i>
+                    <pre class="data">{{test.input}}</pre>
+                    <i>Выходные данные</i>
+                    <pre class="data">{{test.output}}</pre>
+                  </div>
+                </div>
+              </div>
+            </as-split-area>
+            <as-split-area [class.closed]="!panelOpenState" minSize="20" size="10" #areaHint="asSplitArea">
+              <mat-accordion multi [style.display]="hints.length > 0 ? 'block' : 'none'">
+                <mat-expansion-panel style="margin: 10px 0; box-shadow: none; background: none;"
+                                     (opened)="openedPanelHints()"
+                                     (closed)="closedPanelHints()">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="button-hint-bottom">
+                      подсказки
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div *ngFor="let hint of hints">
+                    <p [innerHTML]="hint.text | marked"></p>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
 
-    <div class="panel-button">
-      <div *ngIf="!(sending || running)">
-        <app-next-step *ngIf="status" [problemId]="problemId" [subtopicId]="subtopicId"></app-next-step>
-        <button *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="send()" [disabled]="isSendDisabled()"
-                color="primary">Отправить
-        </button>
-        <button *ngIf="status || !bestLastSubmission" mat-raised-button color="primary" (click)="status = null">
-          Решить снова
-        </button>
-      </div>
-      <div *ngIf="(sending || running)">
-        <mat-spinner diameter="35"></mat-spinner>
-      </div>
-      <div *ngIf="hints.length === 0">
-        <button *ngIf="this.problem.hintsCount !== this.hints.length" mat-raised-button color="accent"
-                (click)="sendHint();">Взять подсказку
-        </button>
-        <button *ngIf="this.problem.hintsCount === this.hints.length" mat-raised-button [disabled]="true">Нет подсказок
-        </button>
-      </div>
-    </div>
-
-    <mat-accordion multi [style.display]="hints.length > 0 ? 'block' : 'none'">
-      <mat-expansion-panel style="margin: 10px 0; box-shadow: none; background: none;"
-                           (opened)="panelOpenState = true"
-                           (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title class="button-hint-bottom">
-            подсказки
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div *ngFor="let hint of hints">
-          <p [innerHTML]="hint.text | marked"></p>
+            </as-split-area>
+          </as-split>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
 
-    <div *ngIf="hints.length !== 0" class="button-hint-bottom">
-      <button mat-raised-button color="accent" (click)="sendHint();"
-              [disabled]="this.problem.hintsCount === this.hints.length && panelOpenState">
-        {{panelOpenState ? 'Взять подсказку' : 'Открыть подсказки'}}
-      </button>
-    </div>
+      </div>
 
-    <div class="submissions" *ngIf="listSubmissions && listSubmissions.length">
-      <table mat-table [dataSource]="listSubmissions">
+      <div class="hint">
+        <div class="hint__inner" >
+          <div *ngIf="hints.length === 0">
+            <button *ngIf="this.problem.hintsCount !== this.hints.length" mat-raised-button color="accent"
+                    (click)="sendHint();">
+              Взять подсказку
+            </button>
+            <button *ngIf="this.problem.hintsCount === this.hints.length" mat-raised-button [disabled]="true">
+              Нет подсказок
+            </button>
+          </div>
 
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Тип</th>
-          <td mat-cell *matCellDef="let element; let i = index">{{getType(i)}}</td>
-        </ng-container>
+          <div *ngIf="hints.length !== 0" class="button-hint-bottom">
+            <button mat-raised-button color="accent" (click)="sendHint();"
+                    [disabled]="this.problem.hintsCount === this.hints.length && panelOpenState">
+              {{panelOpenState ? (this.problem.hintsCount === this.hints.length ? 'Нет подсказок' : 'Взять подсказку') : 'Открыть подсказки'}}
+            </button>
+          </div>
+        </div>
+      </div>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Статус</th>
-          <td mat-cell *matCellDef="let element">{{element.status}}</td>
-        </ng-container>
+    </as-split-area>
 
-        <ng-container matColumnDef="wrongTest">
-          <th mat-header-cell *matHeaderCellDef>Непройденный тест</th>
-          <td mat-cell
-              *matCellDef="let element">{{element.wrongTest ? element.wrongTest + ' / ' + problem.totalTests : ''}}</td>
-        </ng-container>
+    <as-split-area  minSize="40" size="{{taskPageAreas.windowRight}}">
+      <div style="height: {{size - 160}}px;">
+        <as-split unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $event)">
+          <as-split-area minSize="20" size="{{taskPageAreas.ace}}">
+            <div class="code">
+              Код
+            </div>
+            <div class="ace">
+              <ace mode="java" theme="github"
+                   [(value)]="solution"
+                   (valueChange)="editSubject.next($event)">
+              </ace>
+            </div>
+          </as-split-area>
+          <as-split-area  minSize="20" size="{{taskPageAreas.inputAndOutput}}">
 
-        <ng-container matColumnDef="maxExecutionTime">
-          <th mat-header-cell *matHeaderCellDef>Время выполнения</th>
-          <td mat-cell *matCellDef="let element">{{element.maxExecutionTime}} мс</td>
-        </ng-container>
+            <div class="area-input-and-output">
+              <as-split  unit="percent" direction="horizontal" (dragEnd)="dragEndInputAndOutput('percent', $event)">
+                <as-split-area style="overflow: hidden;"  minSize="20" size="{{taskPageAreas.input}}">
+                  <textarea name="text" [(ngModel)]="input"
+                            style="padding: 0; resize: none; outline: none; border: none; width: 100%; height: 100%;">
+                  </textarea>
+                </as-split-area>
+                <as-split-area minSize="20" size="{{taskPageAreas.output}}">
+                  {{output}}
+                </as-split-area>
+              </as-split>
+            </div>
 
-        <ng-container matColumnDef="maxUsedMemory">
-          <th mat-header-cell *matHeaderCellDef>Память</th>
-          <td mat-cell *matCellDef="let element">{{element.maxUsedMemory}}</td>
-        </ng-container>
+          </as-split-area>
+        </as-split>
+      </div>
 
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Дата</th>
-          <td mat-cell *matCellDef="let element">{{element.sentDate | date:'dd MMMM yyyy':null:'ru'}}</td>
-        </ng-container>
+      <div class="result">
+        <div class="giveMeEllipsis" *ngIf="bestLastSubmission && bestLastSubmission.last && !(sending || running)">
+          Последний результат:
+          <a
+             (click)="seeMore(bestLastSubmission.last)">
+            {{bestLastSubmission.last.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')'}}
+            {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
+          <span *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
+            Лучший результат:
+          <a
+             (click)="seeMore(bestLastSubmission.best)">
+            {{bestLastSubmission.best.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')'}}
+            {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
+          </span>
+        </div>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-          <td mat-cell *matCellDef="let row">
-            <button mat-button *ngIf="showMore(row)" (click)="seeMore(row)">Подробнее</button>
-            <mat-spinner *ngIf="isRunning(row)" diameter="16"></mat-spinner>
-          </td>
-        </ng-container>
+        <div class="panel-button">
+          <div *ngIf="!(sending || running)">
+            <app-next-step *ngIf="status" [problemId]="problemId" [subtopicId]="subtopicId"></app-next-step>
+            <button *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="send()"
+                    [disabled]="isSendDisabled()"
+                    color="primary">Проверить
+            </button>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    </div>
-  </div>
+            <button class="bottom-run" *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="run()"
+                    [disabled]="isSendDisabled()"
+                    color="primary">Запустить
+            </button>
+            <button *ngIf="status || !bestLastSubmission" mat-raised-button color="primary" (click)="status = null">
+              Решить снова
+            </button>
+          </div>
+          <div *ngIf="(sending || running)">
+            <mat-spinner diameter="35"></mat-spinner>
+          </div>
+        </div>
+      </div>
+
+    </as-split-area>
+  </as-split>
 </div>

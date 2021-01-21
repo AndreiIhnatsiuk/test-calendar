@@ -4,7 +4,6 @@ mat-sidenav-container {
   bottom: 0;
   left: 0;
   right: 0;
-  padding-bottom: 36px;
 }
 
 mat-sidenav {
@@ -121,7 +120,6 @@ mat-expansion-panel {
 }
 
 mat-sidenav-content {
-  padding: 16px 32px;
   background-color: #f3f4f6;
 }
 
@@ -154,7 +152,6 @@ mat-sidenav-content {
     box-sizing: border-box;
     overflow: visible;
     clear: both;
-    padding: 16px;
     margin-left: 0 !important;
   }
 

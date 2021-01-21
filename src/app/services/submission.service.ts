@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {concat, Observable, Subject, timer} from 'rxjs';
-import {Submission} from '../entities/submission';
 import {SubmissionRequest} from '../entities/submission-request';
 import {FullSubmission} from '../entities/full-submission';
 import {StoredSolution} from '../entities/stored-solution';
@@ -11,6 +10,8 @@ import {SubmissionStatus} from '../entities/submission-status';
 import {UserAnswer} from '../entities/user-answer';
 import {BestLastUserAnswer} from '../entities/best-last-user-answer';
 import {BestLastFullSubmission} from '../entities/best-last-full-submission';
+import {RunSubmission} from '../entities/run-submission';
+import {RunSubmissionRequest} from '../entities/run-submission-request';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
@@ -49,13 +50,45 @@ export class SubmissionService {
     }));
   }
 
+  public getRunSubmissionsByProblemId(problemId: number): Observable<RunSubmission> {
+    const params = new HttpParams().append('problemId', '' + problemId);
+    const result = this.http.get<RunSubmission>('/api/run-submissions', {params});
+    return concat(
+      result,
+      timer(2500, 2500).pipe(
+        filter(() => this.running.has(problemId)),
+        switchMap(() => this.http.get<RunSubmission>('/api/run-submissions', {params}))
+      )
+    ).pipe(tap(submissions => {
+      if (submissions !== null) {
+        const isRunning = this.runIsRunning(submissions);
+        if (isRunning) {
+          this.running.add(problemId);
+        } else if (this.running.has(problemId)) {
+          this.changes.next(problemId);
+          this.running.delete(problemId);
+        }
+      }
+    }));
+  }
+
   public isRunning(submission: FullSubmission): boolean {
+    const status = SubmissionStatus[submission.status];
+    return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+  }
+
+  public runIsRunning(submission: RunSubmission): boolean {
     const status = SubmissionStatus[submission.status];
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
   public postSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
     return this.http.post<FullSubmission>('/api/task-submissions', submissionRequest)
+      .pipe(tap(() => this.running.add(submissionRequest.problemId)));
+  }
+
+  public postRunSubmission(submissionRequest: RunSubmissionRequest): Observable<RunSubmission> {
+    return this.http.post<RunSubmission>('/api/run-submissions', submissionRequest)
       .pipe(tap(() => this.running.add(submissionRequest.problemId)));
   }
 
