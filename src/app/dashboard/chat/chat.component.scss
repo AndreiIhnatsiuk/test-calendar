@@ -28,7 +28,6 @@ $config: mat-typography-config($font-family: 'Roboto Mono, monospace');
     font-size: 24px;
     text-align: center;
     overflow: hidden;
-    border-bottom: rgba(0,0,0,.87) solid 1px;
   }
 
   .body {
@@ -37,7 +36,7 @@ $config: mat-typography-config($font-family: 'Roboto Mono, monospace');
     font-family: mat-font-family($config);
 
     .messages {
-      height: calc(100% - 102px);
+      height: 100%;
       overflow-y: auto;
 
       .message {
@@ -54,12 +53,14 @@ $config: mat-typography-config($font-family: 'Roboto Mono, monospace');
     }
 
     .input-field {
-      padding: 0 16px;
-      height: 62px;
       overflow: hidden;
 
       textarea {
         resize: none;
+        outline: none;
+        border: none;
+        width: 100%;
+        height: calc(100% - 100px);
       }
     }
   }

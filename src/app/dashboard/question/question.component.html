@@ -1,6 +1,6 @@
 <div class="question" *ngIf="problem">
-  <div class="question-content" [innerHTML]="problem.text | marked"></div>
-  <h2>Выберите все правильные варианты ответа:</h2>
+  <div [innerHTML]="problem.text | marked"></div>
+  <h2 class="title">Выберите все правильные варианты ответа:</h2>
   <ul class="answers">
     <li *ngFor="let answer of problem.answers">
       <mat-checkbox [(ngModel)]="answer.selected"
@@ -11,7 +11,7 @@
       </mat-checkbox>
     </li>
   </ul>
-  <div style="height: 35px;">
+  <div style="height: 25px;">
     <div *ngIf="userAnswer != null" style="display: flex; flex-direction: row">
       <div class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'">
         <div *ngIf="bestLastUserAnswer.best.right && !bestLastUserAnswer.last.right">
@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!sending">
+  <div class="button" *ngIf="!sending">
     <app-next-step *ngIf="userAnswer && userAnswer.right" [problemId]="problemId"
                    [lessonId]="lessonId"></app-next-step>
     <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">

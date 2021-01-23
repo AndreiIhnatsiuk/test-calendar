@@ -174,6 +174,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     if (this.submissionsSubscription) {
       this.submissionsSubscription.unsubscribe();
     }
+    this.localStorage.setItem('taskPageAreas', JSON.stringify(this.taskPageAreas));
   }
 
   initDefaultSolution() {

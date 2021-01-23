@@ -11,17 +11,6 @@
   cursor: pointer;
   box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.1);
 
-  &:hover {
-    box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
-    bottom: 5px;
-    transition-duration: 300ms;
-
-    .card-img {
-      transform: scale(1.2);
-      transition: 300ms;
-    }
-  }
-
   .card-img {
     background-color: black;
     height: 50%;
@@ -32,7 +21,6 @@
     color: white;
     font-weight: bold;
     text-align: center;
-    transition: 300ms;
   }
 
   .card-content {
@@ -66,7 +54,12 @@ div {
         color: grey;
         display: flex;
         justify-content: flex-end;
-        margin: 20px
+        margin: 20px;
+
+        & > a {
+          color: grey;
+          text-decoration: none;
+        }
       }
 
       & > div {

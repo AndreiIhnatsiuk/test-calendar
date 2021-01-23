@@ -4,8 +4,9 @@
       <div class="task" *ngIf="problem">
 
         <div style="height: {{size - 85}}px;">
-          <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical" (dragEnd)="dragEndLeft('percent', $event)">
-            <as-split-area  minSize="20" size="90" #areaTask="asSplitArea">
+          <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical"
+                    (dragEnd)="dragEndLeft('percent', $event)">
+            <as-split-area minSize="20" size="90" #areaTask="asSplitArea">
               <div class="area-task">
                 <div class="content" [innerHTML]="problem.text | marked"></div>
                 <div class="tests" *ngIf="problem.tests.length">
@@ -43,8 +44,8 @@
       </div>
 
       <div class="hint">
-        <div class="hint__inner" >
-          <div *ngIf="hints.length === 0">
+        <div class="hint__inner">
+          <div *ngIf="this.problem && hints.length === 0">
             <button *ngIf="this.problem.hintsCount !== this.hints.length" mat-raised-button color="accent"
                     (click)="sendHint();">
               Взять подсказку
@@ -65,13 +66,13 @@
 
     </as-split-area>
 
-    <as-split-area  minSize="40" size="{{taskPageAreas.windowRight}}">
+    <as-split-area minSize="40" size="{{taskPageAreas.windowRight}}">
       <div style="height: {{size - 160}}px;">
         <as-split unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $event)">
+          <div class="code">
+            Код
+          </div>
           <as-split-area minSize="20" size="{{taskPageAreas.ace}}">
-            <div class="code">
-              Код
-            </div>
             <div class="ace">
               <ace mode="java" theme="github"
                    [(value)]="solution"
@@ -79,16 +80,17 @@
               </ace>
             </div>
           </as-split-area>
-          <as-split-area  minSize="20" size="{{taskPageAreas.inputAndOutput}}">
-
+          <as-split-area minSize="20" size="{{taskPageAreas.inputAndOutput}}">
             <div class="area-input-and-output">
-              <as-split  unit="percent" direction="horizontal" (dragEnd)="dragEndInputAndOutput('percent', $event)">
-                <as-split-area style="overflow: hidden;"  minSize="20" size="{{taskPageAreas.input}}">
+              <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndInputAndOutput('percent', $event)">
+                <as-split-area style="overflow: hidden;" minSize="20" size="{{taskPageAreas.input}}">
+                  <div class="input-and-output">Входные данные</div>
                   <textarea name="text" [(ngModel)]="input"
-                            style="padding: 0; resize: none; outline: none; border: none; width: 100%; height: 100%;">
+                            class="input-textarea">
                   </textarea>
                 </as-split-area>
                 <as-split-area minSize="20" size="{{taskPageAreas.output}}">
+                  <div class="input-and-output">Результат запуска</div>
                   {{output}}
                 </as-split-area>
               </as-split>
@@ -102,13 +104,13 @@
         <div class="giveMeEllipsis" *ngIf="bestLastSubmission && bestLastSubmission.last && !(sending || running)">
           Последний результат:
           <a
-             (click)="seeMore(bestLastSubmission.last)">
+            (click)="seeMore(bestLastSubmission.last)">
             {{bestLastSubmission.last.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')'}}
             {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
           <span *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
             Лучший результат:
           <a
-             (click)="seeMore(bestLastSubmission.best)">
+            (click)="seeMore(bestLastSubmission.best)">
             {{bestLastSubmission.best.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')'}}
             {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
           </span>
@@ -117,16 +119,16 @@
         <div class="panel-button">
           <div *ngIf="!(sending || running)">
             <app-next-step *ngIf="status" [problemId]="problemId" [lessonId]="lessonId"></app-next-step>
-            <button *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="send()"
+            <button *ngIf="!status" mat-raised-button (click)="send()"
                     [disabled]="isSendDisabled()"
                     color="primary">Проверить
             </button>
 
-            <button class="bottom-run" *ngIf="!status || !bestLastSubmission" mat-raised-button (click)="run()"
+            <button class="bottom-run" *ngIf="!status" mat-raised-button (click)="run()"
                     [disabled]="isSendDisabled()"
                     color="primary">Запустить
             </button>
-            <button *ngIf="status || !bestLastSubmission" mat-raised-button color="primary" (click)="status = null">
+            <button *ngIf="status" mat-raised-button color="primary" (click)="status = null">
               Решить снова
             </button>
           </div>

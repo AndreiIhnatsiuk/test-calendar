@@ -33,9 +33,11 @@
             <div mat-line>
               {{lesson.name}}
             </div>
-            <mat-icon *ngIf="getAcceptedInLesson(lesson)" class="green-check-lesson">
-              check
-            </mat-icon>
+            <div class="status">
+              <mat-icon *ngIf="getAcceptedInLesson(lesson)" class="green-check-lesson">
+                check
+              </mat-icon>
+            </div>
           </mat-list-item>
 
           <mat-list-item *ngIf="!availableLessons.has(lesson.id)"
@@ -44,9 +46,11 @@
             <div mat-line>
               {{lesson.name}}
             </div>
-            <mat-icon class="descr">
-              lock
-            </mat-icon>
+            <div class="status">
+              <mat-icon class="descr">
+                lock
+              </mat-icon>
+            </div>
           </mat-list-item>
         </mat-nav-list>
 

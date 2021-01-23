@@ -12,6 +12,10 @@ mat-sidenav {
   justify-content: center;
 }
 
+.status {
+  width: 50px;
+}
+
 .descr {
   display: none;
 }
@@ -94,7 +98,6 @@ mat-expansion-panel {
 
   .mat-expansion-panel-header {
     padding: 0 0 0 16px;
-    font-size: 16px;
     height: 48px;
   }
 
@@ -104,6 +107,10 @@ mat-expansion-panel {
 
   .mat-list-base {
     padding-top: 0;
+  }
+
+  ::ng-deep .mat-list-base .mat-list-item {
+    font-size: 14px;
   }
 
   ::ng-deep .mat-nav-list .mat-list-item .mat-list-item-content {
