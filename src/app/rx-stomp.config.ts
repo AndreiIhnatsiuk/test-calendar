@@ -8,7 +8,7 @@ export const rxStompConfig: InjectableRxStompConfig = {
   reconnectDelay: 1000,
   debug: (msg: string): void => {
     if (!environment.production) {
-      console.log(new Date(), msg);
+      // console.log(new Date(), msg);
     }
   }
 };

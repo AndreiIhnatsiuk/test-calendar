@@ -31,7 +31,7 @@ $config: mat-typography-config($font-family: 'Roboto Mono, monospace');
   }
 
   .body {
-    height: 100%;
+    height: calc(100% - 40px);
     @include angular-material-typography($config);
     font-family: mat-font-family($config);
 
@@ -60,7 +60,7 @@ $config: mat-typography-config($font-family: 'Roboto Mono, monospace');
         outline: none;
         border: none;
         width: 100%;
-        height: calc(100% - 100px);
+        height: 100%;
       }
     }
   }

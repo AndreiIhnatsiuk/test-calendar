@@ -26,7 +26,16 @@ pre, code {
   font-size: 12px;
 }
 
+code {
+  padding: 1px 5px;
+}
+
 pre {
   padding: 10px;
   margin: 0;
+  line-height: normal;
+
+  code {
+    padding: 0;
+  }
 }

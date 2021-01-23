@@ -68,6 +68,9 @@
   background-color: #f3f4f6;
   font-size: 12px;
   font-weight: 500;
+  overflow: hidden;
+  word-break: break-all;
+  height: 20px;
 }
 
 .input-textarea {
@@ -84,7 +87,7 @@
 }
 
 .area-input-and-output {
-  height: 80%;
+  height: calc(100% - 20px);
   background-color: white;
 }
 

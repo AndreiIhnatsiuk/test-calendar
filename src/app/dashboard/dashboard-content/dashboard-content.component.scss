@@ -51,9 +51,8 @@ div {
       width: 1140px;
 
       &.sponsor {
+        text-align: right;
         color: grey;
-        display: flex;
-        justify-content: flex-end;
         margin: 20px;
 
         & > a {
