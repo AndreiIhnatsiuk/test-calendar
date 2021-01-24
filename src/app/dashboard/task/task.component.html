@@ -101,36 +101,40 @@
       </div>
 
       <div class="result">
-        <div class="giveMeEllipsis" *ngIf="bestLastSubmission && bestLastSubmission.last && !(sending || running)">
+        <p *ngIf="bestLastSubmission && bestLastSubmission.last">
           Последний результат:
           <a
             (click)="seeMore(bestLastSubmission.last)">
             {{bestLastSubmission.last.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')'}}
-            {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
+            {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}.</a>
           <span *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
-            Лучший результат:
+            <br>Лучший результат:
           <a
             (click)="seeMore(bestLastSubmission.best)">
             {{bestLastSubmission.best.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')'}}
             {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
           </span>
-        </div>
+        </p>
 
         <div class="panel-button">
           <div *ngIf="!(sending || running)">
-            <app-next-step *ngIf="status" [problemId]="problemId" [lessonId]="lessonId"></app-next-step>
-            <button *ngIf="!status" mat-raised-button (click)="send()"
-                    [disabled]="isSendDisabled()"
-                    color="primary">Проверить
-            </button>
+            <div *ngIf="status && getLastStatus()">
+              <app-next-step [problemId]="problemId" [lessonId]="lessonId"></app-next-step>
+              <button mat-raised-button color="primary" (click)="status = null">
+                Решить снова
+              </button>
+            </div>
 
-            <button class="bottom-run" *ngIf="!status" mat-raised-button (click)="run()"
-                    [disabled]="isSendDisabled()"
-                    color="primary">Запустить
-            </button>
-            <button *ngIf="status" mat-raised-button color="primary" (click)="status = null">
-              Решить снова
-            </button>
+            <div *ngIf="!status">
+              <button mat-raised-button (click)="send()"
+                      [disabled]="isSendDisabled()"
+                      color="primary">Проверить
+              </button>
+              <button class="bottom-run" mat-raised-button (click)="run()"
+                      [disabled]="isSendDisabled()"
+                      color="primary">Запустить
+              </button>
+            </div>
           </div>
           <div *ngIf="(sending || running)">
             <mat-spinner diameter="35"></mat-spinner>

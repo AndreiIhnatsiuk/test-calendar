@@ -34,16 +34,6 @@
   height: revert !important;
 }
 
-.giveMeEllipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-height: 1;
-  max-height: 32px;
-}
-
 .area-task {
   margin: 10px 0 0 10px;
 }
@@ -96,6 +86,7 @@
   position: absolute;
 
   a {
+    white-space: nowrap;
     cursor: pointer;
     text-decoration: underline;
     color: #673ab7;
