@@ -85,11 +85,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
     }
   }
 
-  getLastStatus() {
-    this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
-    return this.status;
-  }
-
   closedPanelHints() {
     this.panelOpenState = false;
     this.areaTask.size = 90;
@@ -162,6 +157,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       .getSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
         this.bestLastSubmission = bestLastSubmission;
+        this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
         this.parseBestAndLastInList(bestLastSubmission);
         if (bestLastSubmission.last != null) {
           this.running = this.isRunning(this.bestLastSubmission.last);
@@ -262,6 +258,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
         duration: 500
       });
       this.bestLastSubmission.last = added;
+      this.status = added.status === 'ACCEPTED';
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }

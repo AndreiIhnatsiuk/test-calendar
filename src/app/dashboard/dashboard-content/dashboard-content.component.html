@@ -3,31 +3,35 @@
     <div>
       <div>
 
-        <div routerLink="java/lesson/{{getLastOpenedLessons()}}" class="card">
-          <div class="card-img" style="background: url('assets/342.jpg'); background-size: cover;">
-            <div>Основы алгоритмизации</div>
-          </div>
-          <div class="card-content">
-            <div>Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные
-              операторы
-              и циклы.
+        <div class="hover">
+          <div routerLink="java/lesson/{{linkLastLesson}}" class="card">
+            <div class="card-img" style="background: url('assets/342.jpg'); background-size: cover;">
+              <div>Основы алгоритмизации</div>
             </div>
-            <div style="color: gray;">11 тем 10 ч</div>
+            <div class="card-content">
+              <div>Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные
+                операторы
+                и циклы.
+              </div>
+              <div style="color: gray;">11 тем 10 ч</div>
+            </div>
           </div>
         </div>
 
-        <div (click)="send()" *ngFor="let content of getDashboardContent()" class="card">
-          <div class="card-img" style="background: url({{content[1]}}); background-size: cover;">
-            <div>
-              {{content[0]}}
+        <div (click)="send()" *ngFor="let content of dashboardContent" class="hover">
+          <div class="card">
+            <div class="card-img" style="background: url({{content[1]}}); background-size: cover;">
+              <div>
+                {{content[0]}}
+              </div>
             </div>
-          </div>
-          <div class="card-content">
-            <div>
-              {{content[2]}}
-            </div>
-            <div>
-              <div>В разработке</div>
+            <div class="card-content">
+              <div>
+                {{content[2]}}
+              </div>
+              <div>
+                <div>В разработке</div>
+              </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import {AvailableLessonsService} from '../../services/available-lessons.service'
 import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TopicService} from '../../services/topic.service';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-content',
@@ -12,6 +13,25 @@ import {TopicService} from '../../services/topic.service';
 export class DashboardContentComponent implements OnInit {
   topics: Array<Topic>;
   availableLessons: Set<number>;
+  linkLastLesson: number;
+
+  dashboardContent = [
+    ['ООП',
+      'assets/343.jpg',
+      'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
+
+    ['Алгоритмы и структуры данных',
+      'assets/344.jpg',
+      'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
+
+    ['SQL',
+      'assets/349.jpg',
+      'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
+
+    ['Spring',
+      'assets/336.jpg',
+      'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.']
+  ];
 
   constructor(private availableTopicsService: AvailableLessonsService,
               private topicService: TopicService,
@@ -21,10 +41,14 @@ export class DashboardContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.availableTopicsService.getAvailableLessons()
-      .subscribe(availableTopics => this.availableLessons = availableTopics);
-    this.topicService.getTopics()
-      .subscribe(topics => this.topics = topics);
+    zip(
+      this.availableTopicsService.getAvailableLessons(),
+      this.topicService.getTopics(),
+    ).subscribe(([availableTopics, topics]) => {
+      this.availableLessons = availableTopics;
+      this.topics = topics;
+      this.linkLastLesson = this.getLastOpenedLessons();
+    });
   }
 
   public getLastOpenedLessons() {
@@ -42,25 +66,5 @@ export class DashboardContentComponent implements OnInit {
     this.snackBar.open('В разработке.', undefined, {
       duration: 5000
     });
-  }
-
-  public getDashboardContent() {
-    return [
-      ['ООП',
-        'assets/343.jpg',
-        'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
-
-      ['Алгоритмы и структуры данных',
-        'assets/344.jpg',
-        'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
-
-      ['SQL',
-        'assets/349.jpg',
-        'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.'],
-
-      ['Spring',
-        'assets/336.jpg',
-        'Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные операторы и циклы.']
-    ];
   }
 }

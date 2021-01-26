@@ -71,3 +71,12 @@ div {
   }
 }
 
+.hover {
+  &:hover {
+    .card {
+      box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
+      bottom: 5px;
+      transition-duration: 300ms;
+    }
+  }
+}
