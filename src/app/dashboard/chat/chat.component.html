@@ -11,22 +11,28 @@
   <div class="chat" *ngIf="isOpen">
 
     <div class="header">
-      <button class="close-button" mat-icon-button (click)="close()" title="Закрыть"><mat-icon>close</mat-icon></button>
+      <button class="close-button" mat-icon-button (click)="close()" title="Закрыть">
+        <mat-icon>close</mat-icon>
+      </button>
       <div>
         Чат поддержки
       </div>
     </div>
     <div class="body">
-      <div class="messages" #messagesContainer>
-        <div class="message" *ngFor="let message of messages">
-          <p><b>{{getName(message.owner)}}</b>:<br>{{message.message}}</p>
-        </div>
-      </div>
-      <div class="input-field">
-        <mat-form-field color="primary" class="full-width">
-          <textarea matInput [(ngModel)]="message" placeholder="Задайте вопрос" (keydown.enter)="send(); false"></textarea>
-        </mat-form-field>
-      </div>
+      <as-split direction="vertical">
+        <as-split-area [size]="80" minSize="20">
+          <div class="messages" #messagesContainer>
+            <div class="message" *ngFor="let message of messages">
+              <p><b>{{getName(message.owner)}}</b>:<br>{{message.message}}</p>
+            </div>
+          </div>
+        </as-split-area>
+        <as-split-area class="input-field" [size]="20" minSize="20">
+              <textarea matInput [(ngModel)]="message" placeholder="Задайте вопрос"
+                        (keydown.enter)="send(); false">
+              </textarea>
+        </as-split-area>
+      </as-split>
     </div>
   </div>
 </div>

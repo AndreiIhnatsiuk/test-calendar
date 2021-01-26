@@ -1,11 +1,11 @@
 <div *ngIf="lessonId" class="progress">
   <div>
-    <a mat-flat-button [ngClass]="acceptedLesson ? 'green' : 'blue'"
+    <button mat-flat-button [ngClass]="acceptedLesson ? 'green' : 'blue'"
        [routerLink]="urlToLesson + lessonId"
        [class.active-button-item]="!problemId"
        title="Теория">
       <mat-icon>description</mat-icon>
-    </a>
+    </button>
   </div>
 
   <div *ngFor="let problem of problems">

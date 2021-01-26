@@ -2,15 +2,40 @@
 @import '~@angular/material/theming';
 
 $custom-typography: mat-typography-config(
-  $subheading-1:  mat-typography-level(16px, 24px),
-  $body-1:        mat-typography-level(16px, 24px),
-  $button:        mat-typography-level(16px, 24px),
+  $subheading-1: mat-typography-level(14px, 21px),
+  $body-1: mat-typography-level(14px, 21px),
+  $button: mat-typography-level(14px, 21px)
 );
 
 @include mat-base-typography($custom-typography);
 @include angular-material-typography($custom-typography);
 @include mat-core($custom-typography);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+pre, code {
+  font-family: monospace;
+  background-color: white;
+  font-size: 12px;
+}
+
+code {
+  padding: 1px 5px;
+}
+
+pre {
+  padding: 10px;
+  margin: 0 0 12px 0;
+  line-height: normal;
+
+  code {
+    padding: 0;
+  }
+}

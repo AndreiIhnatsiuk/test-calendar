@@ -19,50 +19,9 @@
   width: 100%;
 }
 
-@media screen and (max-width: 992px) {
-  .submissions table {
-    th:nth-child(3), td:nth-child(3) {
-      display: none;
-    }
-
-    th:nth-child(4), td:nth-child(4) {
-      display: none;
-    }
-
-    th:nth-child(5), td:nth-child(5) {
-      display: none;
-    }
-
-    th:nth-child(1), td:nth-child(1) {
-      max-width: 100px;
-    }
-
-    th:nth-child(2), td:nth-child(2) {
-      padding-left: 20px;
-    }
-
-    th:nth-child(6), td:nth-child(6) {
-      padding-left: 20px;
-    }
-  }
-}
-
-.content > ol {
-  font-family: monospace;
-  background-color: #fff;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
 .button-hint-bottom {
   display: flex;
   justify-content: flex-end;
-}
-
-pre {
-  font-family: monospace;
-  background-color: white;
-  padding: 10px;
 }
 
 .panel-button {
@@ -75,18 +34,8 @@ pre {
   height: revert !important;
 }
 
-.giveMeEllipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-height: 1;
-  max-height: 32px;
-}
-
 .area-task {
-  margin-left: 10px;
+  margin: 10px 0 0 10px;
 }
 
 .hint {
@@ -100,9 +49,27 @@ pre {
 }
 
 .code {
-  padding-left: 21px;
   background-color: #e8e8e8;
-  height: 36px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.input-and-output {
+  background-color: #f3f4f6;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  word-break: break-all;
+  height: 20px;
+}
+
+.input-textarea {
+  padding: 0;
+  resize: none;
+  outline: none;
+  border: none;
+  width: 100%;
+  height: calc(100% - 21px);
 }
 
 .ace {
@@ -110,7 +77,7 @@ pre {
 }
 
 .area-input-and-output {
-  height: 100%;
+  height: calc(100% - 20px);
   background-color: white;
 }
 
@@ -119,13 +86,14 @@ pre {
   position: absolute;
 
   a {
+    white-space: nowrap;
     cursor: pointer;
     text-decoration: underline;
     color: #673ab7;
   }
 }
 
-.bottom-run {
+.button {
   margin-left: 10px;
 }
 

@@ -60,6 +60,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   running: boolean;
   size = window.innerHeight;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
+  isRun = false;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -129,7 +130,10 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
-      this.status = answerOnTasks.get(this.problemId);
+      if (!this.isRun) {
+        this.status = answerOnTasks.get(this.problemId);
+      }
+      this.isRun = false;
     });
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
@@ -153,6 +157,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       .getSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
         this.bestLastSubmission = bestLastSubmission;
+        this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
         this.parseBestAndLastInList(bestLastSubmission);
         if (bestLastSubmission.last != null) {
           this.running = this.isRunning(this.bestLastSubmission.last);
@@ -174,6 +179,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     if (this.submissionsSubscription) {
       this.submissionsSubscription.unsubscribe();
     }
+    this.localStorage.setItem('taskPageAreas', JSON.stringify(this.taskPageAreas));
   }
 
   initDefaultSolution() {
@@ -249,9 +255,10 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.sending = false;
       this.running = true;
       this.snackBar.open('Решение отправлено.', undefined, {
-        duration: 5000
+        duration: 500
       });
       this.bestLastSubmission.last = added;
+      this.status = added.status === 'ACCEPTED';
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, added.id);
       }
@@ -268,6 +275,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   run() {
+    this.isRun = true;
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
@@ -279,7 +287,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.sending = false;
       this.running = true;
       this.snackBar.open('Решение отправлено.', undefined, {
-        duration: 5000
+        duration: 500
       });
       this.output = added.output;
       if (this.solution === submission.solution) {
