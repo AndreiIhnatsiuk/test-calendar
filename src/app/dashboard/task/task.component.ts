@@ -24,9 +24,10 @@ import {FullProblem} from '../../entities/full-problem';
 import {FullSubmission} from '../../entities/full-submission';
 import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 import {RunSubmissionRequest} from '../../entities/run-submission-request';
-import {SplitAreaDirective, SplitComponent} from 'angular-split';
+import {SplitAreaDirective} from 'angular-split';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {TaskPageAreas} from '../../entities/task-page-areas';
+import {RunSubmission} from '../../entities/run-submission';
 
 @Component({
   selector: 'app-task',
@@ -46,12 +47,13 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   problem: FullProblem;
   bestLastSubmission: BestLastFullSubmission;
-  listSubmissions: Array<FullSubmission>;
   hints: Array<Hint> = [];
   solution: string;
   editSubject: Subject<string>;
+  inputSubject: Subject<string>;
   storedSolution: StoredSolution;
-  submissionsSubscription: Subscription;
+  taskSubmissionsSubscription: Subscription;
+  runSubmissionsSubscription: Subscription;
   status: boolean = null;
   panelOpenState = false;
   input: string;
@@ -60,7 +62,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
   running: boolean;
   size = window.innerHeight;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
-  isRun = false;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -72,9 +73,13 @@ export class TaskComponent implements OnChanges, OnDestroy {
               private gtag: Gtag,
               private localStorage: LocalStorageService) {
     this.editSubject = new Subject<string>();
+    this.inputSubject = new Subject<string>();
     this.editSubject
       .pipe(debounceTime(1000))
-      .subscribe(solution => this.storeSolution(solution));
+      .subscribe(solution => this.storeSolution(solution, this.input));
+    this.inputSubject
+      .pipe(debounceTime(1000))
+      .subscribe(input => this.storeSolution(this.solution, input));
     const taskPageAreas: string = localStorage.getItem('taskPageAreas');
     if (taskPageAreas) {
       this.taskPageAreas = JSON.parse(taskPageAreas);
@@ -129,10 +134,14 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+    this.output = null;
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
       if (this.storedSolution == null || !this.storedSolution.solution) {
         this.initDefaultSolution();
+      }
+      if (this.storedSolution == null || !this.storedSolution.input) {
+        this.input = fullProblem.tests[0].input;
       }
     });
     this.hintService.getAllOpenedHints(this.problemId).subscribe(hints => {
@@ -142,26 +151,34 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.storedSolution = this.submissionService.getSolution(this.problemId);
       if (this.storedSolution) {
         this.solution = this.storedSolution.solution;
+        this.input = this.storedSolution.input;
       }
     }
-    if (this.submissionsSubscription) {
-      this.submissionsSubscription.unsubscribe();
+    if (this.taskSubmissionsSubscription) {
+      this.taskSubmissionsSubscription.unsubscribe();
     }
-    this.submissionsSubscription = this.submissionService
-      .getSubmissionsByProblemId(this.problemId)
+    if (this.runSubmissionsSubscription) {
+      this.runSubmissionsSubscription.unsubscribe();
+    }
+    this.runSubmissionsSubscription = this.submissionService.getRunSubmissionsByProblemId(this.problemId)
+      .subscribe(runSubmission => {
+        this.output = runSubmission.output;
+        this.running = this.isRunRunning(runSubmission);
+      });
+    this.taskSubmissionsSubscription = this.submissionService
+      .getTaskSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
         this.bestLastSubmission = bestLastSubmission;
         this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
-        this.parseBestAndLastInList(bestLastSubmission);
         if (bestLastSubmission.last != null) {
-          this.running = this.isRunning(this.bestLastSubmission.last);
+          this.running = this.isTaskRunning(this.bestLastSubmission.last);
           if (this.storedSolution && this.storedSolution.submissionId) {
             let index;
             if (bestLastSubmission.last.id === this.storedSolution.submissionId) {
               index = 0;
             }
             if (index !== -1 && SubmissionStatus[bestLastSubmission.last.status] === SubmissionStatus.COMPILATION_ERROR) {
-              this.submissionService.getSubmissionsByProblemId(bestLastSubmission.last.problemId)
+              this.submissionService.getTaskSubmissionsByProblemId(bestLastSubmission.last.problemId)
                 .subscribe(fullSubmission => this.parseErrors(fullSubmission.last.errorString));
             }
           }
@@ -170,8 +187,11 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.submissionsSubscription) {
-      this.submissionsSubscription.unsubscribe();
+    if (this.taskSubmissionsSubscription) {
+      this.taskSubmissionsSubscription.unsubscribe();
+    }
+    if (this.runSubmissionsSubscription) {
+      this.runSubmissionsSubscription.unsubscribe();
     }
     this.localStorage.setItem('taskPageAreas', JSON.stringify(this.taskPageAreas));
   }
@@ -210,12 +230,13 @@ export class TaskComponent implements OnChanges, OnDestroy {
     }
   }
 
-  storeSolution(solution: string, submissionId?: string) {
+  storeSolution(solution: string, input: string, submissionId?: string) {
     const old = submissionId ? null : this.submissionService.getSolution(this.problemId);
-    if (!old || old.problemId !== this.problemId || old.solution !== solution) {
+    if (!old || old.problemId !== this.problemId || old.solution !== solution || old.input !== input) {
       const storedSolution: StoredSolution = {
         problemId: this.problemId,
         solution: solution,
+        input: input,
         submissionId: submissionId
       };
       this.storedSolution = storedSolution;
@@ -241,7 +262,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new SubmissionRequest(this.problemId, this.solution);
-    this.submissionService.postSubmission(submission).subscribe(added => {
+    this.submissionService.postTaskSubmission(submission).subscribe(added => {
       this.gtag.event('sent', {
         event_category: 'submission',
         event_label: this.problemId.toString()
@@ -254,7 +275,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.bestLastSubmission.last = added;
       this.status = added.status === 'ACCEPTED';
       if (this.solution === submission.solution) {
-        this.storeSolution(this.solution, added.id);
+        this.storeSolution(this.solution, this.input, added.id);
       }
     }, error => {
       this.gtag.event('sending-error', {
@@ -269,11 +290,15 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   run() {
-    this.isRun = true;
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
     this.submissionService.postRunSubmission(submission).subscribe(added => {
+      this.runSubmissionsSubscription = this.submissionService.getRunSubmissionsByProblemId(this.problemId)
+        .subscribe(runSubmission => {
+          this.output = runSubmission.output;
+          this.running = this.isRunRunning(runSubmission);
+        });
       this.gtag.event('sent', {
         event_category: 'submission',
         event_label: this.problemId.toString()
@@ -283,9 +308,8 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.snackBar.open('Решение отправлено.', undefined, {
         duration: 500
       });
-      this.output = added.output;
       if (this.solution === submission.solution) {
-        this.storeSolution(this.solution, added.id);
+        this.storeSolution(this.solution, this.input, added.id);
       }
     }, error => {
       this.gtag.event('sending-error', {
@@ -299,8 +323,12 @@ export class TaskComponent implements OnChanges, OnDestroy {
     });
   }
 
-  isRunning(submission: FullSubmission): boolean {
-    return this.submissionService.isRunning(submission);
+  isTaskRunning(submission: FullSubmission): boolean {
+    return this.submissionService.isTaskRunning(submission);
+  }
+
+  isRunRunning(submission: RunSubmission): boolean {
+    return this.submissionService.isRunRunning(submission);
   }
 
   showMore(submission: FullSubmission): boolean {
@@ -335,15 +363,5 @@ export class TaskComponent implements OnChanges, OnDestroy {
     }
 
     this.ace.directiveRef.ace().getSession().setAnnotations(annotations);
-  }
-
-  private parseBestAndLastInList(submissions: BestLastFullSubmission): void {
-    if (submissions.last !== null) {
-      this.listSubmissions = new Array<FullSubmission>();
-      this.listSubmissions.push(submissions.last);
-      this.listSubmissions.push(submissions.best);
-    } else {
-      this.listSubmissions = null;
-    }
   }
 }

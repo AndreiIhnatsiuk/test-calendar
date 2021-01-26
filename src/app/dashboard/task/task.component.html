@@ -85,8 +85,10 @@
               <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndInputAndOutput('percent', $event)">
                 <as-split-area style="overflow: hidden;" minSize="20" size="{{taskPageAreas.input}}">
                   <div class="input-and-output">Входные данные</div>
-                  <textarea name="text" [(ngModel)]="input"
-                            class="input-textarea">
+                  <textarea name="text"
+                            class="input-textarea"
+                            [(ngModel)]="input"
+                            (ngModelChange)="inputSubject.next($event)">
                   </textarea>
                 </as-split-area>
                 <as-split-area minSize="20" size="{{taskPageAreas.output}}">
@@ -101,7 +103,7 @@
       </div>
 
       <div class="result">
-        <p *ngIf="bestLastSubmission && bestLastSubmission.last">
+        <p *ngIf="bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
           Последний результат:
           <a
             (click)="seeMore(bestLastSubmission.last)">

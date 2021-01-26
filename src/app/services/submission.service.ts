@@ -15,12 +15,14 @@ import {RunSubmissionRequest} from '../entities/run-submission-request';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
-  private running: Set<number>;
+  private runningTask: Set<number>;
+  private runningRun: Set<number>;
   private changes: Subject<number>;
 
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {
-    this.running = new Set<number>();
+    this.runningTask = new Set<number>();
+    this.runningRun = new Set<number>();
     this.changes = new Subject<number>();
   }
 
@@ -28,23 +30,23 @@ export class SubmissionService {
     return this.changes;
   }
 
-  public getSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+  public getTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
     const params = new HttpParams().append('problemId', '' + problemId);
     const result = this.http.get<BestLastFullSubmission>('/api/task-submissions', {params});
     return concat(
       result,
       timer(2500, 2500).pipe(
-        filter(() => this.running.has(problemId)),
+        filter(() => this.runningTask.has(problemId)),
         switchMap(() => this.http.get<BestLastFullSubmission>('/api/task-submissions', {params}))
       )
     ).pipe(tap(submissions => {
       if (submissions.last !== null) {
-        const isRunning = this.isRunning(submissions.last);
+        const isRunning = this.isTaskRunning(submissions.last);
         if (isRunning) {
-          this.running.add(problemId);
-        } else if (this.running.has(problemId)) {
+          this.runningTask.add(problemId);
+        } else if (this.runningTask.has(problemId)) {
           this.changes.next(problemId);
-          this.running.delete(problemId);
+          this.runningTask.delete(problemId);
         }
       }
     }));
@@ -56,40 +58,40 @@ export class SubmissionService {
     return concat(
       result,
       timer(2500, 2500).pipe(
-        filter(() => this.running.has(problemId)),
+        filter(() => this.runningRun.has(problemId)),
         switchMap(() => this.http.get<RunSubmission>('/api/run-submissions', {params}))
       )
     ).pipe(tap(submissions => {
       if (submissions !== null) {
-        const isRunning = this.runIsRunning(submissions);
+        const isRunning = this.isRunRunning(submissions);
         if (isRunning) {
-          this.running.add(problemId);
-        } else if (this.running.has(problemId)) {
+          this.runningRun.add(problemId);
+        } else if (this.runningRun.has(problemId)) {
           this.changes.next(problemId);
-          this.running.delete(problemId);
+          this.runningRun.delete(problemId);
         }
       }
     }));
   }
 
-  public isRunning(submission: FullSubmission): boolean {
+  public isTaskRunning(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
-  public runIsRunning(submission: RunSubmission): boolean {
+  public isRunRunning(submission: RunSubmission): boolean {
     const status = SubmissionStatus[submission.status];
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
   }
 
-  public postSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
+  public postTaskSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
     return this.http.post<FullSubmission>('/api/task-submissions', submissionRequest)
-      .pipe(tap(() => this.running.add(submissionRequest.problemId)));
+      .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
   public postRunSubmission(submissionRequest: RunSubmissionRequest): Observable<RunSubmission> {
     return this.http.post<RunSubmission>('/api/run-submissions', submissionRequest)
-      .pipe(tap(() => this.running.add(submissionRequest.problemId)));
+      .pipe(tap(() => this.runningRun.add(submissionRequest.problemId)));
   }
 
   public storeSolution(storedSolution: StoredSolution): void {
