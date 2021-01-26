@@ -129,12 +129,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.acceptedSubmissionService.getAccepted([this.problemId]).subscribe(answerOnTasks => {
-      if (!this.isRun) {
-        this.status = answerOnTasks.get(this.problemId);
-      }
-      this.isRun = false;
-    });
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
       if (this.storedSolution == null || !this.storedSolution.solution) {
