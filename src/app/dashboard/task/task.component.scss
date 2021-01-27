@@ -63,7 +63,12 @@
   height: 20px;
 }
 
-.input-textarea {
+.full-height {
+  height: 100%;
+  overflow: hidden;
+}
+
+.input-textarea, .output-textarea {
   padding: 0;
   resize: none;
   outline: none;
@@ -91,10 +96,6 @@
     text-decoration: underline;
     color: #673ab7;
   }
-}
-
-.button {
-  margin-left: 10px;
 }
 
 .closed {

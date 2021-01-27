@@ -1,5 +1,12 @@
 <div class="submission" *ngIf="submission">
   <div>
+    <b style="font-size: 15px; font-weight: 500">
+      Статус: {{submission.status}},
+      время: {{submission.maxExecutionTime}}ms,
+      память: {{submission.maxUsedMemory}}kb
+    </b>
+  </div>
+  <div>
     <pre class="data">{{submission.solution}}</pre>
   </div>
   <div *ngIf="submission.test">
@@ -9,13 +16,6 @@
     <pre class="data">{{submission.test.output}}</pre>
     <i>Вывод программы</i>
     <pre class="data">{{submission.errorString}}</pre>
-  </div>
-  <div>
-    <b style="font-size: 15px; font-weight: 500">
-      Статус: {{submission.status}},
-      время: {{submission.maxExecutionTime}}ms,
-      память: {{submission.maxUsedMemory}}kb
-    </b>
   </div>
 </div>
 <button style="margin-top: 10px" mat-raised-button color="primary" (click)="close()">Закрыть</button>

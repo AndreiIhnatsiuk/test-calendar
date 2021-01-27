@@ -40,7 +40,7 @@
     <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">
       Отправить
     </button>
-    <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
+    <button style="margin-left: 10px" *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
   </div>
   <div *ngIf="sending">
     <mat-spinner diameter="35"></mat-spinner>
