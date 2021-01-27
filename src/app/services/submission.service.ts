@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {concat, Observable, Subject, timer} from 'rxjs';
+import {concat, EMPTY, Observable, Subject, timer} from 'rxjs';
 import {SubmissionRequest} from '../entities/submission-request';
 import {FullSubmission} from '../entities/full-submission';
 import {StoredSolution} from '../entities/stored-solution';
 import {LocalStorageService} from './local-storage.service';
-import {filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {SubmissionStatus} from '../entities/submission-status';
 import {UserAnswer} from '../entities/user-answer';
 import {BestLastUserAnswer} from '../entities/best-last-user-answer';
@@ -52,14 +52,24 @@ export class SubmissionService {
     }));
   }
 
-  public getRunSubmissionsByProblemId(problemId: number): Observable<RunSubmission> {
+  public getRunSubmissionsByProblemIdOnce(problemId: number): Observable<RunSubmission> {
     const params = new HttpParams().append('problemId', '' + problemId);
-    const result = this.http.get<RunSubmission>('/api/run-submissions', {params});
+    return this.http.get<RunSubmission>('/api/run-submissions', {params}).pipe(
+      catchError(error => {
+        if (error.status === 404) {
+          return EMPTY;
+        } else {
+          throw error;
+        }
+      }));
+  }
+
+  public getRunSubmissionsByProblemId(problemId: number): Observable<RunSubmission> {
     return concat(
-      result,
+      this.getRunSubmissionsByProblemIdOnce(problemId),
       timer(2500, 2500).pipe(
         filter(() => this.runningRun.has(problemId)),
-        switchMap(() => this.http.get<RunSubmission>('/api/run-submissions', {params}))
+        switchMap(() => this.getRunSubmissionsByProblemIdOnce(problemId))
       )
     ).pipe(tap(submissions => {
       if (submissions !== null) {

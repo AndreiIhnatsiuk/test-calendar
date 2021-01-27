@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnChanges, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SubmissionService} from '../../services/submission.service';
 import {SubmissionRequest} from '../../entities/submission-request';
@@ -57,12 +57,11 @@ export class TaskComponent implements OnChanges, OnDestroy {
   status: boolean = null;
   panelOpenState = false;
   input: string;
-  output: string;
   sending = false;
   running: boolean;
   size = window.innerHeight;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
-  runStatus: string;
+  runSubmission: RunSubmission;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -135,10 +134,9 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.runStatus = null;
+    this.runSubmission = null;
     this.sending = false;
     this.running = null;
-    this.output = null;
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
       if (this.storedSolution == null || !this.storedSolution.solution) {
@@ -164,7 +162,12 @@ export class TaskComponent implements OnChanges, OnDestroy {
     if (this.runSubmissionsSubscription) {
       this.runSubmissionsSubscription.unsubscribe();
     }
-    this.runSubmissionsSubscription = this.getRunSubmissions();
+    this.runSubmissionsSubscription = this.submissionService
+      .getRunSubmissionsByProblemId(this.problemId)
+      .subscribe(runSubmission => {
+        this.runSubmission = runSubmission;
+        this.running = this.isRunRunning(runSubmission);
+      });
     this.taskSubmissionsSubscription = this.submissionService
       .getTaskSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
@@ -178,8 +181,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
               index = 0;
             }
             if (index !== -1 && SubmissionStatus[bestLastSubmission.last.status] === SubmissionStatus.COMPILATION_ERROR) {
-              this.submissionService.getTaskSubmissionsByProblemId(bestLastSubmission.last.problemId)
-                .subscribe(fullSubmission => this.parseErrors(fullSubmission.last.errorString));
+              this.parseErrors(bestLastSubmission.last.errorString);
             }
           }
         }
@@ -270,7 +272,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       this.sending = false;
       this.running = true;
       this.snackBar.open('Решение отправлено.', undefined, {
-        duration: 500
+        duration: 2500
       });
       this.bestLastSubmission.last = added;
       this.status = added.status === 'ACCEPTED';
@@ -289,33 +291,20 @@ export class TaskComponent implements OnChanges, OnDestroy {
     });
   }
 
-  getRunSubmissions() {
-    return this.submissionService.getRunSubmissionsByProblemId(this.problemId)
-      .subscribe(runSubmission => {
-        if (runSubmission.problemId === this.problemId) {
-          this.runStatus = runSubmission.status;
-          if (this.runStatus === 'ACCEPTED') {
-            this.output = runSubmission.output;
-          }
-          this.running = this.isRunRunning(runSubmission);
-        }
-      });
-  }
-
   run() {
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
     this.submissionService.postRunSubmission(submission).subscribe(added => {
-      this.runSubmissionsSubscription = this.getRunSubmissions();
-      this.gtag.event('sent', {
+      this.gtag.event('run', {
         event_category: 'submission',
         event_label: this.problemId.toString()
       });
       this.sending = false;
       this.running = true;
+      this.runSubmission = added;
       this.snackBar.open('Решение отправлено.', undefined, {
-        duration: 500
+        duration: 2500
       });
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, this.input, added.id);

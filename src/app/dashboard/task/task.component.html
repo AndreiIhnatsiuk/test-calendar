@@ -84,36 +84,43 @@
             <div class="area-input-and-output">
               <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndInputAndOutput('percent', $event)">
                 <as-split-area style="overflow: hidden;" minSize="20" size="{{taskPageAreas.input}}">
-                  <div class="input-and-output">Входные данные</div>
-                  <textarea name="text"
-                            class="input-textarea"
-                            [(ngModel)]="input"
-                            (ngModelChange)="inputSubject.next($event)">
+                  <div class="full-height">
+                    <div class="input-and-output">Входные данные</div>
+                    <textarea name="input"
+                              class="input-textarea"
+                              [(ngModel)]="input"
+                              (ngModelChange)="inputSubject.next($event)">
                   </textarea>
+                  </div>
                 </as-split-area>
                 <as-split-area minSize="20" size="{{taskPageAreas.output}}">
-                  <div class="input-and-output">Результат запуска {{runStatus ? '(' + runStatus + ')' : ''}}</div>
-                  {{output}}
+                  <div class="full-height">
+                    <div class="input-and-output">Результат запуска {{runSubmission ? '(' + runSubmission.status + ')' : ''}}</div>
+                    <textarea name="output"
+                              class="output-textarea"
+                              [value]="runSubmission ? (runSubmission.status == 'ACCEPTED' ? runSubmission.output : runSubmission.errorString) : ''"
+                              readonly="readonly">
+                    </textarea>
+                  </div>
                 </as-split-area>
               </as-split>
             </div>
-
           </as-split-area>
         </as-split>
       </div>
 
       <div class="result">
-        <p *ngIf="bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
+        <p *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
           Последний результат:
           <a
             (click)="seeMore(bestLastSubmission.last)">
-            {{bestLastSubmission.last.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')'}}
+            {{bestLastSubmission.last.wrongTest ? bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.last.status }}
             {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}.</a>
           <span *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
             <br>Лучший результат:
           <a
             (click)="seeMore(bestLastSubmission.best)">
-            {{bestLastSubmission.best.status === 'ACCEPTED' ? 'ACCEPTED' : bestLastSubmission.best.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')'}}
+            {{bestLastSubmission.best.wrongTest ? bestLastSubmission.best.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.best.status }}
             {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
           </span>
         </p>
