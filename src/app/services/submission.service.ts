@@ -67,7 +67,6 @@ export class SubmissionService {
         if (isRunning) {
           this.runningRun.add(problemId);
         } else if (this.runningRun.has(problemId)) {
-          this.changes.next(problemId);
           this.runningRun.delete(problemId);
         }
       }

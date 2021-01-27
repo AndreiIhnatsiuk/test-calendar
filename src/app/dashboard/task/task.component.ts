@@ -62,6 +62,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   running: boolean;
   size = window.innerHeight;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
+  runStatus: string;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -134,6 +135,9 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+    this.runStatus = null;
+    this.sending = false;
+    this.running = null;
     this.output = null;
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
@@ -160,11 +164,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     if (this.runSubmissionsSubscription) {
       this.runSubmissionsSubscription.unsubscribe();
     }
-    this.runSubmissionsSubscription = this.submissionService.getRunSubmissionsByProblemId(this.problemId)
-      .subscribe(runSubmission => {
-        this.output = runSubmission.output;
-        this.running = this.isRunRunning(runSubmission);
-      });
+    this.runSubmissionsSubscription = this.getRunSubmissions();
     this.taskSubmissionsSubscription = this.submissionService
       .getTaskSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
@@ -289,16 +289,25 @@ export class TaskComponent implements OnChanges, OnDestroy {
     });
   }
 
+  getRunSubmissions() {
+    return this.submissionService.getRunSubmissionsByProblemId(this.problemId)
+      .subscribe(runSubmission => {
+        if (runSubmission.problemId === this.problemId) {
+          this.runStatus = runSubmission.status;
+          if (this.runStatus === 'ACCEPTED') {
+            this.output = runSubmission.output;
+          }
+          this.running = this.isRunRunning(runSubmission);
+        }
+      });
+  }
+
   run() {
     this.sending = true;
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new RunSubmissionRequest(this.problemId, this.solution, this.input);
     this.submissionService.postRunSubmission(submission).subscribe(added => {
-      this.runSubmissionsSubscription = this.submissionService.getRunSubmissionsByProblemId(this.problemId)
-        .subscribe(runSubmission => {
-          this.output = runSubmission.output;
-          this.running = this.isRunRunning(runSubmission);
-        });
+      this.runSubmissionsSubscription = this.getRunSubmissions();
       this.gtag.event('sent', {
         event_category: 'submission',
         event_label: this.problemId.toString()

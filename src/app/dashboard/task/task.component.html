@@ -92,7 +92,7 @@
                   </textarea>
                 </as-split-area>
                 <as-split-area minSize="20" size="{{taskPageAreas.output}}">
-                  <div class="input-and-output">Результат запуска</div>
+                  <div class="input-and-output">Результат запуска {{runStatus ? '(' + runStatus + ')' : ''}}</div>
                   {{output}}
                 </as-split-area>
               </as-split>
