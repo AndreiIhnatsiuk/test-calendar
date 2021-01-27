@@ -58,17 +58,6 @@ div {
     & > div {
       width: 1140px;
 
-      &.sponsor {
-        text-align: right;
-        color: grey;
-        margin: 20px;
-
-        & > a {
-          color: grey;
-          text-decoration: none;
-        }
-      }
-
       & > div {
         display: flex;
         justify-content: center;
