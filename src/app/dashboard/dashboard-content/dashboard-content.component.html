@@ -5,43 +5,38 @@
 
         <div class="hover">
           <div routerLink="java/lesson/{{linkLastLesson}}" class="card">
-            <div class="card-img" style="background: url('assets/342.jpg'); background-size: cover;">
-              <div>Основы алгоритмизации</div>
+            <div class="card-img" style="background-color: #FCF6F6; background-size: cover;">
+              <div style="color: black;">Основы алгоритмизации</div>
             </div>
             <div class="card-content">
-              <div>Квест Вы узнаете, что такое классы, объекты, методы, переменные, типы данных, массивы, условные
-                операторы
-                и циклы.
+              <div>Начни путь программиста.<br><br>
+                Изучите основные алгоритмы и синтаксис Java.<br><br>
+                В конце модуля Вы напишите свою первую игру — крестики нолики.
               </div>
-              <div style="color: gray;">11 тем 10 ч</div>
+            </div>
+            <div class="access">
+              <div>28 уроков, 102 задания</div>
             </div>
           </div>
         </div>
 
         <div (click)="send()" *ngFor="let content of dashboardContent" class="hover">
           <div class="card">
-            <div class="card-img" style="background: url({{content[1]}}); background-size: cover;">
+            <div class="card-img" style="background-color: {{content[1]}}; background-size: cover;">
               <div>
                 {{content[0]}}
               </div>
             </div>
             <div class="card-content">
-              <div>
-                {{content[2]}}
-              </div>
-              <div>
-                <div>В разработке</div>
-              </div>
+              <div style="white-space: pre-wrap">{{content[2]}}</div>
+            </div>
+            <div class="access">
+              <div>Недоступен</div>
             </div>
           </div>
         </div>
 
       </div>
-    </div>
-  </div>
-  <div>
-    <div class="sponsor">
-      Images are provided by <a href="https://www.freepik.com/photos/technology">Freepik</a>
     </div>
   </div>
 </div>
