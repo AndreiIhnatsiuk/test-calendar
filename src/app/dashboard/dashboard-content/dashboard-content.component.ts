@@ -83,7 +83,7 @@ export class DashboardContentComponent implements OnInit {
   }
 
   public send() {
-    this.snackBar.open('В разработке.', undefined, {
+    this.snackBar.open('Пройдите предыдущий модуль.', undefined, {
       duration: 5000
     });
   }

@@ -1,8 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {concat, of, Subscription} from 'rxjs';
-import {LessonService} from '../../services/lesson.service';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
-import {AvailableLessonsService} from '../../services/available-lessons.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
 import * as routes from '../routes';

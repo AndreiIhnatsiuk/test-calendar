@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-renew',
@@ -16,7 +17,8 @@ export class RenewComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private gtag: Gtag) {
     this.sending = false;
   }
 
@@ -38,11 +40,17 @@ export class RenewComponent implements OnInit {
     }
     this.sending = true;
     this.authService.updatePassword(this.route.snapshot.paramMap.get('id'), this.password).subscribe(() => {
+      this.gtag.event('renew', {
+        event_category: 'account'
+      });
       this.snackBar.open('Пароль изменен.', undefined, {
         duration: 5000
       });
       this.router.navigate(['/dashboard']);
     }, (e) => {
+      this.gtag.event('renew', {
+        event_category: 'error-account'
+      });
       this.snackBar.open(e.error.message + ' Минимальная длина пароля 7 символов', undefined, {
         duration: 5000
       });

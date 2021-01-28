@@ -1,11 +1,12 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
 import {ProblemService} from '../../services/problem.service';
 import {FullProblem} from '../../entities/full-problem';
 import {SubmissionService} from '../../services/submission.service';
 import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-question',
@@ -27,7 +28,8 @@ export class QuestionComponent implements OnChanges {
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
               private submissionService: SubmissionService,
-              private problemService: ProblemService) {
+              private problemService: ProblemService,
+              private gtag: Gtag) {
   }
 
   onSelectAnswer() {
@@ -54,6 +56,10 @@ export class QuestionComponent implements OnChanges {
       .filter(answer => answer.selected)
       .map(answer => answer.id);
     this.submissionService.sendAnswerUser(this.problemId, selectedAnswers).subscribe(userAnswer => {
+      this.gtag.event('answer', {
+        event_category: 'question',
+        event_label: '' + this.problemId
+      });
       if (this.bestLastUserAnswer.best === null || userAnswer.right) {
         this.bestLastUserAnswer.best = userAnswer;
       }
@@ -65,6 +71,10 @@ export class QuestionComponent implements OnChanges {
   }
 
   reset() {
+    this.gtag.event('reset', {
+      event_category: 'question',
+      event_label: '' + this.problemId
+    });
     this.userAnswer = null;
     this.problem.answers.forEach(answer => answer.selected = false);
     this.disabledButton = true;

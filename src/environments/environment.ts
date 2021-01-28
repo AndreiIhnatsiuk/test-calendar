@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  brokerURL: 'ws://localhost:8080/ws'
+  brokerURL: 'ws://localhost:8080/ws',
+  googleTrackingId: 'UA-138130610-3'
 };
 
 /*

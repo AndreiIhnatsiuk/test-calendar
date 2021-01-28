@@ -10,6 +10,7 @@ import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {GtagModule} from 'angular-gtag';
 import {registerLocaleData} from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
+import {environment} from '../environments/environment';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -23,7 +24,7 @@ registerLocaleData(localeRu, 'ru');
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    GtagModule.forRoot({trackingId: '', trackPageviews: true})
+    GtagModule.forRoot({trackingId: environment.googleTrackingId, trackPageviews: true})
   ],
   providers: [
     {

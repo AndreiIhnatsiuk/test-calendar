@@ -4,6 +4,7 @@ import {AuthService} from '../../services/auth.service';
 import {UserAgreementDialogComponent} from '../user-agreement-dialog/user-agreement-dialog.component';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-registration',
@@ -19,13 +20,18 @@ export class RegistrationComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private authService: AuthService,
               private router: Router,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private gtag: Gtag) {
   }
 
   ngOnInit(): void {
   }
 
   openDialog() {
+    this.gtag.event('open', {
+      event_category: 'user-agreement',
+      event_label: 'signup-page'
+    });
     this.dialog.open(UserAgreementDialogComponent, {
       width: '1000px',
     });
@@ -41,8 +47,14 @@ export class RegistrationComponent implements OnInit {
     this.sending = true;
     this.authService.create(this.name, this.email, this.password).subscribe(() => {
         this.authService.login(this.email, this.password).subscribe(() => {
+          this.gtag.event('signup', {
+            event_category: 'account'
+          });
           this.router.navigate(['/dashboard']);
         }, () => {
+          this.gtag.event('signup', {
+            event_category: 'error-account'
+          });
           this.sending = false;
         });
         this.snackBar.open('Регистрация завершена. Приятного обучения.', undefined, {

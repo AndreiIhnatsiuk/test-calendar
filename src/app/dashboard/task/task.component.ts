@@ -97,6 +97,10 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   openedPanelHints() {
+    this.gtag.event('open', {
+      event_category: 'hint',
+      event_label: '' + this.problemId
+    });
     this.panelOpenState = true;
     this.areaTask.size = this.taskPageAreas.task;
     this.areaHint.size = this.taskPageAreas.hint;
@@ -249,6 +253,10 @@ export class TaskComponent implements OnChanges, OnDestroy {
   sendHint() {
     if (this.panelOpenState || this.hints.length === 0) {
       this.hintService.postNextHintByTaskId(this.problemId).subscribe(hint => {
+        this.gtag.event('take', {
+          event_category: 'hint',
+          event_label: '' + this.problemId
+        });
         this.hints.push(hint);
         this.accordion.openAll();
       });
@@ -338,6 +346,10 @@ export class TaskComponent implements OnChanges, OnDestroy {
     if (!this.showMore(submission)) {
       return;
     }
+    this.gtag.event('see-more', {
+      event_category: 'submission',
+      event_label: '' + this.problemId
+    });
     this.dialog.open(SubmissionComponent, {data: submission});
   }
 

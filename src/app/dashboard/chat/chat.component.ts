@@ -4,6 +4,8 @@ import {AuthService} from '../../services/auth.service';
 import {WebSocketService} from '../../services/web-socket.service';
 import {ChatSnapshot} from '../../entities/chat-snapshot';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +22,8 @@ export class ChatComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private webSocketService: WebSocketService,
-              private router: Router) {
+              private router: Router,
+              private gtag: Gtag) {
     this.isOpen = false;
     this.name = '';
     this.messages = [];
@@ -45,11 +48,17 @@ export class ChatComponent implements OnInit {
   }
 
   open() {
+    this.gtag.event('open', {
+      event_category: 'chat'
+    });
     this.scrollToBottom();
     this.isOpen = true;
   }
 
   close() {
+    this.gtag.event('close', {
+      event_category: 'chat'
+    });
     this.isOpen = false;
   }
 
@@ -65,7 +74,11 @@ export class ChatComponent implements OnInit {
           path: this.router.url,
           message: this.message
         }
-      ).subscribe(() => {});
+      ).subscribe(() => {
+        this.gtag.event('send-message', {
+          event_category: 'chat'
+        });
+      });
       this.message = '';
       this.scrollToBottom();
     }
