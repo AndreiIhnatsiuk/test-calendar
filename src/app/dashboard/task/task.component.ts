@@ -207,7 +207,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       if (this.problem.method.resultIndex === -1 &&
         this.problem.method.returnType === 'void' &&
         this.problem.method.name === 'main' &&
-        this.problem.method.arguments[0] === 'String[]') {
+        (this.problem.method.arguments[0] === 'String[]' || this.problem.method.arguments[0] === 'java.lang.String[]')) {
         this.solution =
           'import java.util.Scanner;\n' +
           '\n' +
