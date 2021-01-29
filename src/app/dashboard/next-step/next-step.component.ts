@@ -54,12 +54,12 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges() {
     if (this.oldLessonId !== this.lessonId) {
       this.oldLessonId = this.lessonId;
-      zip(
-        this.problemService.getProblemsByLessonId(this.lessonId),
-      ).subscribe(([problems]) => {
+      this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
         this.problems = problems;
         this.urlToNextStep = this.getNextStepLink();
       });
+    } else {
+      this.urlToNextStep = this.getNextStepLink();
     }
   }
 
