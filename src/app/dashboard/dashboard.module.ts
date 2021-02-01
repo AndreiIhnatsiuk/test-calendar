@@ -25,6 +25,7 @@ import * as url from './routes';
 import {ProblemComponent} from './problem/problem.component';
 import {SharedModule} from '../shared/shared.module';
 import {AngularSplitModule} from 'angular-split';
+import {MatMenuModule} from '@angular/material/menu';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -78,20 +79,21 @@ const routes: Routes = [
   entryComponents: [
     SubmissionComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatSidenavModule,
-    MatListModule,
-    MatTableModule,
-    AceModule,
-    NgxMaskModule.forRoot(),
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatIconModule,
-    SharedModule,
-    AngularSplitModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatSidenavModule,
+        MatListModule,
+        MatTableModule,
+        AceModule,
+        NgxMaskModule.forRoot(),
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatIconModule,
+        SharedModule,
+        AngularSplitModule,
+        MatMenuModule
+    ],
   providers: [
     {
       provide: ACE_CONFIG,

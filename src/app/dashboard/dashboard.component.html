@@ -3,7 +3,10 @@
     <a routerLink="" mat-button class="logo"><mat-icon>home</mat-icon><span class="mat-button">Study ITman.by</span></a>
     <app-progress></app-progress>
     <a class="spacer"></a>
-    <a *ngIf="personal" class="name">Привет, {{personal.name}}</a>
+    <button *ngIf="personal" class="name" mat-button [mat-menu-trigger-for]="menu">Привет, {{personal.name}}</button>
+    <mat-menu #menu="matMenu">
+      <button (click)="logout()" mat-menu-item>Выход</button>
+    </mat-menu>
   </mat-toolbar>
 </header>
 <b class="warning" style="display: none;">Рекомендую проходить обучение на компьютере</b>

@@ -24,4 +24,9 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
+
+  logout() {
+    this.authService.logout();
+    location.reload();
+  }
 }
