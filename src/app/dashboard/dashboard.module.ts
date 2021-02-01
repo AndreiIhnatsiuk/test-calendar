@@ -79,21 +79,21 @@ const routes: Routes = [
   entryComponents: [
     SubmissionComponent
   ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        MatSidenavModule,
-        MatListModule,
-        MatTableModule,
-        AceModule,
-        NgxMaskModule.forRoot(),
-        MatCheckboxModule,
-        MatExpansionModule,
-        MatIconModule,
-        SharedModule,
-        AngularSplitModule,
-        MatMenuModule
-    ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    MatSidenavModule,
+    MatListModule,
+    MatTableModule,
+    AceModule,
+    NgxMaskModule.forRoot(),
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatIconModule,
+    SharedModule,
+    AngularSplitModule,
+    MatMenuModule
+  ],
   providers: [
     {
       provide: ACE_CONFIG,
