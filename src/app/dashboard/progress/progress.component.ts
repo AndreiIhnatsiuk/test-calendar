@@ -116,6 +116,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
       return 'green';
     }
     if (this.acceptedProblems.has(problem.id) && !this.acceptedProblems.get(problem.id)) {
+      if (problem.type === 'GIT_TASK_MANUAL') {
+        return 'orange';
+      }
       return 'red';
     }
     if (this.availableProblemIds.has(problem.id)) {

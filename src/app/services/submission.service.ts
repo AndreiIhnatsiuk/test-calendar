@@ -12,6 +12,7 @@ import {BestLastUserAnswer} from '../entities/best-last-user-answer';
 import {BestLastFullSubmission} from '../entities/best-last-full-submission';
 import {RunSubmission} from '../entities/run-submission';
 import {RunSubmissionRequest} from '../entities/run-submission-request';
+import {GitTaskSubmissionRequest} from '../entities/git-task-submission-request';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
@@ -30,14 +31,26 @@ export class SubmissionService {
     return this.changes;
   }
 
+  public getGitTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/git-task-submissions');
+  }
+
+  public getGitManualTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/git-manual-task-submissions');
+  }
+
   public getTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/task-submissions');
+  }
+
+  private getSubmissionByProblemIdAndUrlApi(problemId: number, url: string): Observable<BestLastFullSubmission> {
     const params = new HttpParams().append('problemId', '' + problemId);
-    const result = this.http.get<BestLastFullSubmission>('/api/task-submissions', {params});
+    const result = this.http.get<BestLastFullSubmission>(url, {params});
     return concat(
       result,
       timer(2500, 2500).pipe(
         filter(() => this.runningTask.has(problemId)),
-        switchMap(() => this.http.get<BestLastFullSubmission>('/api/task-submissions', {params}))
+        switchMap(() => this.http.get<BestLastFullSubmission>(url, {params}))
       )
     ).pipe(tap(submissions => {
       if (submissions.last !== null) {
@@ -91,6 +104,16 @@ export class SubmissionService {
   public isRunRunning(submission: RunSubmission): boolean {
     const status = SubmissionStatus[submission.status];
     return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+  }
+
+  public postGitTaskSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {
+    return this.http.post<FullSubmission>('/api/git-task-submissions', submissionRequest)
+      .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
+  }
+
+  public postGitTaskManualSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {
+    return this.http.post<FullSubmission>('/api/git-manual-task-submissions', submissionRequest)
+      .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
   public postTaskSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {

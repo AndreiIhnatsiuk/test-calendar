@@ -6,7 +6,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {SubmissionComponent} from '../submission/submission.component';
-import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 import {AceComponent} from 'ngx-ace-wrapper';
 
 import 'brace';
@@ -67,7 +66,6 @@ export class TaskComponent implements OnChanges, OnDestroy {
               private problemService: ProblemService,
               private hintService: HintService,
               private submissionService: SubmissionService,
-              private acceptedSubmissionService: AcceptedSubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private gtag: Gtag,

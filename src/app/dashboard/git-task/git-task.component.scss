@@ -1,0 +1,16 @@
+.task {
+  max-width: 780px;
+  margin: 10px 0 10px 10px;
+}
+
+.git-result {
+  font-weight: 500;
+
+  a {
+    font-weight: 400;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #673ab7;
+  }
+}
