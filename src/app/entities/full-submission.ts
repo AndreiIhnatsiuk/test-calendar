@@ -1,5 +1,6 @@
 import {SubmissionStatusStrings} from './submission-status';
 import {Test} from './test';
+import {PullRequestInfo} from './pull-request-info';
 
 export interface FullSubmission {
   id: string;
@@ -13,4 +14,5 @@ export interface FullSubmission {
   sentDate: string;
   solution: string;
   type: string;
+  pullRequestInfo: PullRequestInfo;
 }

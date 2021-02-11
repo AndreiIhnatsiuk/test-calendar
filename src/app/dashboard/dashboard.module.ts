@@ -26,6 +26,8 @@ import {ProblemComponent} from './problem/problem.component';
 import {SharedModule} from '../shared/shared.module';
 import {AngularSplitModule} from 'angular-split';
 import {MatMenuModule} from '@angular/material/menu';
+import {GitTaskComponent} from './git-task/git-task.component';
+import {GitSubmissionComponent} from './git-submission/git-submission.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -74,7 +76,9 @@ const routes: Routes = [
     ProgressComponent,
     DashboardContentComponent,
     NextStepComponent,
-    ProblemComponent
+    ProblemComponent,
+    GitTaskComponent,
+    GitSubmissionComponent
   ],
   entryComponents: [
     SubmissionComponent

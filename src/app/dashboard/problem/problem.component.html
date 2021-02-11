@@ -1,2 +1,3 @@
 <app-task *ngIf="type === 'TASK'" [problemId]="problemId" [lessonId]="lessonId"></app-task>
+<app-git-task *ngIf="type === 'GIT_TASK' || type === 'GIT_TASK_MANUAL'" [problemId]="problemId" [lessonId]="lessonId" [type]="type"></app-git-task>
 <app-question *ngIf="type === 'QUESTION'" [problemId]="problemId" [lessonId]="lessonId"></app-question>
