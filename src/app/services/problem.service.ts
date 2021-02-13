@@ -19,6 +19,11 @@ export class ProblemService {
       .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
 
+  public countByModules(): Observable<Map<number, number>> {
+    return this.http.get('/api/problems?groupBy=modules')
+      .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
+  }
+
   public getProblemById(id: number): Observable<FullProblem> {
     return this.http.get<FullProblem>('/api/problems/' + id);
   }

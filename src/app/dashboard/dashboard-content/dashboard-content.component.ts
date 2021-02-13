@@ -4,6 +4,11 @@ import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TopicService} from '../../services/topic.service';
 import {zip} from 'rxjs';
+import {ModuleService} from '../../services/module.service';
+import {Module} from '../../entities/module';
+import {LessonService} from '../../services/lesson.service';
+import {ProblemService} from '../../services/problem.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-content',
@@ -12,50 +17,20 @@ import {zip} from 'rxjs';
 })
 export class DashboardContentComponent implements OnInit {
   topics: Array<Topic>;
+  modules: Array<Module>;
+  availableModules: Set<number>;
   availableLessons: Set<number>;
   linkLastLesson: number;
-
-  dashboardContent = [
-    ['Алгоритмы и структуры данных',
-      '#FFD64A',
-      'Продолжайте тренировки в алгоритмах.\n\n' +
-      'Узнайте как решать сложные задачи и как делать ваши программы быстрыми.\n\n' +
-      'В конце модуля Вы научите робота выходить из лабиринта.'],
-
-    ['ООП',
-      '#FFB334',
-      'Постигните дзэн ООП.\n\n' +
-      'Научитесь писать переиспользуемый и масштабируемый код.\n\n' +
-      'В конце модуля Вы напишите программу показывающую прогноз погоды.'],
-
-    ['Java Core',
-      '#51C574',
-      'Осознайте всю мощь Java.\n\n' +
-      'Научитесь решать сложные задачи в несколько строк кода и писать многопоточные программы.\n\n' +
-      'В конце модуля Вы напишите программу позволяющую вести список задач (TODO-лист).'],
-
-    ['SQL',
-      '#5443C0',
-      'Научитесь управлять данными.\n\n' +
-      'Узнайте, что такое базы данных и выучите язык управления данными.\n\n' +
-      'В конце модуля Вы усовершенствуете TODO-лист.'],
-
-    ['Spring',
-      '#5C2C1F',
-      'Обуздайте интернет.\n\n' +
-      'Узнайте как писать многопользовательские клиент-серверные приложения.\n\n' +
-      'В конце модуля Вы превратите свой TODO-лист в многопользовательское приложение.'],
-
-    ['Стажировка',
-      '#050201',
-      'Получите опыт в бою.\n\n' +
-      'Научитесь работать в команде и решать коммерческие задачи.\n\n' +
-      'После стажировки Вы получите свою первую работу.']
-  ];
+  countLessonsByModules: Map<number, number>;
+  countProblemsByModules: Map<number, number>;
 
   constructor(private availableTopicsService: AvailableLessonsService,
               private topicService: TopicService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private  moduleService: ModuleService,
+              private  lessonService: LessonService,
+              private  problemService: ProblemService,
+              private router: Router) {
     this.availableLessons = new Set<number>();
     this.topics = [];
   }
@@ -64,10 +39,25 @@ export class DashboardContentComponent implements OnInit {
     zip(
       this.availableTopicsService.getAvailableLessons(),
       this.topicService.getTopics(),
-    ).subscribe(([availableTopics, topics]) => {
+      this.moduleService.getModules(),
+      this.moduleService.getAvailableModules(),
+      this.lessonService.countByModules(),
+      this.problemService.countByModules(),
+    ).subscribe(([
+                   availableTopics,
+                   topics,
+                   modules,
+                   availableModules,
+                   countLessonsByModules,
+                   countProblemsByModules
+                 ]) => {
       this.availableLessons = availableTopics;
       this.topics = topics;
       this.linkLastLesson = this.getLastOpenedLessons();
+      this.modules = modules;
+      this.availableModules = availableModules;
+      this.countLessonsByModules = countLessonsByModules;
+      this.countProblemsByModules = countProblemsByModules;
     });
   }
 
@@ -82,9 +72,19 @@ export class DashboardContentComponent implements OnInit {
     return 1;
   }
 
-  public send() {
-    this.snackBar.open('Пройдите предыдущий модуль.', undefined, {
-      duration: 5000
-    });
+  public send(moduleId: number) {
+    if (!this.availableModules.has(moduleId)) {
+      this.snackBar.open('Пройдите предыдущий модуль.', undefined, {
+        duration: 5000
+      });
+    } else {
+      this.router.navigate(['dashboard', 'java', 'lesson', this.linkLastLesson]);
+    }
+  }
+
+  public declination(number, text): string {
+    const cases = [2, 0, 1, 1, 1, 2];
+    const declination = (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5];
+    return number + ' ' + text[declination];
   }
 }
