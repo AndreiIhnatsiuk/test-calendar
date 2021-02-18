@@ -43,13 +43,9 @@ const routes: Routes = [
         component: DashboardContentComponent,
       },
       {
-        path: url.JAVA,
+        path: url.MODULE + '/:moduleId',
         component: BeginnerComponent,
         children: [
-          {
-            path: '',
-            redirectTo: url.LESSON + '/1'
-          },
           {
             path: url.LESSON + '/:lessonId',
             component: LessonComponent

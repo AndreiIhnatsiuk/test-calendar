@@ -35,13 +35,14 @@ export class BeginnerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.topicService.getTopics()
+    const moduleId = Number.parseFloat(this.route.snapshot.paramMap.get('moduleId'));
+    this.topicService.getTopics(moduleId)
       .subscribe(topics => this.topics = topics);
-    this.acceptedProblemsByLessonsSubscription = this.acceptedSubmissionService.getAcceptedByLessons()
+    this.acceptedProblemsByLessonsSubscription = this.acceptedSubmissionService.getAcceptedByLessons(moduleId)
       .subscribe(accepted => this.acceptedProblemsByLessons = accepted);
-    this.problemService.countByLesson()
+    this.problemService.countByLesson(moduleId)
       .subscribe(number => this.countProblemsByLessons = number);
-    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons()
+    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons(moduleId)
       .subscribe(availableTopics => this.availableLessons = availableTopics);
 
     concat(

@@ -14,8 +14,8 @@ export class ProblemService {
     return this.http.get<Array<Problem>>('/api/problems?lessonId=' + lessonId);
   }
 
-  public countByLesson(): Observable<Map<number, number>> {
-    return this.http.get('/api/problems?groupBy=lessons')
+  public countByLesson(moduleId: number): Observable<Map<number, number>> {
+    return this.http.get('/api/problems?groupBy=lessons&moduleId=' + moduleId)
       .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
 
