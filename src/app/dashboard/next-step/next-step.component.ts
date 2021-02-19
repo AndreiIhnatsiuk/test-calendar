@@ -7,6 +7,7 @@ import {Subscription, zip} from 'rxjs';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
 import {TopicService} from '../../services/topic.service';
+import {combineAll} from 'rxjs/operators';
 
 @Component({
   selector: 'app-next-step',

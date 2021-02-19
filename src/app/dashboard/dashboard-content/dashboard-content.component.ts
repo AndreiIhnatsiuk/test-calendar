@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AvailableLessonsService} from '../../services/available-lessons.service';
-import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TopicService} from '../../services/topic.service';
 import {zip} from 'rxjs';
