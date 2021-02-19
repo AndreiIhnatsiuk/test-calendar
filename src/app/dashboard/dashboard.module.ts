@@ -5,7 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LessonComponent} from './lesson/lesson.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
-import {BeginnerComponent} from './beginner/beginner.component';
+import {ModuleComponent} from './module/module.component';
 import {TaskComponent} from './task/task.component';
 import {MatTableModule} from '@angular/material/table';
 import {SubmissionComponent} from './submission/submission.component';
@@ -44,7 +44,7 @@ const routes: Routes = [
       },
       {
         path: url.MODULE + '/:moduleId',
-        component: BeginnerComponent,
+        component: ModuleComponent,
         children: [
           {
             path: url.LESSON + '/:lessonId',
@@ -64,7 +64,7 @@ const routes: Routes = [
   declarations: [
     DashboardComponent,
     LessonComponent,
-    BeginnerComponent,
+    ModuleComponent,
     TaskComponent,
     SubmissionComponent,
     QuestionComponent,

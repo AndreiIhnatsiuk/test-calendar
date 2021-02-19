@@ -10,11 +10,11 @@ import {ProblemService} from '../../services/problem.service';
 import {TopicService} from '../../services/topic.service';
 
 @Component({
-  selector: 'app-beginner',
-  templateUrl: './beginner.component.html',
-  styleUrls: ['./beginner.component.scss']
+  selector: 'app-module',
+  templateUrl: './module.component.html',
+  styleUrls: ['./module.component.scss']
 })
-export class BeginnerComponent implements OnInit, OnDestroy {
+export class ModuleComponent implements OnInit, OnDestroy {
   topics: Array<Topic>;
   lessonId: number;
   availableLessons: Set<number>;

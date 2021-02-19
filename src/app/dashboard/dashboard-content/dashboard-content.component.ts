@@ -59,7 +59,7 @@ export class DashboardContentComponent implements OnInit {
     });
   }
 
-  public getLastOpenedLessons(moduleId: number) {
+  public goToPageLastLesson(moduleId: number) {
     zip(
       this.availableTopicsService.getAvailableLessons(moduleId),
       this.topicService.getTopics(moduleId),
@@ -80,7 +80,7 @@ export class DashboardContentComponent implements OnInit {
         duration: 5000
       });
     } else {
-      this.getLastOpenedLessons(moduleId);
+      this.goToPageLastLesson(moduleId);
     }
   }
 }

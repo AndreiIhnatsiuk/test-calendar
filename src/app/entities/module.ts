@@ -3,5 +3,4 @@ export interface Module {
   title: string;
   description: string;
   color: string;
-  position: number;
 }
