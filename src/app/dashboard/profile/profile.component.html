@@ -1,0 +1,32 @@
+<div class="center">
+  <mat-card *ngIf="personal">
+    <h1 style="display: flex; justify-content: center">Профиль</h1>
+    <mat-form-field class="full-width">
+      <mat-label>Имя</mat-label>
+      <input [disabled]="true" [(ngModel)]="personal.name" matInput>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Эл. Почта</mat-label>
+      <input [disabled]="true" [(ngModel)]="personal.email" matInput>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Телефон</mat-label>
+      <input [disabled]="personal.phone"
+             [(ngModel)]="personal.phone ? personal.phone : phone"
+             type="tel" matInput
+             autocomplete="off"
+             [imask]="{mask: '+{375}000000000'}">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Git Repository</mat-label>
+      <input [disabled]="personal.repository"
+             [(ngModel)]="personal.repository ? personal.repository : repository"
+             matInput type="text"
+             placeholder="nickname/repository" autocomplete="off">
+    </mat-form-field>
+    <div>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</div>
+    <div style="display: flex; justify-content: center; margin-top: 50px">
+      <button (click)="send()" mat-flat-button color="primary" [disabled]="!(phone && repository)">Сохранить</button>
+    </div>
+  </mat-card>
+</div>

@@ -5,7 +5,8 @@
     <a class="spacer"></a>
     <button *ngIf="personal" class="name" mat-button [mat-menu-trigger-for]="menu">Привет, {{personal.name}}</button>
     <mat-menu #menu="matMenu">
-      <button (click)="logout()" mat-menu-item>Выход</button>
+      <button routerLink="/dashboard/profile" mat-menu-item><mat-icon>person</mat-icon>Профиль</button>
+      <button (click)="logout()" mat-menu-item><mat-icon>door_back</mat-icon>Выход</button>
     </mat-menu>
   </mat-toolbar>
 </header>

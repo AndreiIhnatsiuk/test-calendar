@@ -3,4 +3,6 @@ export interface Personal {
   name: string;
   phone: string;
   analyticsId: string;
+  email: string;
+  repository: string;
 }

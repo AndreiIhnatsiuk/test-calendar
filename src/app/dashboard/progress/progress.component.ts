@@ -48,7 +48,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
       .subscribe(paramMap => {
         const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
-        if (lessonId !== this.lessonId) {
+        if (lessonId !== this.lessonId && lessonId !== 0) {
           this.lessonId = lessonId;
           this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
             this.problems = problems;
