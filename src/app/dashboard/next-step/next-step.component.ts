@@ -7,6 +7,7 @@ import {Subscription, zip} from 'rxjs';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
 import {TopicService} from '../../services/topic.service';
+import {combineAll} from 'rxjs/operators';
 
 @Component({
   selector: 'app-next-step',
@@ -17,6 +18,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   @Input() problemId: number;
   @Input() lessonId: number;
 
+  moduleId: number;
   problems: Array<Problem>;
   oldLessonId: number;
   topics: Array<Topic>;
@@ -32,19 +34,20 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     this.oldLessonId = this.lessonId;
     this.topics = new Array<Topic>();
     this.availableLessons = new Set<number>();
-    this.urlToLesson = '/' + routes.DASHBOARD + '/' + routes.JAVA + '/' + routes.LESSON;
+    this.urlToLesson = '/' + routes.DASHBOARD + '/' + routes.MODULE;
   }
 
   ngOnInit() {
+    this.moduleId = Number.parseFloat(this.route.parent.snapshot.paramMap.get('moduleId'));
     zip(
-      this.topicService.getTopics(),
+      this.topicService.getTopics(this.moduleId),
       this.problemService.getProblemsByLessonId(this.lessonId),
     ).subscribe(([topics, problems]) => {
       this.topics = topics;
       this.problems = problems;
       this.urlToNextStep = this.getNextStepLink();
     });
-    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons()
+    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons(this.moduleId)
       .subscribe(availableTopics => {
         this.availableLessons = availableTopics;
         this.urlToNextStep = this.getNextStepLink();
@@ -72,7 +75,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   getNextStepLink() {
     if (!this.problemId) {
       if (this.problems && this.problems.length > 0) {
-        return [this.urlToLesson, this.lessonId, routes.PROBLEM, this.problems[0].id];
+        return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, this.problems[0].id];
       }
     } else {
       if (this.problemId && this.problems && this.problems[this.problems.length - 1].id !== this.problemId) {
@@ -86,7 +89,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     let isCurrentTask = false;
     for (const problem of this.problems) {
       if (isCurrentTask) {
-        return [this.urlToLesson, this.lessonId, routes.PROBLEM, problem.id];
+        return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, problem.id];
       }
       if (this.problemId === problem.id) {
         isCurrentTask = true;
@@ -97,7 +100,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   getNextLessonLink() {
     const nextLessonId = this.getNextLessonId();
     if (this.availableLessons.has(nextLessonId)) {
-      return [this.urlToLesson, nextLessonId];
+      return [this.urlToLesson, this.moduleId, routes.LESSON, nextLessonId];
     }
     return null;
   }

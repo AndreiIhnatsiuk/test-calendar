@@ -2,40 +2,25 @@
   <div>
     <div>
       <div>
-
-        <div class="hover">
-          <div routerLink="java/lesson/{{linkLastLesson}}" class="card">
-            <div class="card-img" style="background-color: #FCF6F6; background-size: cover;">
-              <div style="color: black;">Основы алгоритмизации</div>
-            </div>
-            <div class="card-content">
-              <div>Начни путь программиста.<br><br>
-                Изучите основные алгоритмы и синтаксис Java.<br><br>
-                В конце модуля Вы напишите свою первую игру — крестики нолики.
-              </div>
-            </div>
-            <div class="access">
-              <div>28 уроков, 102 задания</div>
-            </div>
-          </div>
-        </div>
-
-        <div (click)="send()" *ngFor="let content of dashboardContent" class="hover">
+        <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
           <div class="card">
-            <div class="card-img" style="background-color: {{content[1]}}; background-size: cover;">
+            <div class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
               <div>
-                {{content[0]}}
+                {{module.title}}
               </div>
             </div>
             <div class="card-content">
-              <div style="white-space: pre-wrap">{{content[2]}}</div>
+              <div style="white-space: pre-wrap">{{module.description}}</div>
             </div>
             <div class="access">
-              <div>Недоступен</div>
+              <div>
+                {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}} ,
+                {{countProblemsByModules.get(module.id) | i18nPlural: tasks:'ru'}}
+              </div>
+              <div *ngIf="!availableModules.has(module.id)">Недоступен</div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
