@@ -1,8 +1,6 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Personal} from '../../entities/personal';
 import {AuthService} from '../../services/auth.service';
-import {Gtag} from 'angular-gtag';
-import {error} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +22,7 @@ export class ProfileComponent implements OnInit {
   }
 
   send() {
-    this.authService.update(this.phone, this.repository).subscribe(personal => {
+    this.authService.update('+375' + this.phone, this.repository).subscribe(personal => {
       this.personal = personal;
     });
   }

@@ -1,6 +1,6 @@
 <div class="center">
   <mat-card *ngIf="personal">
-    <h1 style="display: flex; justify-content: center">Профиль</h1>
+    <h1>Профиль</h1>
     <mat-form-field class="full-width">
       <mat-label>Имя</mat-label>
       <input [disabled]="true" [(ngModel)]="personal.name" matInput>
@@ -12,10 +12,13 @@
     <mat-form-field class="full-width">
       <mat-label>Телефон</mat-label>
       <input [disabled]="personal.phone"
+             matInput
+             name="phone"
+             placeholder="Телефон"
              [(ngModel)]="personal.phone ? personal.phone : phone"
-             type="tel" matInput
-             autocomplete="off"
-             [imask]="{mask: '+{375}000000000'}">
+             prefix="+375 "
+             mask="(00) 000-00-00"
+             [showMaskTyped]="true">
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>Git Repository</mat-label>
@@ -24,8 +27,8 @@
              matInput type="text"
              placeholder="nickname/repository" autocomplete="off">
     </mat-form-field>
-    <div>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</div>
-    <div style="display: flex; justify-content: center; margin-top: 50px">
+    <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
+    <div>
       <button (click)="send()" mat-flat-button color="primary" [disabled]="!(phone && repository)">Сохранить</button>
     </div>
   </mat-card>
