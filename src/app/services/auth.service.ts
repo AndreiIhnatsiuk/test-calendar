@@ -61,8 +61,12 @@ export class AuthService {
     return this.http.get<Personal>('/api/users/me');
   }
 
-  update(phone: string, repository: string): Observable<Personal> {
-    return this.http.patch<Personal>('/api/users/me', {phone, repository});
+  updatePhone(phone: string): Observable<Personal> {
+    return this.http.patch<Personal>('/api/users/me', {phone});
+  }
+
+  updateRepository(repository: string): Observable<Personal> {
+    return this.http.patch<Personal>('/api/users/me', {repository});
   }
 
   create(name: string, email: string, password: string): Observable<any> {

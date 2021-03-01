@@ -22,8 +22,15 @@ export class ProfileComponent implements OnInit {
   }
 
   send() {
-    this.authService.update('+375' + this.phone, this.repository).subscribe(personal => {
-      this.personal = personal;
-    });
+    if (this.phone) {
+      this.authService.updatePhone('+375' + this.phone).subscribe(personal => {
+        this.personal = personal;
+      });
+    }
+    if (this.repository) {
+      this.authService.updateRepository(this.repository).subscribe(personal => {
+        this.personal = personal;
+      });
+    }
   }
 }
