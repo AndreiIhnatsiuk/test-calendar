@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { TokenInfo } from '../entities/token-info';
-import { LocalStorageService } from './local-storage.service';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {TokenInfo} from '../entities/token-info';
+import {LocalStorageService} from './local-storage.service';
 import {Personal} from '../entities/personal';
 import {map} from 'rxjs/operators';
 
@@ -61,18 +61,22 @@ export class AuthService {
     return this.http.get<Personal>('/api/users/me');
   }
 
-  updatePhone(phone: string): Observable<Personal> {
-    return this.http.patch<Personal>('/api/users/me', {phone});
-  }
-
-  updateRepository(repository: string): Observable<Personal> {
-    return this.http.patch<Personal>('/api/users/me', {repository});
+  updatePersonal(phone: string, repository: string): Observable<Personal> {
+    if (phone && repository) {
+      return this.http.patch<Personal>('/api/users/me', {phone: '+375' + phone, repository: repository});
+    }
+    if (phone) {
+      return this.http.patch<Personal>('/api/users/me', {phone: '+375' + phone});
+    }
+    if (repository) {
+      return this.http.patch<Personal>('/api/users/me', {repository});
+    }
   }
 
   create(name: string, email: string, password: string): Observable<any> {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa('web:web'));
 
-    return this.http.post('/api/users', { name, email, level: 'BEGINNER', password}, {headers: headers});
+    return this.http.post('/api/users', {name, email, level: 'BEGINNER', password}, {headers: headers});
   }
 }

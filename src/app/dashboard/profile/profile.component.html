@@ -16,8 +16,8 @@
              name="phone"
              placeholder="Телефон"
              [(ngModel)]="personal.phone ? personal.phone : phone"
-             prefix="+375 "
-             mask="(00) 000-00-00"
+             prefix="{{personal.phone ? '' : '+375 '}}"
+             mask="{{personal.phone ? '+000 (00) 000-00-00' : '(00) 000-00-00'}}"
              [showMaskTyped]="true">
     </mat-form-field>
     <mat-form-field class="full-width">
