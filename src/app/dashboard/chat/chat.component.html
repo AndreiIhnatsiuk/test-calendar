@@ -23,7 +23,7 @@
         <as-split-area [size]="80" minSize="20">
           <div class="messages" #messagesContainer>
             <div class="message" *ngFor="let message of messages">
-              <p><b>{{getName(message.owner)}}</b>:<br>{{message.message}}</p>
+              <p><b>{{getName(message.owner)}}</b>:<br>{{message.message}}<a *ngIf="message.id === -1" href="https://t.me/itman_community">@itman_community</a></p>
             </div>
           </div>
         </as-split-area>
