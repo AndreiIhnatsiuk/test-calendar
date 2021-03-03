@@ -10,15 +10,15 @@ export class AvailableLessonsService {
               private submissionService: SubmissionService) {
   }
 
-  private getAvailableLessonsSingle(): Observable<Set<number>> {
-    return this.http.get<Array<number>>('/api/available-lessons')
+  private getAvailableLessonsSingle(moduleId: number): Observable<Set<number>> {
+    return this.http.get<Array<number>>('/api/available-lessons?moduleId=' + moduleId)
       .pipe(map(lessons => new Set(lessons)));
   }
 
-  public getAvailableLessons(): Observable<Set<number>> {
+  public getAvailableLessons(moduleId: number): Observable<Set<number>> {
     return merge(
-      this.getAvailableLessonsSingle(),
-      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableLessonsSingle()))
+      this.getAvailableLessonsSingle(moduleId),
+      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableLessonsSingle(moduleId)))
     );
   }
 }

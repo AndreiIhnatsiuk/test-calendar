@@ -135,7 +135,10 @@
                     [disabled]="isSendDisabled()"
                     color="primary">Запустить
             </button>
-            <app-next-step style="margin-left: 10px;" *ngIf="status" [problemId]="problemId" [lessonId]="lessonId"></app-next-step>
+            <app-next-step style="margin-left: 10px;"
+                           *ngIf="status"
+                           [problemId]="problemId"
+                           [lessonId]="lessonId"></app-next-step>
           </div>
           <div *ngIf="(sending || running)">
             <mat-spinner diameter="35"></mat-spinner>

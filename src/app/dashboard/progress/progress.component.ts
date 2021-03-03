@@ -33,7 +33,6 @@ export class ProgressComponent implements OnInit, OnDestroy {
     this.problems = new Array<Problem>();
     this.acceptedProblems = new Map<number, boolean>();
     this.availableProblemIds = new Set<number>();
-    this.urlToLesson = routes.JAVA + '/' + routes.LESSON + '/';
   }
 
   ngOnInit() {
@@ -46,6 +45,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
+        const moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
+        this.urlToLesson = this.url.MODULE + '/' + moduleId + '/' + this.url.LESSON + '/';
         const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
         if (lessonId !== this.lessonId && lessonId !== 0) {
