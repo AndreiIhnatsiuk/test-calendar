@@ -28,6 +28,8 @@ import {AngularSplitModule} from 'angular-split';
 import {MatMenuModule} from '@angular/material/menu';
 import {GitTaskComponent} from './git-task/git-task.component';
 import {GitSubmissionComponent} from './git-submission/git-submission.component';
+import {ProfileComponent} from './profile/profile.component';
+import {IMaskModule} from 'angular-imask';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -41,6 +43,10 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardContentComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
       },
       {
         path: url.MODULE + '/:moduleId',
@@ -74,7 +80,8 @@ const routes: Routes = [
     NextStepComponent,
     ProblemComponent,
     GitTaskComponent,
-    GitSubmissionComponent
+    GitSubmissionComponent,
+    ProfileComponent
   ],
   entryComponents: [
     SubmissionComponent
@@ -92,7 +99,8 @@ const routes: Routes = [
     MatIconModule,
     SharedModule,
     AngularSplitModule,
-    MatMenuModule
+    MatMenuModule,
+    IMaskModule
   ],
   providers: [
     {
