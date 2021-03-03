@@ -37,13 +37,7 @@ export class ChatComponent implements OnInit {
       });
     this.webSocketService.send<ChatSnapshot>('/app/snapshot/messages', null)
       .subscribe(snapshot => {
-        this.messages.unshift({
-          id: -1,
-          message: 'Привет! Это поддержка ITMan! Если что-то не получается — постараемся помочь.' +
-            ' Пишите свой вопрос в чат и в течении 24 часов получите ответ.' +
-            ' Если ответ нужен быстрее, то спросите у участников нашей группы: ',
-          owner: 'SUPPORT'
-        } as Message, ...snapshot.messages);
+        this.messages.unshift(...snapshot.messages);
         this.receiveMessage();
       });
   }
