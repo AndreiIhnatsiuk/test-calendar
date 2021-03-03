@@ -3,7 +3,8 @@
   <div class="topic-part" *ngFor="let part of lesson.parts">
     <div class="topic-part-text" *ngIf="part.text" [innerHTML]="part.text | marked"></div>
     <div class="topic-part-youtube" *ngIf="part.youtubeId">
-      <iframe width="800" height="450" [src]="this.safeVideoUrl.get(part.youtubeId)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="800" height="450" [src]="this.safeVideoUrl.get(part.youtubeId)" frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <div class="topic-part-tasks" *ngIf="part.problemIds">
       <p>Ты уже можешь решить следующие задачи:</p>

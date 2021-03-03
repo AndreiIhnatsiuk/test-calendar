@@ -22,6 +22,12 @@
       <as-split direction="vertical">
         <as-split-area [size]="80" minSize="20">
           <div class="messages" #messagesContainer>
+            <div class="message">
+              <p><b>ITMan</b>:<br>Привет! Это поддержка ITMan! Если что-то не получается — постараемся помочь.
+                Пишите свой вопрос в чат и в течении 24 часов получите ответ.
+                Если ответ нужен быстрее, то спросите у участников нашей группы:
+                <a href="https://t.me/itman_community">@itman_community</a></p>
+            </div>
             <div class="message" *ngFor="let message of messages">
               <p><b>{{getName(message.owner)}}</b>:<br>{{message.message}}</p>
             </div>

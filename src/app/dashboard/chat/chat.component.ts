@@ -4,7 +4,6 @@ import {AuthService} from '../../services/auth.service';
 import {WebSocketService} from '../../services/web-socket.service';
 import {ChatSnapshot} from '../../entities/chat-snapshot';
 import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {Gtag} from 'angular-gtag';
 
 @Component({
@@ -38,11 +37,7 @@ export class ChatComponent implements OnInit {
       });
     this.webSocketService.send<ChatSnapshot>('/app/snapshot/messages', null)
       .subscribe(snapshot => {
-        this.messages.unshift({
-          id: -1,
-          message: 'Привет! Это поддержка ITMan! Если что-то не получается — постараемся помочь. Пишите свой вопрос в чат.',
-          owner: 'SUPPORT'
-        } as Message, ...snapshot.messages);
+        this.messages.unshift(...snapshot.messages);
         this.receiveMessage();
       });
   }
