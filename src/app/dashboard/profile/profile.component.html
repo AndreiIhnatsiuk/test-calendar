@@ -29,7 +29,10 @@
     </mat-form-field>
     <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
     <div>
-      <button (click)="send()" mat-flat-button color="primary" [disabled]="!(phone || repository)">Сохранить</button>
+      <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary" [disabled]="!(phone || repository)">
+        Сохранить
+      </button>
+      <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
     </div>
   </mat-card>
 </div>

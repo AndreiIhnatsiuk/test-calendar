@@ -35,12 +35,12 @@
     </div>
   </div>
   <div class="button" *ngIf="!sending">
-    <app-next-step *ngIf="userAnswer && userAnswer.right" [problemId]="problemId"
+    <app-next-step style="margin-right: 10px" *ngIf="userAnswer && userAnswer.right" [problemId]="problemId"
                    [lessonId]="lessonId"></app-next-step>
     <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">
       Отправить
     </button>
-    <button style="margin-left: 10px" *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
+    <button *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
   </div>
   <div *ngIf="sending">
     <mat-spinner diameter="35"></mat-spinner>

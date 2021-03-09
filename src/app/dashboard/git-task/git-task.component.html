@@ -1,27 +1,32 @@
-<div class="task" *ngIf="problem">
+<div class="task" *ngIf="problem && bestLastSubmission">
   <div [innerHTML]="problem.text | marked"></div>
 
-  <p class="git-result" *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
+  <p class="git-result" *ngIf="bestLastSubmission.last">
     Статус:
     <a
+      [ngClass]="bestLastSubmission.last.status === 'ACCEPTED' ? 'disabled' : ''"
       (click)="seeMore(bestLastSubmission.last)">
-      {{bestLastSubmission.last.wrongTest ? bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.last.status }}
+      <span>{{bestLastSubmission.last.status}}</span>
+      {{bestLastSubmission.last.wrongTest ? ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : '' }}
       {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}.</a>
   </p>
 
-  <mat-form-field *ngIf="!(sending || running) && bestLastSubmission.last.status !== 'ACCEPTED'" class="example-form-field">
-    <mat-label>Введите Pull Request Id</mat-label>
-    <input matInput autocomplete="off" type="text" [(ngModel)]="pullRequestId">
-  </mat-form-field>
-
-  <div *ngIf="!(sending || running)">
-    <button *ngIf="bestLastSubmission.last.status !== 'ACCEPTED'" mat-raised-button (click)="send()"
-            style="margin-right: 10px;"
-            [disabled]="isSendDisabled() || !this.pullRequestId"
-            color="primary">Проверить
-    </button>
-    <app-next-step *ngIf="status" [problemId]="problemId"
-                   [lessonId]="lessonId"></app-next-step>
+  <div *ngIf="!(sending || running)" style="display: flex; flex-direction: column;">
+    <mat-form-field *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'ACCEPTED'"
+                    class="example-form-field">
+      <mat-label>Введите Pull Request Id</mat-label>
+      <input matInput autocomplete="off" type="text" [(ngModel)]="pullRequestId">
+    </mat-form-field>
+    <div>
+      <button *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'ACCEPTED'" mat-raised-button
+              (click)="send()"
+              style="margin-right: 10px;"
+              [disabled]="isSendDisabled() || !this.pullRequestId"
+              color="primary">Проверить
+      </button>
+      <app-next-step *ngIf="status" [problemId]="problemId"
+                     [lessonId]="lessonId"></app-next-step>
+    </div>
   </div>
 
   <div *ngIf="(sending || running)">
