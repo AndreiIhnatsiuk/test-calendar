@@ -27,9 +27,13 @@ export class ProfileComponent implements OnInit {
   send() {
     this.sending = true;
     this.authService.updatePersonal(this.phone, this.repository).subscribe(personal => {
+      this.sending = false;
       this.repository = null;
       this.phone = null;
       this.personal = personal;
+      this.snackBar.open('Сохранено', undefined, {
+        duration: 5000
+      });
     }, error => {
       this.sending = false;
       let message = error.error.message;
