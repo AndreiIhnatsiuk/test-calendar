@@ -13,4 +13,14 @@
     text-decoration: underline;
     color: #673ab7;
   }
+
+  .disabled {
+    pointer-events: none;
+    text-decoration: none;
+
+    span {
+      font-weight: 500;
+      color: #66cd66;
+    }
+  }
 }

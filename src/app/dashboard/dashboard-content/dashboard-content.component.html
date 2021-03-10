@@ -5,7 +5,7 @@
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
           <div class="card">
             <div class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
-              <div>
+              <div style="color: {{brightness(module.color)}}">
                 {{module.title}}
               </div>
             </div>
@@ -13,8 +13,8 @@
               <div style="white-space: pre-wrap">{{module.description}}</div>
             </div>
             <div class="access">
-              <div>
-                {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}} ,
+              <div *ngIf="availableModules.has(module.id)">
+                {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}},
                 {{countProblemsByModules.get(module.id) | i18nPlural: tasks:'ru'}}
               </div>
               <div *ngIf="!availableModules.has(module.id)">Недоступен</div>

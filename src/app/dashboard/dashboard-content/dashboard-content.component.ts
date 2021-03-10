@@ -83,4 +83,11 @@ export class DashboardContentComponent implements OnInit {
       this.goToPageLastLesson(moduleId);
     }
   }
+
+  private brightness(color: string): string {
+    const R = parseInt(color.substring(0, 2), 16);
+    const G = parseInt(color.substring(2, 4), 16);
+    const B = parseInt(color.substring(4, 6), 16);
+    return Math.sqrt(R * R * .241 + G * G * .691 + B * B * .068) < 220 ? '#FFFFFF' : '#000000';
+  }
 }
