@@ -1,6 +1,7 @@
 .progress {
   display: flex;
   margin-left: 140px;
+  height: 43px;
 
   div {
     display: flex;
@@ -50,4 +51,12 @@
   margin-right: 5px;
 }
 
+::-webkit-scrollbar {
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 5px;
+}
 

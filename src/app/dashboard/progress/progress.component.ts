@@ -24,6 +24,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   private availableProblemsSubscription: Subscription;
   urlToLesson: string;
   url = routes;
+  show = true;
 
   constructor(private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
@@ -49,6 +50,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
         this.urlToLesson = this.url.MODULE + '/' + moduleId + '/' + this.url.LESSON + '/';
         const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
+        this.show = lessonId !== 0;
         if (lessonId !== this.lessonId && lessonId !== 0) {
           this.lessonId = lessonId;
           this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
@@ -95,7 +97,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.availableProblemsSubscription = undefined;
     }
     if (this.lessonId) {
-      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblems(this.lessonId)
+      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblemsByLessonId(this.lessonId)
         .subscribe(problemIds => {
           this.availableProblemIds = problemIds;
         });
@@ -117,7 +119,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
       return 'green';
     }
     if (this.acceptedProblems.has(problem.id) && !this.acceptedProblems.get(problem.id)) {
-      if (problem.type === 'GIT_TASK_MANUAL') {
+      if (problem.type === 'GIT_MANUAL_TASK') {
         return 'orange';
       }
       return 'red';

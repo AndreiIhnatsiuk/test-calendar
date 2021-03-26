@@ -1,0 +1,50 @@
+<div *ngIf="activePlan">
+  <div class="deadline">
+    <span *ngIf="isPlanCompleted">План выполнен. Следующий план:</span>
+    <span *ngIf="!isPlanCompleted">Дедлайн:</span>
+    {{activePlan.deadline | date:'EEEE, d MMMM, HH:mm':'':'ru'}}
+  </div>
+  <div *ngFor="let planProblem of planProblems">
+    <div class="lesson">
+      <div>
+        <div class="title">{{planProblem[0].lessonTitle}}
+        </div>
+      </div>
+      <div class="problems">
+        <div *ngFor="let problem of planProblem" class="progress">
+          <button mat-flat-button
+                  [ngClass]="getStatus(problem)"
+                  [routerLink]="'module/' + problem.moduleId + '/lesson/' + problem.lessonId + '/problem/' + problem.problemId"
+                  [disabled]="!availableProblemIds.has(problem.problemId)"
+                  title="Задание">
+            <mat-icon *ngIf="problem.typeProblem === 'QUESTION'">live_help</mat-icon>
+            <mat-icon *ngIf="problem.typeProblem === 'TASK'">extension</mat-icon>
+            <mat-icon *ngIf="problem.typeProblem === 'GIT_TASK'">extension</mat-icon>
+            <mat-icon *ngIf="problem.typeProblem === 'GIT_MANUAL_TASK'">extension</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!activePlan && futurePlan" style="padding: 10px; width: 340px; margin: auto">
+  <p *ngIf="futurePlan.status === 'ENDED'">Поздравляем, вы выполнили все задания.
+    Ожидайте появление новых заданий или повторите материалы
+  </p>
+  <div *ngIf="futurePlan.status === 'AVAILABLE'">
+    <p>Для пользования платформой ITman, необходимо активировать личный план обучения.
+      После активации каждую неделю будет генерироваться недельный личный план.
+      План будет содержать список тем и заданий, которые необходимо успеть выполнить до дедлайна.
+      План генерируется таким образом, что 75% людей успевают сделать все задания меньше, чем за 10 часов.
+      Если Вы не успеете выполнить задания до дедлайна, то платформа перестанет быть доступна.
+      Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дедлайн на
+      {{futurePlan.deadline | date:'EEEE, d MMMM':null:'ru'}}.
+    </p>
+    <button mat-flat-button color="primary" (click)="send()" style="width: 340px; background-color: #8c9fc9">Начать обучение</button>
+  </div>
+  <p *ngIf="futurePlan.status === 'NOT_AVAILABLE'">К сожалению, Вы не справились с предыдущим недельным планом,
+    поэтому платформа ITman для Вас не доступна. Свяжитесь со мной в телеграмм <a href="https://t.me/StarWix">@StarWix</a>
+    и может мы сможем решить эту проблему.
+  </p>
+</div>

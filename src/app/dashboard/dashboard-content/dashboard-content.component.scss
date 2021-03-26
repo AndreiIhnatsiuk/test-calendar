@@ -16,7 +16,7 @@
 
   .card-img {
     background-color: black;
-    height: 25%;
+    height: 67px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,13 +27,14 @@
 
   .card-content {
     flex: 1 1 auto;
-    margin-top: 10px;
-    padding: 0 10px;
+    padding: 10px;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .access {
-    margin: 0 10px 10px;
     color: grey;
   }
 }
@@ -46,7 +47,8 @@ div {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 95%;
+  height: calc(100vh - 50px);
+  overflow: auto;
 
   & > div {
     display: flex;
@@ -59,7 +61,6 @@ div {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 5px;
       }
     }
   }

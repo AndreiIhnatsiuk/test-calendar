@@ -1,24 +1,25 @@
-<div *ngIf="lessonId" class="progress">
-  <div>
-    <button mat-flat-button [ngClass]="acceptedLesson ? 'green' : 'blue'"
-       [routerLink]="urlToLesson + lessonId"
-       [class.active-button-item]="!problemId"
-       title="Теория">
-      <mat-icon>description</mat-icon>
-    </button>
-  </div>
-
-  <div *ngFor="let problem of problems">
-    <button mat-flat-button [ngClass]="getStatus(problem)"
-       [routerLink]="urlToLesson + lessonId + '/' + url.PROBLEM + '/' + problem.id"
-       [class.active-button-item]="problem.id === problemId"
-       [disabled]="!availableProblemIds.has(problem.id)"
-       title="Задание">
-      <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
-      <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
-      <mat-icon *ngIf="problem.type === 'GIT_TASK'">extension</mat-icon>
-      <mat-icon *ngIf="problem.type === 'GIT_TASK_MANUAL'">extension</mat-icon>
-    </button>
+<div *ngIf="show && lessonId" class="progress">
+  <div class="progress-menu" style="overflow: auto; max-width: 500px">
+    <div>
+      <button mat-flat-button [ngClass]="acceptedLesson ? 'green' : 'blue'"
+              [routerLink]="urlToLesson + lessonId"
+              [class.active-button-item]="!problemId"
+              title="Теория">
+        <mat-icon>description</mat-icon>
+      </button>
+    </div>
+    <div *ngFor="let problem of problems">
+      <button mat-flat-button [ngClass]="getStatus(problem)"
+              [routerLink]="urlToLesson + lessonId + '/' + url.PROBLEM + '/' + problem.id"
+              [class.active-button-item]="problem.id === problemId"
+              [disabled]="!availableProblemIds.has(problem.id)"
+              title="Задание">
+        <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
+        <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
+        <mat-icon *ngIf="problem.type === 'GIT_TASK'">extension</mat-icon>
+        <mat-icon *ngIf="problem.type === 'GIT_MANUAL_TASK'">extension</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 

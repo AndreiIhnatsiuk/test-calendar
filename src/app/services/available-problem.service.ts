@@ -10,15 +10,27 @@ export class AvailableProblemsService {
               private submissionService: SubmissionService) {
   }
 
-  private getAvailableProblemsSingle(lessonId: number): Observable<Set<number>> {
+  private getAvailableProblemsSingleByLessonId(lessonId: number): Observable<Set<number>> {
     return this.http.get<Array<number>>('/api/available-problems?lessonId=' + lessonId)
       .pipe(map(problemIds => new Set(problemIds)));
   }
 
-  public getAvailableProblems(lessonId: number): Observable<Set<number>> {
+  public getAvailableProblemsByLessonId(lessonId: number): Observable<Set<number>> {
     return merge(
-      this.getAvailableProblemsSingle(lessonId),
-      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableProblemsSingle(lessonId)))
+      this.getAvailableProblemsSingleByLessonId(lessonId),
+      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableProblemsSingleByLessonId(lessonId)))
+    );
+  }
+
+  private getAvailableProblemsSingleByProblemIdIn(problemIds: Array<number>): Observable<Set<number>> {
+    return this.http.get<Array<number>>('/api/available-problems?problemIds=' + problemIds)
+      .pipe(map(availableProblemIds => new Set(availableProblemIds)));
+  }
+
+  public getAvailableProblemsByProblemIdIn(problemIds: Array<number>): Observable<Set<number>> {
+    return merge(
+      this.getAvailableProblemsSingleByProblemIdIn(problemIds),
+      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableProblemsSingleByProblemIdIn(problemIds)))
     );
   }
 }

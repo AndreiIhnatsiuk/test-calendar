@@ -1,7 +1,7 @@
 <div class="container">
   <button mat-fab
           color="accent"
-          [class.answered]="!messages.length || messages[messages.length - 1].owner === 'SUPPORT'"
+          [class.answered]="messages.length && messages[messages.length - 1].owner === 'SUPPORT'"
           *ngIf="!isOpen"
           (click)="open()"
           title="Чат поддержки">

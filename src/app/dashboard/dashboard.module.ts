@@ -30,6 +30,11 @@ import {GitTaskComponent} from './git-task/git-task.component';
 import {GitSubmissionComponent} from './git-submission/git-submission.component';
 import {ProfileComponent} from './profile/profile.component';
 import {IMaskModule} from 'angular-imask';
+import {PersonalPlanProgressComponent} from './personal-plan-progress/personal-plan-progress.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {CountdownModule} from 'ngx-countdown';
+import {PersonalPlanComponent} from './personal-plan/personal-plan.component';
+import {PersonalPlanContentComponent} from './personal-plan-content/personal-plan-content.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -47,6 +52,18 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'plan',
+        component: PersonalPlanComponent,
+      },
+      {
+        path: 'plan/' + url.MODULE + '/:moduleId',
+        redirectTo: url.MODULE + '/:moduleId'
+      },
+      {
+        path: 'java/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
+        redirectTo: url.MODULE + '/1/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId'
       },
       {
         path: url.MODULE + '/:moduleId',
@@ -81,7 +98,10 @@ const routes: Routes = [
     ProblemComponent,
     GitTaskComponent,
     GitSubmissionComponent,
-    ProfileComponent
+    ProfileComponent,
+    PersonalPlanProgressComponent,
+    PersonalPlanComponent,
+    PersonalPlanContentComponent
   ],
   entryComponents: [
     SubmissionComponent
@@ -100,7 +120,9 @@ const routes: Routes = [
     SharedModule,
     AngularSplitModule,
     MatMenuModule,
-    IMaskModule
+    IMaskModule,
+    MatProgressBarModule,
+    CountdownModule
   ],
   providers: [
     {

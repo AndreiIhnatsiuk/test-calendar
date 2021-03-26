@@ -1,11 +1,16 @@
 .topic {
-  margin: 10px 0 0 10px;
+  box-sizing: border-box;
+  padding: 10px 0 0 10px;
   display: flex;
   height: 100%;
   flex-direction: column;
 
   p {
     max-width: 780px;
+  }
+
+  ul {
+    max-width: 740px;
   }
 
   pre {

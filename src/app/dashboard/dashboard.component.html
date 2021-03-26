@@ -3,8 +3,10 @@
     <a routerLink="" mat-button class="logo"><mat-icon>home</mat-icon><span class="mat-button">Study ITman.by</span></a>
     <app-progress></app-progress>
     <a class="spacer"></a>
+    <app-personal-plan-progress></app-personal-plan-progress>
     <button *ngIf="personal" class="name" mat-button [mat-menu-trigger-for]="menu">Привет, {{personal.name}}</button>
     <mat-menu #menu="matMenu">
+      <button routerLink="plan" mat-menu-item><mat-icon>assignment</mat-icon>План</button>
       <button routerLink="/dashboard/profile" mat-menu-item><mat-icon>person</mat-icon>Профиль</button>
       <button (click)="logout()" mat-menu-item><mat-icon>door_back</mat-icon>Выход</button>
     </mat-menu>
