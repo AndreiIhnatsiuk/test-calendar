@@ -1,27 +1,22 @@
 <div class="wrapper">
   <div>
     <div>
-      <div class="card" style="max-width: none; margin-top: 15px; height: auto;">
-        <div class="card-img" style="background-color: #8c9fc9; background-size: cover;">
-          <div>
-            Личный план
-          </div>
-        </div>
-        <div class="card-content" style="padding: 0">
+      <H1>Личный план</H1>
+      <mat-card class="card plan">
+        <mat-card-content>
           <div style="white-space: pre-wrap">
             <app-personal-plan-content></app-personal-plan-content>
           </div>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
+      <H1>Модули</H1>
       <div>
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
-          <div class="card">
-            <div class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
-              <div style="color: {{brightness(module.color)}}">
-                {{module.title}}
-              </div>
-            </div>
-            <div class="card-content">
+          <mat-card class="card">
+            <mat-card-header class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
+              <mat-card-title style="color: {{brightness(module.color)}}">{{module.title}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="card-content">
               <div style="white-space: pre-wrap">{{module.description}}</div>
               <div class="access">
                 <div *ngIf="availableModules.has(module.id)">
@@ -30,8 +25,8 @@
                 </div>
                 <div *ngIf="!availableModules.has(module.id)">Недоступен</div>
               </div>
-            </div>
-          </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>

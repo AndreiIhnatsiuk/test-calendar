@@ -28,23 +28,28 @@
   </div>
 </div>
 
-<div *ngIf="!activePlan && futurePlan" style="padding: 10px; width: 340px; margin: auto">
+<div *ngIf="!activePlan && futurePlan" style="padding: 10px; width: 780px; margin: auto">
   <p *ngIf="futurePlan.status === 'ENDED'">Поздравляем, вы выполнили все задания.
     Ожидайте появление новых заданий или повторите материалы
   </p>
   <div *ngIf="futurePlan.status === 'AVAILABLE'">
-    <p>Для пользования платформой ITman, необходимо активировать личный план обучения.
-      После активации каждую неделю будет генерироваться недельный личный план.
+    <p>Для использования платформы ITman, необходимо активировать личный план обучения.
+    </p>
+    <p>После активации каждую неделю будет генерироваться недельный личный план.
       План будет содержать список тем и заданий, которые необходимо успеть выполнить до дедлайна.
       План генерируется таким образом, что 75% людей успевают сделать все задания меньше, чем за 10 часов.
       Если Вы не успеете выполнить задания до дедлайна, то платформа перестанет быть доступна.
-      Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дедлайн на
+    </p>
+    <p>Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дата дедлайна
       {{futurePlan.deadline | date:'EEEE, d MMMM':null:'ru'}}.
     </p>
-    <button mat-flat-button color="primary" (click)="send()" style="width: 340px; background-color: #8c9fc9">Начать обучение</button>
+    <button mat-flat-button color="primary" (click)="send()" style="width: 200px; height: 54px; background-color: #f57c00">
+      НАЧАТЬ ОБУЧЕНИЕ
+    </button>
   </div>
   <p *ngIf="futurePlan.status === 'NOT_AVAILABLE'">К сожалению, Вы не справились с предыдущим недельным планом,
-    поэтому платформа ITman для Вас не доступна. Свяжитесь со мной в телеграмм <a href="https://t.me/StarWix">@StarWix</a>
+    поэтому платформа ITman для Вас не доступна. Свяжитесь со мной в телеграмм <a
+      href="https://t.me/StarWix">@StarWix</a>
     и может мы сможем решить эту проблему.
   </p>
 </div>
