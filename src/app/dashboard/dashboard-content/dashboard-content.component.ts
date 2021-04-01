@@ -72,12 +72,12 @@ export class DashboardContentComponent implements OnInit {
             this.router.navigate([routes.DASHBOARD, routes.MODULE, moduleId, routes.LESSON, lesson.id]);
           }
         }
-        this.personalPlanService.getActivePlan().subscribe(() => {}, () => {
-          this.snackBar.open('Активируйте личный план.', undefined, {
-            duration: 5000
-          });
-        });
       }
+      this.personalPlanService.getActivePlan().subscribe(() => {}, () => {
+        this.snackBar.open('Активируйте личный план.', undefined, {
+          duration: 5000
+        });
+      });
     });
   }
 

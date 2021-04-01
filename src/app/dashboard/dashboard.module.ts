@@ -35,6 +35,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {CountdownModule} from 'ngx-countdown';
 import {PersonalPlanComponent} from './personal-plan/personal-plan.component';
 import {PersonalPlanContentComponent} from './personal-plan-content/personal-plan-content.component';
+import {ButtonProblemComponent} from './button-problem/button-problem.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -58,12 +59,12 @@ const routes: Routes = [
         component: PersonalPlanComponent,
       },
       {
-        path: 'plan/' + url.MODULE + '/:moduleId',
-        redirectTo: url.MODULE + '/:moduleId'
-      },
-      {
         path: 'java/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
         redirectTo: url.MODULE + '/1/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId'
+      },
+      {
+        path: 'java/' + url.LESSON + '/:lessonId',
+        redirectTo: url.MODULE + '/1/' + url.LESSON + '/:lessonId'
       },
       {
         path: url.MODULE + '/:moduleId',
@@ -101,7 +102,8 @@ const routes: Routes = [
     ProfileComponent,
     PersonalPlanProgressComponent,
     PersonalPlanComponent,
-    PersonalPlanContentComponent
+    PersonalPlanContentComponent,
+    ButtonProblemComponent
   ],
   entryComponents: [
     SubmissionComponent

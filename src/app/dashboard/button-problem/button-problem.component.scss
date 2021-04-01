@@ -1,0 +1,35 @@
+.mat-flat-button {
+  color: rgba(0, 0, 0, 0.65);
+  border-radius: 5px;
+  min-width: 30px;
+  line-height: 30px;
+  padding: 0;
+  margin-right: 5px;
+}
+
+.red {
+  background-color: #cd6666;
+}
+
+.green {
+  background-color: #66cd66;
+}
+
+.blue {
+  background-color: #66a6cd;
+}
+
+.orange {
+  background-color: #f39543;
+}
+
+.active-button-item {
+  padding: 0;
+  min-width: 30px;
+  line-height: 26px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.mat-flat-button[disabled] {
+  background-color: grey;
+}

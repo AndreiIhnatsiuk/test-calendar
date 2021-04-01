@@ -1,0 +1,10 @@
+<button mat-flat-button [ngClass]="getStatus()"
+        [routerLink]="'/dashboard/module/' + moduleId + '/lesson/' + lessonId + '/problem/' + problemId"
+        [class.active-button-item]="problemId === currentProblemId"
+        [disabled]="!isAvailable"
+        title="Задание">
+  <mat-icon *ngIf="problemType === 'QUESTION'">live_help</mat-icon>
+  <mat-icon *ngIf="problemType === 'TASK'">extension</mat-icon>
+  <mat-icon *ngIf="problemType === 'GIT_TASK'">extension</mat-icon>
+  <mat-icon *ngIf="problemType === 'GIT_MANUAL_TASK'">extension</mat-icon>
+</button>

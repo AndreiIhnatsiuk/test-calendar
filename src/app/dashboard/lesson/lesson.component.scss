@@ -4,14 +4,7 @@
   display: flex;
   height: 100%;
   flex-direction: column;
-
-  p {
-    max-width: 780px;
-  }
-
-  ul {
-    max-width: 740px;
-  }
+  max-width: 780px;
 
   pre {
     overflow-x: scroll;

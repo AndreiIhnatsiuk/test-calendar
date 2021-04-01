@@ -9,16 +9,16 @@
       </button>
     </div>
     <div *ngFor="let problem of problems">
-      <button mat-flat-button [ngClass]="getStatus(problem)"
-              [routerLink]="urlToLesson + lessonId + '/' + url.PROBLEM + '/' + problem.id"
-              [class.active-button-item]="problem.id === problemId"
-              [disabled]="!availableProblemIds.has(problem.id)"
-              title="Задание">
-        <mat-icon *ngIf="problem.type === 'QUESTION'">live_help</mat-icon>
-        <mat-icon *ngIf="problem.type === 'TASK'">extension</mat-icon>
-        <mat-icon *ngIf="problem.type === 'GIT_TASK'">extension</mat-icon>
-        <mat-icon *ngIf="problem.type === 'GIT_MANUAL_TASK'">extension</mat-icon>
-      </button>
+      <app-button-problem
+        [moduleId]="moduleId"
+        [lessonId]="lessonId"
+        [problemId]="problem.id"
+        [problemType]="problem.type"
+        [currentProblemId]="problemId"
+        [isAvailable]="availableProblemIds.has(problem.id)"
+        [isAccepted]="acceptedProblems.has(problem.id) && acceptedProblems.get(problem.id)"
+        [existSubmissions]="acceptedProblems.has(problem.id)"
+      ></app-button-problem>
     </div>
   </div>
 </div>

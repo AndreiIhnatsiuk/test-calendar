@@ -2,7 +2,7 @@
   <div class="deadline">
     <span *ngIf="isPlanCompleted">План выполнен. Следующий план:</span>
     <span *ngIf="!isPlanCompleted">Дедлайн:</span>
-    {{activePlan.deadline | date:'EEEE, d MMMM, HH:mm':'':'ru'}}
+    {{activePlan.deadline | date:'EEEE, d MMMM, HH:mm':null:'ru'}}
   </div>
   <div *ngFor="let planProblem of planProblems">
     <div class="lesson">
@@ -12,23 +12,22 @@
       </div>
       <div class="problems">
         <div *ngFor="let problem of planProblem" class="progress">
-          <button mat-flat-button
-                  [ngClass]="getStatus(problem)"
-                  [routerLink]="'module/' + problem.moduleId + '/lesson/' + problem.lessonId + '/problem/' + problem.problemId"
-                  [disabled]="!availableProblemIds.has(problem.problemId)"
-                  title="Задание">
-            <mat-icon *ngIf="problem.typeProblem === 'QUESTION'">live_help</mat-icon>
-            <mat-icon *ngIf="problem.typeProblem === 'TASK'">extension</mat-icon>
-            <mat-icon *ngIf="problem.typeProblem === 'GIT_TASK'">extension</mat-icon>
-            <mat-icon *ngIf="problem.typeProblem === 'GIT_MANUAL_TASK'">extension</mat-icon>
-          </button>
+          <app-button-problem
+            [moduleId]="problem.moduleId"
+            [lessonId]="problem.lessonId"
+            [problemId]="problem.problemId"
+            [problemType]="problem.typeProblem"
+            [isAvailable]="availableProblemIds.has(problem.problemId)"
+            [isAccepted]="acceptedProblems.has(problem.problemId) && acceptedProblems.get(problem.problemId)"
+            [existSubmissions]="acceptedProblems.has(problem.problemId)"
+          ></app-button-problem>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div *ngIf="!activePlan && futurePlan" style="padding: 10px; width: 780px; margin: auto">
+<div *ngIf="!activePlan && futurePlan">
   <p *ngIf="futurePlan.status === 'ENDED'">Поздравляем, вы выполнили все задания.
     Ожидайте появление новых заданий или повторите материалы
   </p>
@@ -43,7 +42,8 @@
     <p>Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дата дедлайна
       {{futurePlan.deadline | date:'EEEE, d MMMM':null:'ru'}}.
     </p>
-    <button mat-flat-button color="primary" (click)="send()" style="width: 200px; height: 54px; background-color: #f57c00">
+    <button mat-flat-button color="primary" (click)="send()"
+            style="width: 200px; height: 54px; background-color: #f57c00">
       НАЧАТЬ ОБУЧЕНИЕ
     </button>
   </div>

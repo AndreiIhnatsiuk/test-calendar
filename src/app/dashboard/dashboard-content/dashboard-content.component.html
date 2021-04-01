@@ -1,15 +1,13 @@
 <div class="wrapper">
   <div>
     <div>
-      <H1>Личный план</H1>
+      <H2>Личный план</H2>
       <mat-card class="card plan">
-        <mat-card-content>
-          <div style="white-space: pre-wrap">
-            <app-personal-plan-content></app-personal-plan-content>
-          </div>
+        <mat-card-content class="plan-content">
+          <app-personal-plan-content></app-personal-plan-content>
         </mat-card-content>
       </mat-card>
-      <H1>Модули</H1>
+      <H2>Модули</H2>
       <div>
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
           <mat-card class="card">

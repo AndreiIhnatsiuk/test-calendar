@@ -91,22 +91,6 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  getStatus(planProblem: PlanProblem): string {
-    if (this.acceptedProblems.has(planProblem.problemId) && this.acceptedProblems.get(planProblem.problemId)) {
-      return 'green';
-    }
-    if (this.acceptedProblems.has(planProblem.problemId) && !this.acceptedProblems.get(planProblem.problemId)) {
-      if (planProblem.typeProblem === 'GIT_MANUAL_TASK') {
-        return 'orange';
-      }
-      return 'red';
-    }
-    if (this.availableProblemIds.has(planProblem.problemId)) {
-      return 'blue';
-    }
-    return;
-  }
-
   send() {
     this.sending = true;
     this.personalPlanService.generatePlan().subscribe(() => {

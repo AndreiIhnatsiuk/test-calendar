@@ -9,14 +9,8 @@
   flex: 1 1 auto;
 }
 
-@media screen and (max-width: 700px) {
-  .mat-button {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .name {
+@media screen and (max-width: 1060px) {
+  app-personal-plan-progress {
     display: none;
   }
 }
@@ -30,6 +24,9 @@ mat-toolbar {
   .name {
     font-size: 16px;
     padding: 0 16px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .mat-button:hover {
@@ -40,8 +37,9 @@ mat-toolbar {
     color: lightgrey;
   }
 
-  .mat-button {
+  .logo-name {
     font-size: 15px;
+    margin-left: 10px;
   }
 
   .logo {
@@ -52,5 +50,19 @@ mat-toolbar {
     mat-icon {
       margin-right: 2px;
     }
+  }
+}
+
+.progress {
+  margin-left: 160px;
+}
+
+@media screen and (max-width: 1280px) {
+  .logo-name {
+    display: none;
+  }
+
+  .progress {
+    margin-left: 0;
   }
 }

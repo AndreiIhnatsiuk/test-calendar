@@ -20,6 +20,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   acceptedLesson: boolean;
   lessonId: number;
   problemId: number;
+  moduleId: number;
   private acceptedProblemsSubscription: Subscription;
   private availableProblemsSubscription: Subscription;
   urlToLesson: string;
@@ -46,8 +47,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
-        this.urlToLesson = this.url.MODULE + '/' + moduleId + '/' + this.url.LESSON + '/';
+        this.moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
+        this.urlToLesson = this.url.MODULE + '/' + this.moduleId + '/' + this.url.LESSON + '/';
         const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
         this.show = lessonId !== 0;
@@ -112,21 +113,5 @@ export class ProgressComponent implements OnInit, OnDestroy {
       }
     }
     this.acceptedLesson = true;
-  }
-
-  getStatus(problem: Problem): string {
-    if (this.acceptedProblems.has(problem.id) && this.acceptedProblems.get(problem.id)) {
-      return 'green';
-    }
-    if (this.acceptedProblems.has(problem.id) && !this.acceptedProblems.get(problem.id)) {
-      if (problem.type === 'GIT_MANUAL_TASK') {
-        return 'orange';
-      }
-      return 'red';
-    }
-    if (this.availableProblemIds.has(problem.id)) {
-      return 'blue';
-    }
-    return;
   }
 }

@@ -42,6 +42,12 @@
   .access {
     color: grey;
   }
+
+  .plan-content {
+    padding: 10px;
+    width: 780px;
+    margin: auto;
+  }
 }
 
 .wrapper {
@@ -51,7 +57,7 @@
   height: calc(100vh - 50px);
   overflow: auto;
 
-  H1 {
+  H2 {
     margin-top: 40px;
     text-align: center;
     font-size: 28px;
