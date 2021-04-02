@@ -1,13 +1,13 @@
 <div class="wrapper">
   <div>
     <div>
-      <H2>Личный план</H2>
+      <h2>Личный план</h2>
       <mat-card class="card plan">
         <mat-card-content class="plan-content">
           <app-personal-plan-content></app-personal-plan-content>
         </mat-card-content>
       </mat-card>
-      <H2>Модули</H2>
+      <h2>Модули</h2>
       <div>
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
           <mat-card class="card">

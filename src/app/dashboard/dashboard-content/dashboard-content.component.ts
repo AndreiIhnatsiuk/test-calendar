@@ -70,6 +70,7 @@ export class DashboardContentComponent implements OnInit {
         for (const lesson of topic.lessons.reverse()) {
           if (availableTopics.has(lesson.id)) {
             this.router.navigate([routes.DASHBOARD, routes.MODULE, moduleId, routes.LESSON, lesson.id]);
+            return;
           }
         }
       }
