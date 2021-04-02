@@ -62,10 +62,9 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
           this.update(bestLastSubmission);
         });
     }
-    if (this.type === 'GIT_TASK_MANUAL') {
-      this.taskSubmissionsSubscription = this.submissionService
-        .getGitManualTaskSubmissionsByProblemId(this.problemId)
-        .subscribe(bestLastSubmission => {
+    if (this.type === 'GIT_MANUAL_TASK') {
+      this.taskSubmissionsSubscription =
+        this.submissionService.getGitManualTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
           this.update(bestLastSubmission);
         });
     }
@@ -113,7 +112,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
         });
       });
     }
-    if (this.type === 'GIT_TASK_MANUAL') {
+    if (this.type === 'GIT_MANUAL_TASK') {
       this.submissionService.postGitTaskManualSubmission(submission).subscribe(added => {
         this.gtag.event('sent', {
           event_category: 'submission',

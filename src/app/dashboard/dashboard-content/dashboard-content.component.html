@@ -1,25 +1,30 @@
 <div class="wrapper">
   <div>
     <div>
+      <h2>Личный план</h2>
+      <mat-card class="card plan">
+        <mat-card-content class="plan-content">
+          <app-personal-plan-content></app-personal-plan-content>
+        </mat-card-content>
+      </mat-card>
+      <h2>Модули</h2>
       <div>
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
-          <div class="card">
-            <div class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
-              <div style="color: {{brightness(module.color)}}">
-                {{module.title}}
-              </div>
-            </div>
-            <div class="card-content">
+          <mat-card class="card">
+            <mat-card-header class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
+              <mat-card-title style="color: {{brightness(module.color)}}">{{module.title}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="card-content">
               <div style="white-space: pre-wrap">{{module.description}}</div>
-            </div>
-            <div class="access">
-              <div *ngIf="availableModules.has(module.id)">
-                {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}},
-                {{countProblemsByModules.get(module.id) | i18nPlural: tasks:'ru'}}
+              <div class="access">
+                <div *ngIf="availableModules.has(module.id)">
+                  {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}},
+                  {{countProblemsByModules.get(module.id) | i18nPlural: tasks:'ru'}}
+                </div>
+                <div *ngIf="!availableModules.has(module.id)">Недоступен</div>
               </div>
-              <div *ngIf="!availableModules.has(module.id)">Недоступен</div>
-            </div>
-          </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>

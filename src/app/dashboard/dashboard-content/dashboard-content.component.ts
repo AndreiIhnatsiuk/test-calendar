@@ -9,6 +9,7 @@ import {LessonService} from '../../services/lesson.service';
 import {ProblemService} from '../../services/problem.service';
 import {Router} from '@angular/router';
 import * as routes from '../routes';
+import {PersonalPlanService} from '../../services/personal-plan';
 
 @Component({
   selector: 'app-dashboard-content',
@@ -32,6 +33,7 @@ export class DashboardContentComponent implements OnInit {
   };
 
   constructor(private availableTopicsService: AvailableLessonsService,
+              private personalPlanService: PersonalPlanService,
               private topicService: TopicService,
               private snackBar: MatSnackBar,
               private  moduleService: ModuleService,
@@ -68,9 +70,15 @@ export class DashboardContentComponent implements OnInit {
         for (const lesson of topic.lessons.reverse()) {
           if (availableTopics.has(lesson.id)) {
             this.router.navigate([routes.DASHBOARD, routes.MODULE, moduleId, routes.LESSON, lesson.id]);
+            return;
           }
         }
       }
+      this.personalPlanService.getActivePlan().subscribe(() => {}, () => {
+        this.snackBar.open('Активируйте личный план.', undefined, {
+          duration: 5000
+        });
+      });
     });
   }
 

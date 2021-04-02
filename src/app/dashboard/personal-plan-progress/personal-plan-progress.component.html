@@ -1,0 +1,19 @@
+<div style="height: 30px">
+  <button routerLink="plan" *ngIf="activePlan" mat-button style="height: 30px">
+    <mat-progress-bar class="progress" mode="determinate" value="{{count}}"></mat-progress-bar>
+    <div class="timer" *ngIf="time <= 86400 && active">
+      <span>Осталось: </span>
+      <countdown #cd [config]="{leftTime: time, format: 'HH:mm:ss'}" (event)="onEvent($event)"></countdown>
+    </div>
+    <div class="timer" *ngIf="time > 86400 && active">
+      <span>Осталось </span>
+      <countdown #cd [config]="{leftTime: time, format: 'd'}"></countdown>
+      <span> дней</span>
+    </div>
+    <div class="timer" *ngIf="!active">
+      <span *ngIf="futurePlan.status === 'AVAILABLE'">План выполнен.</span>
+      <span *ngIf="futurePlan.status === 'ENDED'">Вы выполнили все задания.</span>
+      <span *ngIf="futurePlan.status === 'NOT_AVAILABLE'">План провален.</span>
+    </div>
+  </button>
+</div>

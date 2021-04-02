@@ -1,0 +1,44 @@
+.progress {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+
+  ::ng-deep .mat-flat-button {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    padding: 0;
+    line-height: normal;
+  }
+}
+
+.mat-card {
+  overflow: auto;
+}
+
+.deadline {
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  margin: 20px 0 10px;
+}
+
+.lesson {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+
+  &:hover {
+    background: rgba(0,0,0,.04);
+  }
+}
+
+.title {
+  width: 260px;
+}
+
+.problems {
+  display: flex;
+  flex-wrap: wrap;
+}

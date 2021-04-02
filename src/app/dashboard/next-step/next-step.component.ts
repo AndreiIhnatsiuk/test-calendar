@@ -7,7 +7,7 @@ import {Subscription, zip} from 'rxjs';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
 import {TopicService} from '../../services/topic.service';
-import {combineAll} from 'rxjs/operators';
+import {AvailableProblemsService} from '../../services/available-problem.service';
 
 @Component({
   selector: 'app-next-step',
@@ -26,15 +26,19 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   urlToLesson: string;
   availableLessonsSubscription: Subscription;
   urlToNextStep: Array<any>;
+  availableProblemIds: Set<number>;
+  private availableProblemsSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
-              private availableTopicsService: AvailableLessonsService,
+              private availableLessonsService: AvailableLessonsService,
+              private availableProblemsService: AvailableProblemsService,
               private topicService: TopicService) {
     this.oldLessonId = this.lessonId;
     this.topics = new Array<Topic>();
     this.availableLessons = new Set<number>();
     this.urlToLesson = '/' + routes.DASHBOARD + '/' + routes.MODULE;
+    this.availableProblemIds = new Set<number>();
   }
 
   ngOnInit() {
@@ -47,18 +51,30 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
       this.problems = problems;
       this.urlToNextStep = this.getNextStepLink();
     });
-    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons(this.moduleId)
-      .subscribe(availableTopics => {
-        this.availableLessons = availableTopics;
+    this.availableLessonsSubscription = this.availableLessonsService.getAvailableLessons(this.moduleId)
+      .subscribe(availableLessons => {
+        this.availableLessons = availableLessons;
         this.urlToNextStep = this.getNextStepLink();
       });
   }
 
   ngOnChanges() {
+    if (this.availableProblemsSubscription) {
+      this.availableProblemsSubscription.unsubscribe();
+      this.availableProblemsSubscription = undefined;
+    }
     if (this.oldLessonId !== this.lessonId) {
       this.oldLessonId = this.lessonId;
       this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
         this.problems = problems;
+        if (this.problems) {
+          this.availableProblemsSubscription =
+            this.availableProblemsService.getAvailableProblemsByProblemIdIn(this.problems.map(x => x.id))
+              .subscribe(availableProblemIds => {
+                this.availableProblemIds = availableProblemIds;
+                this.urlToNextStep = this.getNextStepLink();
+              });
+        }
         this.urlToNextStep = this.getNextStepLink();
       });
     } else {
@@ -70,11 +86,17 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     if (this.availableLessonsSubscription) {
       this.availableLessonsSubscription.unsubscribe();
     }
+    if (this.availableProblemsSubscription) {
+      this.availableProblemsSubscription.unsubscribe();
+    }
   }
 
   getNextStepLink() {
     if (!this.problemId) {
       if (this.problems && this.problems.length > 0) {
+        if (!this.availableProblemIds.has(this.problems[0].id)) {
+          return null;
+        }
         return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, this.problems[0].id];
       }
     } else {
@@ -89,6 +111,9 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     let isCurrentTask = false;
     for (const problem of this.problems) {
       if (isCurrentTask) {
+        if (!this.availableProblemIds.has(problem.id)) {
+          return null;
+        }
         return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, problem.id];
       }
       if (this.problemId === problem.id) {

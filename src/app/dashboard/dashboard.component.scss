@@ -9,14 +9,8 @@
   flex: 1 1 auto;
 }
 
-@media screen and (max-width: 700px) {
-  .mat-button {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .name {
+@media screen and (max-width: 1060px) {
+  app-personal-plan-progress {
     display: none;
   }
 }
@@ -25,27 +19,50 @@ mat-toolbar {
   padding: 0;
   background-color: black;
   color: grey;
-  height: 40px;
+  height: 50px;
+
   .name {
     font-size: 16px;
     padding: 0 16px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
   .mat-button:hover {
     color: lightgrey;
   }
+
   .active-button {
     color: lightgrey;
   }
-  .mat-button {
+
+  .logo-name {
     font-size: 15px;
+    margin-left: 10px;
   }
+
   .logo {
     display: flex;
     align-items: center;
     color: white;
+
     mat-icon {
       margin-right: 2px;
     }
   }
 }
 
+.progress {
+  margin-left: 160px;
+}
+
+@media screen and (max-width: 1280px) {
+  .logo-name {
+    display: none;
+  }
+
+  .progress {
+    margin-left: 0;
+  }
+}

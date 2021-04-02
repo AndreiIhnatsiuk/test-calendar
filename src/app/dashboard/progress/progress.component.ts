@@ -20,10 +20,12 @@ export class ProgressComponent implements OnInit, OnDestroy {
   acceptedLesson: boolean;
   lessonId: number;
   problemId: number;
+  moduleId: number;
   private acceptedProblemsSubscription: Subscription;
   private availableProblemsSubscription: Subscription;
   urlToLesson: string;
   url = routes;
+  show = true;
 
   constructor(private problemService: ProblemService,
               private acceptedSubmissionService: AcceptedSubmissionService,
@@ -45,10 +47,11 @@ export class ProgressComponent implements OnInit, OnDestroy {
     )
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
-        const moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
-        this.urlToLesson = this.url.MODULE + '/' + moduleId + '/' + this.url.LESSON + '/';
+        this.moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
+        this.urlToLesson = this.url.MODULE + '/' + this.moduleId + '/' + this.url.LESSON + '/';
         const lessonId = +paramMap.get('lessonId');
         const problemId = +paramMap.get('problemId');
+        this.show = lessonId !== 0;
         if (lessonId !== this.lessonId && lessonId !== 0) {
           this.lessonId = lessonId;
           this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
@@ -95,7 +98,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.availableProblemsSubscription = undefined;
     }
     if (this.lessonId) {
-      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblems(this.lessonId)
+      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblemsByLessonId(this.lessonId)
         .subscribe(problemIds => {
           this.availableProblemIds = problemIds;
         });
@@ -110,21 +113,5 @@ export class ProgressComponent implements OnInit, OnDestroy {
       }
     }
     this.acceptedLesson = true;
-  }
-
-  getStatus(problem: Problem): string {
-    if (this.acceptedProblems.has(problem.id) && this.acceptedProblems.get(problem.id)) {
-      return 'green';
-    }
-    if (this.acceptedProblems.has(problem.id) && !this.acceptedProblems.get(problem.id)) {
-      if (problem.type === 'GIT_TASK_MANUAL') {
-        return 'orange';
-      }
-      return 'red';
-    }
-    if (this.availableProblemIds.has(problem.id)) {
-      return 'blue';
-    }
-    return;
   }
 }

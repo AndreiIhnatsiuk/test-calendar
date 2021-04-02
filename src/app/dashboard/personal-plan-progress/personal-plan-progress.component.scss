@@ -1,0 +1,33 @@
+.timer {
+  position: relative;
+  bottom: 32px;
+  font-weight: 500;
+  color: black;
+}
+
+::ng-deep .mat-menu-panel {
+  max-width: 1000px !important;
+}
+
+::ng-deep .mat-menu-content:not(:empty) {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.progress {
+  margin-right: 5px;
+  height: 30px;
+  width: 230px;
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: #8c9fc9;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+  background: #d2dbde;
+}
+
+::ng-deep .mat-progress-bar {
+  border-radius: 5px;
+}
