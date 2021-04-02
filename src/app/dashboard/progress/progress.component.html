@@ -1,5 +1,5 @@
 <div *ngIf="show && lessonId" class="progress">
-  <div class="progress-menu" style="overflow: auto; max-width: 500px">
+  <div class="progress-menu" style="overflow: auto;">
     <div>
       <button mat-flat-button [ngClass]="acceptedLesson ? 'green' : 'blue'"
               [routerLink]="urlToLesson + lessonId"

@@ -3,7 +3,7 @@ import {ActivePlan} from '../../entities/active-plan';
 import {FuturePlan} from '../../entities/future-plan';
 import {PlanProblem} from '../../entities/plan-problem';
 import {Subscription} from 'rxjs';
-import {PersonalPlanService} from '../../services/personal-plan';
+import {PersonalPlanService} from '../../services/personal-plan.service';
 import {AvailableProblemsService} from '../../services/available-problem.service';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 

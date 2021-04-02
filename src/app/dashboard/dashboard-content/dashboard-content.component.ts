@@ -9,7 +9,7 @@ import {LessonService} from '../../services/lesson.service';
 import {ProblemService} from '../../services/problem.service';
 import {Router} from '@angular/router';
 import * as routes from '../routes';
-import {PersonalPlanService} from '../../services/personal-plan';
+import {PersonalPlanService} from '../../services/personal-plan.service';
 
 @Component({
   selector: 'app-dashboard-content',

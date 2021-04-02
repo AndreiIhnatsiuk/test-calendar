@@ -2,7 +2,7 @@
   <div class="deadline">
     <span *ngIf="isPlanCompleted">План выполнен. Следующий план:</span>
     <span *ngIf="!isPlanCompleted">Дедлайн:</span>
-    {{activePlan.deadline | date:'EEEE, d MMMM, HH:mm':null:'ru'}}
+    {{activePlan.deadline | date:'EEEE, d MMMM в HH:mm':null:'ru'}}
   </div>
   <div *ngFor="let planProblem of planProblems">
     <div class="lesson">
@@ -27,20 +27,23 @@
   </div>
 </div>
 
-<div *ngIf="!activePlan && futurePlan">
+<div *ngIf="!activePlan && futurePlan" class="info">
   <p *ngIf="futurePlan.status === 'ENDED'">Поздравляем, вы выполнили все задания.
     Ожидайте появление новых заданий или повторите материалы
   </p>
   <div *ngIf="futurePlan.status === 'AVAILABLE'">
-    <p>Для использования платформы ITman, необходимо активировать личный план обучения.
+    <p>
+      Для использования платформы ITman, необходимо активировать личный план обучения.
     </p>
-    <p>После активации каждую неделю будет генерироваться недельный личный план.
+    <p>
+      После активации каждую неделю будет генерироваться недельный личный план.
       План будет содержать список тем и заданий, которые необходимо успеть выполнить до дедлайна.
       План генерируется таким образом, что 75% людей успевают сделать все задания меньше, чем за 10 часов.
       Если Вы не успеете выполнить задания до дедлайна, то платформа перестанет быть доступна.
     </p>
-    <p>Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дата дедлайна
-      {{futurePlan.deadline | date:'EEEE, d MMMM':null:'ru'}}.
+    <p>
+      Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дедлайном:
+      {{futurePlan.deadline | date:'EEEE, d MMMM в HH:mm':null:'ru'}}.
     </p>
     <button mat-flat-button color="primary" (click)="send()"
             style="width: 200px; height: 54px; background-color: #f57c00">

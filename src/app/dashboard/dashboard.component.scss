@@ -1,4 +1,4 @@
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 992px) {
   .warning {
     padding: 16px 16px;
     display: block !important;
@@ -7,12 +7,6 @@
 
 .spacer {
   flex: 1 1 auto;
-}
-
-@media screen and (max-width: 1060px) {
-  app-personal-plan-progress {
-    display: none;
-  }
 }
 
 mat-toolbar {
@@ -24,7 +18,7 @@ mat-toolbar {
   .name {
     font-size: 16px;
     padding: 0 16px;
-    max-width: 300px;
+    max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -51,18 +45,35 @@ mat-toolbar {
       margin-right: 2px;
     }
   }
-}
-
-.progress {
-  margin-left: 160px;
-}
-
-@media screen and (max-width: 1280px) {
-  .logo-name {
-    display: none;
-  }
 
   .progress {
-    margin-left: 0;
+    margin-left: 160px;
+    overflow: auto;
+  }
+
+  @media screen and (max-width: 1150px) {
+    .hello {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .logo-name {
+      display: none;
+    }
+
+    .name {
+      max-width: 120px;
+    }
+
+    .progress {
+      margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    app-personal-plan-progress {
+      display: none;
+    }
   }
 }

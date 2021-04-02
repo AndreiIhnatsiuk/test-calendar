@@ -1,6 +1,6 @@
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CountdownComponent} from 'ngx-countdown';
-import {PersonalPlanService} from '../../services/personal-plan';
+import {PersonalPlanService} from '../../services/personal-plan.service';
 import {ActivePlan} from '../../entities/active-plan';
 import {FuturePlan} from '../../entities/future-plan';
 import {Subscription} from 'rxjs';
@@ -18,6 +18,7 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
   futurePlan: FuturePlan;
   acceptedProblems: Map<number, boolean>;
   private acceptedProblemsSubscription: Subscription;
+  private personalPlanChangesSubscription: Subscription;
   count = 0;
   active = true;
 
@@ -27,28 +28,36 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.personalPlanService.getActivePlan().subscribe(activePlan => {
-      this.activePlan = activePlan;
-      if (this.activePlan.problems) {
-        this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.activePlan.problems.map(x => x.problemId))
-          .subscribe(accepted => {
-            this.acceptedProblems = accepted;
-            this.count = this.countCompletedTasks();
-          });
+    this.personalPlanChangesSubscription = this.personalPlanService.getChanges().subscribe(() => {
+      if (this.acceptedProblemsSubscription) {
+        this.acceptedProblemsSubscription.unsubscribe();
       }
-      this.time = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
-      if (this.countdown) {
-        this.countdown.begin();
-      }
-    });
-    this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
-      this.futurePlan = futurePlan;
+      this.personalPlanService.getActivePlan().subscribe(activePlan => {
+        this.activePlan = activePlan;
+        if (this.activePlan.problems) {
+          this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.activePlan.problems.map(x => x.problemId))
+            .subscribe(accepted => {
+              this.acceptedProblems = accepted;
+              this.count = this.countCompletedTasks();
+            });
+        }
+        this.time = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
+        if (this.countdown) {
+          this.countdown.begin();
+        }
+      });
+      this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
+        this.futurePlan = futurePlan;
+      });
     });
   }
 
   ngOnDestroy(): void {
     if (this.acceptedProblemsSubscription) {
       this.acceptedProblemsSubscription.unsubscribe();
+    }
+    if (this.personalPlanChangesSubscription) {
+      this.personalPlanChangesSubscription.unsubscribe();
     }
   }
 

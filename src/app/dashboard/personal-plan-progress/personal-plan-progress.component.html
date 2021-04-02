@@ -12,7 +12,7 @@
     </div>
     <div class="timer" *ngIf="!active">
       <span *ngIf="futurePlan.status === 'AVAILABLE'">План выполнен.</span>
-      <span *ngIf="futurePlan.status === 'ENDED'">Вы выполнили все задания.</span>
+      <span *ngIf="futurePlan.status === 'ENDED'">План выполнены.</span>
       <span *ngIf="futurePlan.status === 'NOT_AVAILABLE'">План провален.</span>
     </div>
   </button>
