@@ -12,7 +12,7 @@ export class ButtonProblemComponent implements OnChanges {
   @Input() moduleId: number;
   @Input() lessonId: number;
   @Input() isAvailable: boolean;
-  @Input() isAccepted: boolean;
+  @Input() problemStatus: string;
   @Input() existSubmissions: boolean;
 
   status: string;
@@ -23,17 +23,9 @@ export class ButtonProblemComponent implements OnChanges {
 
   getStatus() {
     if (this.existSubmissions) {
-      if (this.isAccepted) {
-        return 'green';
-      } else {
-        if (this.problemType === 'GIT_MANUAL_TASK') {
-          return 'orange';
-        }
-        return 'red';
-      }
-    }
-    if (this.isAvailable) {
-      return 'blue';
+      return this.problemStatus;
+    } else if (this.isAvailable) {
+      return 'AVAILABLE';
     }
   }
 }

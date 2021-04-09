@@ -12,11 +12,11 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
   styleUrls: ['./personal-plan-progress.component.scss']
 })
 export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
-  @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
+  @ViewChild('cd', {static: false}) private countdown: CountdownComponent;
   time: number;
   activePlan: ActivePlan;
   futurePlan: FuturePlan;
-  acceptedProblems: Map<number, boolean>;
+  problemsStatuses: Map<number, string>;
   private acceptedProblemsSubscription: Subscription;
   private personalPlanChangesSubscription: Subscription;
   count = 0;
@@ -24,7 +24,7 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
 
   constructor(private personalPlanService: PersonalPlanService,
               private acceptedSubmissionService: AcceptedSubmissionService) {
-    this.acceptedProblems = new Map<number, boolean>();
+    this.problemsStatuses = new Map<number, string>();
   }
 
   ngOnInit(): void {
@@ -35,9 +35,10 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
       this.personalPlanService.getActivePlan().subscribe(activePlan => {
         this.activePlan = activePlan;
         if (this.activePlan.problems) {
-          this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.activePlan.problems.map(x => x.problemId))
+          this.acceptedProblemsSubscription =
+            this.acceptedSubmissionService.getProblemsStatuses(this.activePlan.problems.map(x => x.problemId))
             .subscribe(accepted => {
-              this.acceptedProblems = accepted;
+              this.problemsStatuses = accepted;
               this.count = this.countCompletedTasks();
             });
         }
@@ -70,7 +71,7 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
     });
     let cnt = 0;
     for (const id of this.activePlan.problems.map(x => x.problemId)) {
-      if (this.acceptedProblems.get(id)) {
+      if (this.problemsStatuses.get(id) === 'ACCEPTED') {
         cnt++;
       }
     }

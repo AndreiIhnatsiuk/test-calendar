@@ -7,7 +7,7 @@ import {map, tap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class PersonalPlanService {
-  private changes: BehaviorSubject<boolean>;
+  private readonly changes: BehaviorSubject<boolean>;
 
   constructor(private http: HttpClient) {
     this.changes = new BehaviorSubject<boolean>(true);

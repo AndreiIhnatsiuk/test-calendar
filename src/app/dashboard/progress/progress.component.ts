@@ -7,6 +7,7 @@ import * as routes from '../routes';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
 import {AvailableProblemsService} from '../../services/available-problem.service';
+import {SubmissionService} from '../../services/submission.service';
 
 @Component({
   selector: 'app-progress',
@@ -15,7 +16,7 @@ import {AvailableProblemsService} from '../../services/available-problem.service
 })
 export class ProgressComponent implements OnInit, OnDestroy {
   problems: Array<Problem>;
-  acceptedProblems: Map<number, boolean>;
+  problemsStatuses: Map<number, string>;
   availableProblemIds: Set<number>;
   acceptedLesson: boolean;
   lessonId: number;
@@ -33,7 +34,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
               private router: Router,
               private route: ActivatedRoute) {
     this.problems = new Array<Problem>();
-    this.acceptedProblems = new Map<number, boolean>();
+    this.problemsStatuses = new Map<number, string>();
     this.availableProblemIds = new Set<number>();
   }
 
@@ -87,9 +88,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.acceptedProblemsSubscription = undefined;
     }
     if (this.problems) {
-      this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.problems.map(x => x.id))
+      this.acceptedProblemsSubscription = this.acceptedSubmissionService.getProblemsStatuses(this.problems.map(x => x.id))
         .subscribe(accepted => {
-          this.acceptedProblems = accepted;
+          this.problemsStatuses = accepted;
           this.updateAcceptedLesson();
         });
     }
@@ -107,7 +108,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   private updateAcceptedLesson() {
     for (const problem of this.problems) {
-      if (!this.acceptedProblems.get(problem.id)) {
+      if (this.problemsStatuses.get(problem.id) !== 'ACCEPTED') {
         this.acceptedLesson = false;
         return;
       }

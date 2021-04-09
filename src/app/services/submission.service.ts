@@ -18,7 +18,7 @@ import {GitTaskSubmissionRequest} from '../entities/git-task-submission-request'
 export class SubmissionService {
   private runningTask: Set<number>;
   private runningRun: Set<number>;
-  private changes: Subject<number>;
+  private readonly changes: Subject<number>;
 
   constructor(private http: HttpClient,
               private localStorage: LocalStorageService) {

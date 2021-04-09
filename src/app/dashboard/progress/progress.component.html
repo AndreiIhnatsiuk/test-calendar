@@ -16,8 +16,8 @@
         [problemType]="problem.type"
         [currentProblemId]="problemId"
         [isAvailable]="availableProblemIds.has(problem.id)"
-        [isAccepted]="acceptedProblems.has(problem.id) && acceptedProblems.get(problem.id)"
-        [existSubmissions]="acceptedProblems.has(problem.id)"
+        [problemStatus]="problemsStatuses.has(problem.id) && problemsStatuses.get(problem.id)"
+        [existSubmissions]="problemsStatuses.has(problem.id)"
       ></app-button-problem>
     </div>
   </div>
