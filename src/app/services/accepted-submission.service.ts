@@ -1,5 +1,5 @@
 import {EMPTY, Observable} from 'rxjs';
-import {filter, map, switchMap} from 'rxjs/operators';
+import {filter, map, switchMap, tap} from 'rxjs/operators';
 import {concat} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
@@ -11,22 +11,16 @@ export class AcceptedSubmissionService {
               private submissionService: SubmissionService) {
   }
 
-  public getAccepted(problemIds: Array<number>, start?: Date, end?: Date): Observable<Map<number, boolean>> {
+  public getProblemsStatuses(problemIds: Array<number>): Observable<Map<number, string>> {
     if (problemIds.length) {
-      let url = '/api/accepted-problems?problemIds=' + problemIds.join(',');
-      if (start) {
-        url += '&start=' + start.toISOString();
-      }
-      if (end) {
-        url += '&end=' + end.toISOString();
-      }
+      const url = '/api/problems-statuses?problemIds=' + problemIds.join(',');
       return concat(
-        this.http.get<Map<number, boolean>>(url),
+        this.http.get<Map<number, string>>(url),
         this.submissionService.getChanges().pipe(
           filter(problemId => problemIds.indexOf(problemId) !== -1),
-          switchMap(() => this.http.get<Map<number, boolean>>(url))
+          switchMap(() => this.http.get<Map<number, string>>(url))
         )
-      ).pipe(map(x => new Map<number, boolean>(Object.entries(x).map(y => [+y[0], y[1]]))));
+      ).pipe(map(x => new Map<number, string>(Object.entries(x).map(y => [+y[0], y[1]]))));
     } else {
       return EMPTY;
     }

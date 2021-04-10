@@ -15,7 +15,7 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
 export class PersonalPlanContentComponent implements OnInit, OnDestroy {
   activePlan: ActivePlan;
   futurePlan: FuturePlan;
-  acceptedProblems: Map<number, boolean>;
+  problemsStatuses: Map<number, string>;
   planProblemByLessonId: Map<number, Array<PlanProblem>>;
   planProblems: Array<Array<PlanProblem>>;
   availableProblemIds: Set<number>;
@@ -32,7 +32,7 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
   constructor(private personalPlanService: PersonalPlanService,
               private availableProblemsService: AvailableProblemsService,
               private acceptedSubmissionService: AcceptedSubmissionService) {
-    this.acceptedProblems = new Map<number, boolean>();
+    this.problemsStatuses = new Map<number, string>();
     this.availableProblemIds = new Set<number>();
     this.planProblemByLessonId = new Map<number, Array<PlanProblem>>();
     this.planProblems = new Array<Array<PlanProblem>>();
@@ -72,9 +72,9 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
       this.acceptedProblemsSubscription = undefined;
     }
     if (this.activePlan.problems) {
-      this.acceptedProblemsSubscription = this.acceptedSubmissionService.getAccepted(this.activePlan.problems.map(x => x.problemId))
+      this.acceptedProblemsSubscription = this.acceptedSubmissionService.getProblemsStatuses(this.activePlan.problems.map(x => x.problemId))
         .subscribe(accepted => {
-          this.acceptedProblems = accepted;
+          this.problemsStatuses = accepted;
           this.isPlanCompleted = this.updateIsPlanCompleted();
         });
     }
@@ -103,7 +103,7 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
 
   updateIsPlanCompleted(): boolean {
     for (const problem of this.activePlan.problems) {
-      if (!this.acceptedProblems.get(problem.problemId)) {
+      if (this.problemsStatuses.get(problem.problemId) !== 'ACCEPTED') {
         return false;
       }
     }
