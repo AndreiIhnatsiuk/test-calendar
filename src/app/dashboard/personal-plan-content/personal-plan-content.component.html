@@ -45,10 +45,13 @@
       Ближайший недельный план будет содержать {{futurePlan.countProblems | i18nPlural: tasks:'ru'}} и дедлайном:
       {{futurePlan.deadline | date:'EEEE, d MMMM в HH:mm':null:'ru'}}.
     </p>
-    <button mat-flat-button color="primary" (click)="send()"
+    <button *ngIf="(!sending)" mat-flat-button color="primary" (click)="send()"
             style="width: 200px; height: 54px; background-color: #f57c00">
       НАЧАТЬ ОБУЧЕНИЕ
     </button>
+    <div *ngIf="(sending)">
+      <mat-spinner diameter="35"></mat-spinner>
+    </div>
   </div>
   <p *ngIf="futurePlan.status === 'NOT_AVAILABLE'">К сожалению, Вы не справились с предыдущим недельным планом,
     поэтому платформа ITman для Вас не доступна. Свяжитесь со мной в телеграмм <a

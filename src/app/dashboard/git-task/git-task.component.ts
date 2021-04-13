@@ -57,8 +57,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
     }
     if (this.type === 'GIT_TASK') {
       this.taskSubmissionsSubscription = this.submissionService
-        .getGitTaskSubmissionsByProblemId(this.problemId)
-        .subscribe(bestLastSubmission => {
+        .getGitTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
           this.update(bestLastSubmission);
         });
     }
@@ -85,52 +84,43 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
   }
 
   send() {
+    this.sending = true;
     const submission = new GitTaskSubmissionRequest(this.problemId, this.pullRequestId);
     this.pullRequestId = null;
     if (this.type === 'GIT_TASK') {
-      this.sending = true;
-      this.submissionService.postGitTaskSubmission(submission).subscribe(added => {
-        this.gtag.event('sent', {
-          event_category: 'submission',
-          event_label: this.problemId.toString()
-        });
-        this.sending = false;
-        this.running = true;
-        this.snackBar.open('Решение отправлено.', undefined, {
-          duration: 2500
-        });
-        this.bestLastSubmission.last = added;
-        this.status = added.status === 'ACCEPTED';
-      }, error => {
-        this.gtag.event('sending-error', {
-          event_category: 'submission',
-          event_label: this.problemId.toString()
-        });
-        this.sending = false;
-        this.snackBar.open(error.error.message, undefined, {
-          duration: 5000
-        });
-      });
+      this.submissionService.postGitTaskSubmission(submission)
+        .subscribe(added => this.handleSending(added), error => this.handleSendingError(error));
     }
     if (this.type === 'GIT_MANUAL_TASK') {
-      this.submissionService.postGitTaskManualSubmission(submission).subscribe(added => {
-        this.gtag.event('sent', {
-          event_category: 'submission',
-          event_label: this.problemId.toString()
-        });
-        this.snackBar.open('Решение отправлено.', undefined, {
-          duration: 2500
-        });
-      }, error => {
-        this.gtag.event('sending-error', {
-          event_category: 'submission',
-          event_label: this.problemId.toString()
-        });
-        this.snackBar.open(error.error.message, undefined, {
-          duration: 5000
-        });
-      });
+      this.submissionService.postGitTaskManualSubmission(submission)
+        .subscribe(added => this.handleSending(added), error => this.handleSendingError(error));
     }
+  }
+
+  handleSending(added) {
+    this.gtag.event('sent', {
+      event_category: 'submission',
+      event_label: this.problemId.toString()
+    });
+    this.sending = false;
+    this.snackBar.open('Решение отправлено.', undefined, {
+      duration: 2500
+    });
+    if (added) {
+      this.bestLastSubmission.last = added;
+      this.status = added.status === 'ACCEPTED';
+    }
+  }
+
+  handleSendingError(error) {
+    this.gtag.event('sending-error', {
+      event_category: 'submission',
+      event_label: this.problemId.toString()
+    });
+    this.sending = false;
+    this.snackBar.open(error.error.message, undefined, {
+      duration: 5000
+    });
   }
 
   showMore(submission: FullSubmission): boolean {
