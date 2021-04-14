@@ -7,7 +7,8 @@
   <div *ngFor="let planProblem of planProblems">
     <div class="lesson">
       <div>
-        <div class="title">{{planProblem[0].lessonTitle}}
+        <div class="title" [routerLink]="'/dashboard/module/' + planProblem[0].moduleId + '/lesson/' + planProblem[0].lessonId">
+          {{planProblem[0].lessonTitle}}
         </div>
       </div>
       <div class="problems">

@@ -17,6 +17,13 @@ export class ButtonProblemComponent implements OnChanges {
 
   status: string;
 
+  title: { [k: string]: string } = {
+    'QUESTION': 'Вопрос',
+    'TASK': 'Задача',
+    'GIT_TASK': 'Задача',
+    'GIT_MANUAL_TASK': 'Задача с ручной проверкой'
+  };
+
   ngOnChanges() {
     this.status = this.getStatus();
   }
