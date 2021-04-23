@@ -10,13 +10,11 @@
       <countdown #cd [config]="{leftTime: time, format: 'd'}"></countdown>
       <span> дней</span>
     </div>
-    <div class="timer" *ngIf="!active">
-      <span *ngIf="futurePlan.status === 'AVAILABLE'">План выполнен.</span>
+    <div class="timer" *ngIf="futurePlan">
+      <span *ngIf="activePlan && futurePlan.status === 'AVAILABLE'">План выполнен.</span>
       <span *ngIf="futurePlan.status === 'ENDED'">Курс пройден.</span>
-      <span *ngIf="futurePlan.status === 'NOT_AVAILABLE'">План провален.</span>
-    </div>
-    <div class="timer" *ngIf="!activePlan">
-      <span style="color: red">Активируйте план.</span>
+      <span *ngIf="!activePlan && futurePlan.status === 'NOT_AVAILABLE'">План провален.</span>
+      <span style="color: red" *ngIf="!activePlan && futurePlan.status !== 'ENDED'">Активируйте план.</span>
     </div>
   </button>
 </div>
