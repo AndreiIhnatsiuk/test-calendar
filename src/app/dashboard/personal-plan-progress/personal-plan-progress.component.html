@@ -1,20 +1,37 @@
 <div style="height: 30px">
-  <button routerLink="plan" mat-button style="height: 30px">
-    <mat-progress-bar class="progress" mode="determinate" value="{{count}}"></mat-progress-bar>
-    <div class="timer" *ngIf="time <= 86400 && active">
-      <span>Осталось: </span>
-      <countdown #cd [config]="{leftTime: time, format: 'HH:mm:ss'}" (event)="onEvent($event)"></countdown>
+  <button routerLink="plan" *ngIf="futurePlan" mat-button style="height: 30px">
+
+    <mat-progress-bar *ngIf="futurePlan.status === 'ACTIVE' && !planCompleted"
+                      class="progress"
+                      mode="determinate"
+                      value="{{count}}">
+    </mat-progress-bar>
+
+    <div *ngIf="futurePlan.status === 'ACTIVE' && !planCompleted">
+
+      <div class="timer" *ngIf="seconds <= secondsInDay">
+        <span>Осталось: </span>
+        <countdown #cd [config]="{leftTime: seconds, format: 'HH:mm:ss'}" (event)="onEvent($event)"></countdown>
+      </div>
+
+      <div class="timer" *ngIf="seconds > secondsInDay">
+        <span>Осталось </span>
+        <countdown #cd [config]="{leftTime: seconds, format: 'd'}"></countdown>
+        <span>{{day | i18nPlural: days:'ru'}}</span>
+      </div>
+
     </div>
-    <div class="timer" *ngIf="time > 86400 && active">
-      <span>Осталось </span>
-      <countdown #cd [config]="{leftTime: time, format: 'd'}"></countdown>
-      <span> дней</span>
-    </div>
-    <div class="timer" *ngIf="futurePlan">
-      <span *ngIf="activePlan && futurePlan.status === 'AVAILABLE'">План выполнен.</span>
-      <span *ngIf="futurePlan.status === 'ENDED'">Курс пройден.</span>
-      <span *ngIf="!activePlan && futurePlan.status === 'NOT_AVAILABLE'">План провален.</span>
-      <span style="color: red" *ngIf="!activePlan && futurePlan.status !== 'ENDED'">Активируйте план.</span>
+
+    <mat-progress-bar *ngIf="futurePlan.status === 'AVAILABLE'" class="progress available"></mat-progress-bar>
+    <mat-progress-bar *ngIf="futurePlan.status === 'EXPIRED'" class="progress expired"></mat-progress-bar>
+    <mat-progress-bar *ngIf="futurePlan.status === 'ENDED'" class="progress completed"></mat-progress-bar>
+    <mat-progress-bar *ngIf="planCompleted" class="progress completed"></mat-progress-bar>
+
+    <div class="timer">
+      <span *ngIf="futurePlan.status === 'AVAILABLE'">Активируйте план.</span>
+      <span *ngIf="futurePlan.status === 'ENDED'">Модуль пройден.</span>
+      <span *ngIf="futurePlan.status === 'EXPIRED'">План провален.</span>
+      <span *ngIf="planCompleted">План выполнен.</span>
     </div>
   </button>
 </div>

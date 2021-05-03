@@ -10,6 +10,16 @@
   }
 }
 
+@media screen and (max-width: 992px) {
+  .mat-flat-button {
+    padding: 8px;
+
+    &.active-button-item {
+      padding: 6px;
+    }
+  }
+}
+
 .REJECTED {
   background-color: #cd6666;
 }

@@ -45,3 +45,13 @@
 .info {
   padding: 10px 0;
 }
+
+@media screen and (max-width: 992px) {
+  .lesson {
+    display: block;
+  }
+
+  .title {
+    padding: 5px;
+  }
+}

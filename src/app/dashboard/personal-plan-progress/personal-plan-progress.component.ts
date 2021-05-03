@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CountdownComponent} from 'ngx-countdown';
 import {PersonalPlanService} from '../../services/personal-plan.service';
 import {ActivePlan} from '../../entities/active-plan';
@@ -13,14 +13,21 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
 })
 export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
   @ViewChild('cd', {static: false}) private countdown: CountdownComponent;
-  time: number;
+  seconds: number;
   activePlan: ActivePlan;
   futurePlan: FuturePlan;
   problemsStatuses: Map<number, string>;
   private acceptedProblemsSubscription: Subscription;
   private personalPlanChangesSubscription: Subscription;
   count = 0;
-  active = true;
+  planCompleted: boolean;
+  days: {[k: string]: string} = {
+    'one': ' день',
+    'few': ' дня',
+    'many': ' дней'
+  };
+  day: number;
+  secondsInDay = 86400;
 
   constructor(private personalPlanService: PersonalPlanService,
               private acceptedSubmissionService: AcceptedSubmissionService) {
@@ -42,13 +49,15 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
               this.count = this.countCompletedTasks();
             });
         }
-        this.time = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
+        this.seconds = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
+        this.day = Math.floor((this.seconds + 3600 * 12) / (3600 * 24));
         if (this.countdown) {
           this.countdown.begin();
         }
       });
       this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
         this.futurePlan = futurePlan;
+        console.log(futurePlan);
       });
     });
   }
@@ -65,25 +74,25 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
   countCompletedTasks(): number {
     this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
       this.futurePlan = futurePlan;
-      if (futurePlan.status === 'AVAILABLE') {
-        this.active = false;
-      }
     });
     let cnt = 0;
-    for (const id of this.activePlan.problems.map(x => x.problemId)) {
+    const countProblemsInPlan = this.activePlan.problems.map(x => x.problemId);
+    for (const id of countProblemsInPlan) {
       if (this.problemsStatuses.get(id) === 'ACCEPTED') {
         cnt++;
       }
     }
-    return cnt * 100 / this.activePlan.problems.map(x => x.problemId).length;
+    this.planCompleted = countProblemsInPlan.length === cnt;
+    return cnt * 100 / countProblemsInPlan.length;
   }
 
   onEvent($event) {
     if ($event.action === 'done') {
-      this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
-        this.futurePlan = futurePlan;
-        this.active = false;
-      });
+      setTimeout(() => {
+        this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
+          this.futurePlan = futurePlan;
+        });
+      }, 1000);
     }
   }
 }
