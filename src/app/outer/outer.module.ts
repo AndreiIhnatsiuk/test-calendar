@@ -12,6 +12,7 @@ import {AuthorizationComponent} from './authorization/authorization.component';
 import {UserAgreementContentComponent} from './user-agreement-content/user-agreement-content.component';
 import {UserAgreementDialogComponent} from './user-agreement-dialog/user-agreement-dialog.component';
 import {SharedModule} from '../shared/shared.module';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 const routes: Routes = [
   {
@@ -64,11 +65,12 @@ const routes: Routes = [
     UserAgreementContentComponent,
     UserAgreementDialogComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatTabsModule,
-    SharedModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatTabsModule,
+        SharedModule,
+        MatCheckboxModule
+    ]
 })
 export class OuterModule { }

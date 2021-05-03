@@ -61,22 +61,21 @@ export class AuthService {
     return this.http.get<Personal>('/api/users/me');
   }
 
-  updatePersonal(phone: string, repository: string): Observable<Personal> {
-    if (phone && repository) {
-      return this.http.patch<Personal>('/api/users/me', {phone: '+375' + phone, repository: repository});
-    }
+  updatePersonal(phone: string, repository: string, emailNotifications: any): Observable<Personal> {
+    const body: { [k: string]: any } = {emailNotifications: emailNotifications};
     if (phone) {
-      return this.http.patch<Personal>('/api/users/me', {phone: '+375' + phone});
+      body.phone = '+375' + phone;
     }
     if (repository) {
-      return this.http.patch<Personal>('/api/users/me', {repository});
+      body.repository = repository;
     }
+    return this.http.patch<Personal>('/api/users/me', body);
   }
 
-  create(name: string, email: string, password: string): Observable<any> {
+  create(name: string, email: string, password: string, offerNotification: boolean): Observable<any> {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa('web:web'));
 
-    return this.http.post('/api/users', {name, email, level: 'BEGINNER', password}, {headers: headers});
+    return this.http.post('/api/users', {name, email, level: 'BEGINNER', password, offerNotification}, {headers: headers});
   }
 }

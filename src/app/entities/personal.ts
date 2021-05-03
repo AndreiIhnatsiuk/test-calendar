@@ -1,3 +1,5 @@
+import {EmailNotifications} from './email-notifications';
+
 export interface Personal {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export interface Personal {
   analyticsId: string;
   email: string;
   repository: string;
+  emailNotifications: EmailNotifications;
 }

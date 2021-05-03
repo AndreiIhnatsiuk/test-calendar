@@ -15,3 +15,17 @@
 .full-width {
   width: 100%;
 }
+
+::ng-deep mat-checkbox {
+  label {
+    margin-bottom: 20px;
+
+    &.mat-checkbox-layout {
+      white-space: normal;
+    }
+  }
+}
+
+::ng-deep .mat-checkbox-layout .mat-checkbox-label {
+  line-height: 21px;
+}

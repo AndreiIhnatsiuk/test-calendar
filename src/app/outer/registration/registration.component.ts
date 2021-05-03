@@ -16,6 +16,7 @@ export class RegistrationComponent implements OnInit {
   email: string;
   password: string;
   sending: boolean;
+  offerNotification = false;
 
   constructor(public dialog: MatDialog,
               private authService: AuthService,
@@ -45,7 +46,7 @@ export class RegistrationComponent implements OnInit {
       return;
     }
     this.sending = true;
-    this.authService.create(this.name, this.email, this.password).subscribe(() => {
+    this.authService.create(this.name, this.email, this.password, this.offerNotification).subscribe(() => {
         this.authService.login(this.email, this.password).subscribe(() => {
           this.gtag.event('signup', {
             event_category: 'account'

@@ -28,8 +28,14 @@
              placeholder="nickname/repository" autocomplete="off">
     </mat-form-field>
     <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
+    <mat-checkbox color="primary" [(ngModel)]="personal.emailNotifications.OFFER">
+      Я хочу получать письма со специальными предложениями, новостями и персональными рекомендациями по обучению.
+    </mat-checkbox>
+    <mat-checkbox color="primary" [(ngModel)]="personal.emailNotifications.STUDY">
+      Получать письма связанные с процессом обучения
+    </mat-checkbox>
     <div>
-      <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary" [disabled]="!(phone || repository)">
+      <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary">
         Сохранить
       </button>
       <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
