@@ -12,7 +12,7 @@
     </li>
   </ul>
   <div style="height: 25px;">
-    <div *ngIf="userAnswer != null" style="display: flex; flex-direction: row">
+    <div *ngIf="userAnswer !== null && !seconds" style="display: flex; flex-direction: row">
       <div class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'">
         <div *ngIf="bestLastUserAnswer.best.right && !bestLastUserAnswer.last.right">
           Неверный ответ.
@@ -33,14 +33,26 @@
         </div>
       </div>
     </div>
+    <countdown *ngIf="seconds"
+               [config]="{leftTime: seconds, format: 'Повторно ответить можно через mm:ss'}"
+               (event)="onEvent($event)">
+    </countdown>
   </div>
   <div class="button" *ngIf="!sending">
-    <app-next-step *ngIf="userAnswer && userAnswer.right" [problemId]="problemId"
-                   [lessonId]="lessonId"></app-next-step>
-    <button *ngIf="userAnswer === null" mat-raised-button color="primary" (click)="send()" [disabled]="disabledButton">
-      Отправить
+    <app-next-step style="margin-right: 10px"
+                   *ngIf="userAnswer && userAnswer.right"
+                   [problemId]="problemId"
+                   [lessonId]="lessonId">
+    </app-next-step>
+    <button *ngIf="userAnswer === null"
+            mat-raised-button color="primary"
+            (click)="send()"
+            [disabled]="disabledButton || seconds">Отправить
     </button>
-    <button style="margin-left: 10px" *ngIf="userAnswer !== null" mat-raised-button color="primary" (click)="reset()">Решить снова</button>
+    <button *ngIf="userAnswer !== null"
+            mat-raised-button color="primary"
+            (click)="reset()">Решить снова
+    </button>
   </div>
   <div *ngIf="sending">
     <mat-spinner diameter="35"></mat-spinner>

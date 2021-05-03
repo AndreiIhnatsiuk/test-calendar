@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
 import {ProblemService} from '../../services/problem.service';
@@ -7,6 +7,9 @@ import {FullProblem} from '../../entities/full-problem';
 import {SubmissionService} from '../../services/submission.service';
 import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 import {Gtag} from 'angular-gtag';
+import {ConfigurationService} from '../../services/configurations.service';
+import {QuestionConfig} from '../../entities/question-config';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-question',
@@ -24,12 +27,16 @@ export class QuestionComponent implements OnChanges {
   disabledButton = true;
   disabledCheckBox = false;
   sending = false;
+  config: QuestionConfig;
+  seconds: number;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
               private submissionService: SubmissionService,
               private problemService: ProblemService,
-              private gtag: Gtag) {
+              private configurationService: ConfigurationService,
+              private gtag: Gtag,
+              private snackBar: MatSnackBar) {
   }
 
   onSelectAnswer() {
@@ -37,6 +44,9 @@ export class QuestionComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    this.configurationService.getConfiguration().subscribe(configuration => {
+      this.config = configuration.questions;
+    });
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
     });
@@ -46,6 +56,9 @@ export class QuestionComponent implements OnChanges {
       this.userAnswer = bestLastUserAnswer.last;
       if (bestLastUserAnswer.last === null) {
         this.disabledButton = true;
+        this.seconds = null;
+      } else {
+        this.calculateRemainingTimeForSecondAnswer();
       }
     });
   }
@@ -67,10 +80,24 @@ export class QuestionComponent implements OnChanges {
       this.userAnswer = userAnswer;
       this.disabledCheckBox = true;
       this.sending = false;
+    }, error => {
+      this.sending = false;
+      this.snackBar.open(error.error.message, undefined, {
+        duration: 5000
+      });
     });
   }
 
+  calculateRemainingTimeForSecondAnswer() {
+    const time = (new Date().getTime() - new Date(this.bestLastUserAnswer.last.createdDate).getTime()) / 1000;
+    this.seconds = Math.round(this.config.answerRateLimit - time);
+    if (this.seconds <= 0) {
+      this.seconds = null;
+    }
+  }
+
   reset() {
+    this.calculateRemainingTimeForSecondAnswer();
     this.gtag.event('reset', {
       event_category: 'question',
       event_label: '' + this.problemId
@@ -79,5 +106,11 @@ export class QuestionComponent implements OnChanges {
     this.problem.answers.forEach(answer => answer.selected = false);
     this.disabledButton = true;
     this.disabledCheckBox = false;
+  }
+
+  onEvent($event) {
+    if ($event.action === 'done') {
+      this.seconds = null;
+    }
   }
 }
