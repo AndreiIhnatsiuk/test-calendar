@@ -5,6 +5,10 @@ import {UserAgreementDialogComponent} from '../user-agreement-dialog/user-agreem
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Gtag} from 'angular-gtag';
+import {PersonalPlanService} from '../../services/personal-plan.service';
+import {ModuleService} from '../../services/module.service';
+import {LessonService} from '../../services/lesson.service';
+import {TopicService} from '../../services/topic.service';
 
 @Component({
   selector: 'app-registration',
@@ -22,7 +26,10 @@ export class RegistrationComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               private snackBar: MatSnackBar,
-              private gtag: Gtag) {
+              private gtag: Gtag,
+              private personalPlanService: PersonalPlanService,
+              private moduleService: ModuleService,
+              private topicService: TopicService) {
   }
 
   ngOnInit(): void {
@@ -51,7 +58,13 @@ export class RegistrationComponent implements OnInit {
           this.gtag.event('signup', {
             event_category: 'account'
           });
-          this.router.navigate(['/dashboard']);
+          this.personalPlanService.generatePlan().subscribe(() => {
+            this.moduleService.getModules().subscribe(modules => {
+              this.topicService.getTopics(modules[0].id).subscribe(topics => {
+                this.router.navigate(['/dashboard/module/' + modules[0].id + '/lesson/' + topics[0].lessons[0].id]);
+              });
+            });
+          });
         }, () => {
           this.gtag.event('signup', {
             event_category: 'error-account'

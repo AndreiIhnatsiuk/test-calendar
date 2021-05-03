@@ -21,12 +21,12 @@ export class DashboardContentComponent implements OnInit {
   availableModules: Set<number>;
   countLessonsByModules: Map<number, number>;
   countProblemsByModules: Map<number, number>;
-  lessons: {[k: string]: string} = {
+  lessons: { [k: string]: string } = {
     'one': '# урок',
     'few': '# урока',
     'many': '# уроков'
   };
-  tasks: {[k: string]: string} = {
+  tasks: { [k: string]: string } = {
     'one': '# задание',
     'few': '# задания',
     'many': '# заданий'
@@ -36,9 +36,9 @@ export class DashboardContentComponent implements OnInit {
               private personalPlanService: PersonalPlanService,
               private topicService: TopicService,
               private snackBar: MatSnackBar,
-              private  moduleService: ModuleService,
-              private  lessonService: LessonService,
-              private  problemService: ProblemService,
+              private moduleService: ModuleService,
+              private lessonService: LessonService,
+              private problemService: ProblemService,
               private router: Router) {
   }
 
@@ -74,7 +74,8 @@ export class DashboardContentComponent implements OnInit {
           }
         }
       }
-      this.personalPlanService.getActivePlan().subscribe(() => {}, () => {
+      this.personalPlanService.getActivePlan().subscribe(() => {
+      }, () => {
         this.snackBar.open('Активируйте личный план.', undefined, {
           duration: 5000
         });
