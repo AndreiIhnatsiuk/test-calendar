@@ -1,4 +1,4 @@
 export interface EmailNotifications {
-  OFFER: boolean;
-  STUDY: boolean;
+  Offer: boolean;
+  Study: boolean;
 }

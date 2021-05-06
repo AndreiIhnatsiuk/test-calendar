@@ -55,13 +55,13 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
     if (this.taskSubmissionsSubscription) {
       this.taskSubmissionsSubscription.unsubscribe();
     }
-    if (this.type === 'GIT_TASK') {
+    if (this.type === 'GitTask') {
       this.taskSubmissionsSubscription = this.submissionService
         .getGitTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
           this.update(bestLastSubmission);
         });
     }
-    if (this.type === 'GIT_MANUAL_TASK') {
+    if (this.type === 'GitManualTask') {
       this.taskSubmissionsSubscription =
         this.submissionService.getGitManualTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
           this.update(bestLastSubmission);
@@ -71,7 +71,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
 
   update(bestLastSubmission: BestLastFullSubmission) {
     this.bestLastSubmission = bestLastSubmission;
-    this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
+    this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'Accepted';
     if (bestLastSubmission.last != null) {
       this.running = this.submissionService.isTaskRunning(this.bestLastSubmission.last);
     }
@@ -87,11 +87,11 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
     this.sending = true;
     const submission = new GitTaskSubmissionRequest(this.problemId, this.pullRequestId);
     this.pullRequestId = null;
-    if (this.type === 'GIT_TASK') {
+    if (this.type === 'GitTask') {
       this.submissionService.postGitTaskSubmission(submission)
         .subscribe(added => this.handleSending(added), error => this.handleSendingError(error));
     }
-    if (this.type === 'GIT_MANUAL_TASK') {
+    if (this.type === 'GitManualTask') {
       this.submissionService.postGitTaskManualSubmission(submission)
         .subscribe(added => this.handleSending(added), error => this.handleSendingError(error));
     }
@@ -108,7 +108,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
     });
     if (added) {
       this.bestLastSubmission.last = added;
-      this.status = added.status === 'ACCEPTED';
+      this.status = added.status === 'Accepted';
     }
   }
 
@@ -125,7 +125,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
 
   showMore(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
-    return !(status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+    return !(status === SubmissionStatus.InQueue || status === SubmissionStatus.Running);
   }
 
   seeMore(submission: FullSubmission) {

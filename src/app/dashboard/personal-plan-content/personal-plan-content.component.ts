@@ -103,7 +103,7 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
 
   updateIsPlanCompleted(): boolean {
     for (const problem of this.activePlan.problems) {
-      if (this.problemsStatuses.get(problem.problemId) !== 'ACCEPTED') {
+      if (this.problemsStatuses.get(problem.problemId) !== 'Accepted') {
         return false;
       }
     }

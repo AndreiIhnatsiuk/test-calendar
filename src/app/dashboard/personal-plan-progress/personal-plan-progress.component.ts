@@ -78,7 +78,7 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
     let cnt = 0;
     const countProblemsInPlan = this.activePlan.problems.map(x => x.problemId);
     for (const id of countProblemsInPlan) {
-      if (this.problemsStatuses.get(id) === 'ACCEPTED') {
+      if (this.problemsStatuses.get(id) === 'Accepted') {
         cnt++;
       }
     }

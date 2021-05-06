@@ -18,10 +18,10 @@ export class ButtonProblemComponent implements OnChanges {
   status: string;
 
   title: { [k: string]: string } = {
-    'QUESTION': 'Вопрос',
-    'TASK': 'Задача',
-    'GIT_TASK': 'Задача',
-    'GIT_MANUAL_TASK': 'Задача с ручной проверкой'
+    'Question': 'Вопрос',
+    'Task': 'Задача',
+    'GitTask': 'Задача',
+    'GitManualTask': 'Задача с ручной проверкой'
   };
 
   ngOnChanges() {
@@ -32,7 +32,7 @@ export class ButtonProblemComponent implements OnChanges {
     if (this.existSubmissions) {
       return this.problemStatus;
     } else if (this.isAvailable) {
-      return 'AVAILABLE';
+      return 'Available';
     }
   }
 }

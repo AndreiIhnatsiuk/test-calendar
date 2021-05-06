@@ -76,6 +76,6 @@ export class AuthService {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa('web:web'));
 
-    return this.http.post('/api/users', {name, email, level: 'BEGINNER', password, offerNotification}, {headers: headers});
+    return this.http.post('/api/users', {name, email, level: 'Beginner', password, offerNotification}, {headers: headers});
   }
 }

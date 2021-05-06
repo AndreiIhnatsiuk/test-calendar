@@ -174,7 +174,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       .getTaskSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
         this.bestLastSubmission = bestLastSubmission;
-        this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'ACCEPTED';
+        this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'Accepted';
         if (bestLastSubmission.last != null) {
           this.running = this.isTaskRunning(this.bestLastSubmission.last);
           if (this.storedSolution && this.storedSolution.submissionId) {
@@ -182,7 +182,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
             if (bestLastSubmission.last.id === this.storedSolution.submissionId) {
               index = 0;
             }
-            if (index !== -1 && SubmissionStatus[bestLastSubmission.last.status] === SubmissionStatus.COMPILATION_ERROR) {
+            if (index !== -1 && SubmissionStatus[bestLastSubmission.last.status] === SubmissionStatus.CompilationError) {
               this.parseErrors(bestLastSubmission.last.errorString);
             }
           }
@@ -281,7 +281,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
         duration: 2500
       });
       this.bestLastSubmission.last = added;
-      this.status = added.status === 'ACCEPTED';
+      this.status = added.status === 'Accepted';
       if (this.solution === submission.solution) {
         this.storeSolution(this.solution, this.input, added.id);
       }
@@ -337,7 +337,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   showMore(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
-    return !(status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+    return !(status === SubmissionStatus.InQueue || status === SubmissionStatus.Running);
   }
 
   seeMore(submission: FullSubmission) {

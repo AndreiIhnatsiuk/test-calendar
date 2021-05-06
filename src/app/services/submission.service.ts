@@ -98,12 +98,12 @@ export class SubmissionService {
 
   public isTaskRunning(submission: FullSubmission): boolean {
     const status = SubmissionStatus[submission.status];
-    return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+    return (status === SubmissionStatus.InQueue || status === SubmissionStatus.Running);
   }
 
   public isRunRunning(submission: RunSubmission): boolean {
     const status = SubmissionStatus[submission.status];
-    return (status === SubmissionStatus.IN_QUEUE || status === SubmissionStatus.RUNNING);
+    return (status === SubmissionStatus.InQueue || status === SubmissionStatus.Running);
   }
 
   public postGitTaskSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {

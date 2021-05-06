@@ -98,7 +98,7 @@
                     <div class="input-and-output">Результат запуска {{runSubmission ? '(' + runSubmission.status + ')' : ''}}</div>
                     <textarea name="output"
                               class="output-textarea"
-                              [value]="runSubmission ? (runSubmission.status == 'ACCEPTED' ? runSubmission.output : runSubmission.errorString) : ''"
+                              [value]="runSubmission ? (runSubmission.status == 'Accepted' ? runSubmission.output : runSubmission.errorString) : ''"
                               readonly="readonly">
                     </textarea>
                   </div>

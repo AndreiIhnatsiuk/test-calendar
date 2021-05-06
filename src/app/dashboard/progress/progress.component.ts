@@ -7,7 +7,6 @@ import * as routes from '../routes';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
 import {AvailableProblemsService} from '../../services/available-problem.service';
-import {SubmissionService} from '../../services/submission.service';
 
 @Component({
   selector: 'app-progress',
@@ -108,7 +107,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   private updateAcceptedLesson() {
     for (const problem of this.problems) {
-      if (this.problemsStatuses.get(problem.id) !== 'ACCEPTED') {
+      if (this.problemsStatuses.get(problem.id) !== 'Accepted') {
         this.acceptedLesson = false;
         return;
       }

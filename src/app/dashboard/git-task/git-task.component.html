@@ -4,7 +4,7 @@
   <p class="git-result" *ngIf="bestLastSubmission.last">
     Статус:
     <a
-      [ngClass]="bestLastSubmission.last.status === 'ACCEPTED' ? 'disabled' : ''"
+      [ngClass]="bestLastSubmission.last.status === 'Accepted' ? 'disabled' : ''"
       (click)="seeMore(bestLastSubmission.last)">
       <span>{{bestLastSubmission.last.status}}</span>
       {{bestLastSubmission.last.wrongTest ? ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : '' }}
@@ -12,13 +12,13 @@
   </p>
 
   <div *ngIf="!(sending || running)" style="display: flex; flex-direction: column;">
-    <mat-form-field *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'ACCEPTED'"
+    <mat-form-field *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'Accepted'"
                     class="example-form-field">
       <mat-label>Введите Pull Request Id</mat-label>
       <input matInput autocomplete="off" type="text" [(ngModel)]="pullRequestId">
     </mat-form-field>
     <div>
-      <button *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'ACCEPTED'" mat-raised-button
+      <button *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'Accepted'" mat-raised-button
               (click)="send()"
               style="margin-right: 10px;"
               [disabled]="isSendDisabled() || !this.pullRequestId"
