@@ -58,7 +58,7 @@ export class ChatComponent implements OnInit {
   }
 
   getName(type: string) {
-    return type === 'USER' ? this.name : 'ITMan';
+    return type === 'User' ? this.name : 'ITMan';
   }
 
   send() {

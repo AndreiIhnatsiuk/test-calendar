@@ -36,7 +36,7 @@ export class WebSocketService {
       if (subject != null) {
         this.subjects.delete(confirmId);
         const body = JSON.parse(message.body) as WebSocketResponse;
-        if (body.status === 'OK') {
+        if (body.status === 'Ok') {
           subject.next(body.body);
         } else {
           subject.error(body.body);
