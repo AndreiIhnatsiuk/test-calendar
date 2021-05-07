@@ -3,7 +3,7 @@
     <as-split-area minSize="30" size="{{taskPageAreas.windowLeft}}">
       <div class="task" *ngIf="problem">
 
-        <div style="height: {{size - 85}}px;">
+        <div style="height: {{size.innerHeight - 85}}px;">
           <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical"
                     (dragEnd)="dragEndLeft('percent', $event)">
             <as-split-area minSize="20" size="90" #areaTask="asSplitArea">
@@ -67,7 +67,7 @@
     </as-split-area>
 
     <as-split-area minSize="40" size="{{taskPageAreas.windowRight}}">
-      <div style="height: {{size - 160}}px;">
+      <div style="height: {{this.size.innerHeight - (this.size.innerWidth <= 992 ? 185 : 150)}}px;">
         <as-split unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $event)">
           <div class="code">
             Код
@@ -95,7 +95,11 @@
                 </as-split-area>
                 <as-split-area minSize="20" size="{{taskPageAreas.output}}">
                   <div class="full-height">
-                    <div class="input-and-output">Результат запуска {{runSubmission ? '(' + runSubmission.status + ')' : ''}}</div>
+                    <div class="input-and-output">Результат запуска
+                      <span *ngIf="runSubmission">
+                        {{runSubmission.status === 'Accepted' ? '(Completed)' : '(' + runSubmission.status + ')'}}
+                      </span>
+                    </div>
                     <textarea name="output"
                               class="output-textarea"
                               [value]="runSubmission ? (runSubmission.status == 'Accepted' ? runSubmission.output : runSubmission.errorString) : ''"
@@ -110,39 +114,43 @@
       </div>
 
       <div class="result">
-        <p *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
-          Последний результат:
-          <a
-            (click)="seeMore(bestLastSubmission.last)">
-            {{bestLastSubmission.last.wrongTest ? bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.last.status }}
-            {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}.</a>
-          <span *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
-            <br>Лучший результат:
-          <a
-            (click)="seeMore(bestLastSubmission.best)">
-            {{bestLastSubmission.best.wrongTest ? bestLastSubmission.best.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.best.status }}
-            {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}</a>.
-          </span>
-        </p>
+        <div style="margin-bottom: 10px;" *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
+          <div>
+            Последний результат:
+            <a (click)="seeMore(bestLastSubmission.last)">
+              {{bestLastSubmission.last.wrongTest ? bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.last.status }}
+              {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}
+            </a>.
+          </div>
 
-        <div class="panel-button">
-          <div *ngIf="!(sending || running)">
-            <button mat-raised-button (click)="send()"
-                    [disabled]="isSendDisabled()"
-                    color="primary">Проверить
-            </button>
-            <button style="margin-left: 10px;" mat-raised-button (click)="run()"
-                    [disabled]="isSendDisabled()"
-                    color="primary">Запустить
-            </button>
-            <app-next-step style="margin-left: 10px;"
-                           *ngIf="status"
-                           [problemId]="problemId"
-                           [lessonId]="lessonId"></app-next-step>
+          <div *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
+            Лучший результат:
+            <a (click)="seeMore(bestLastSubmission.best)">
+              {{bestLastSubmission.best.wrongTest ? bestLastSubmission.best.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')' : bestLastSubmission.best.status }}
+              {{bestLastSubmission.best.sentDate | date:'dd MMMM yyyy':null:'ru'}}
+            </a>.
           </div>
-          <div *ngIf="(sending || running)">
-            <mat-spinner diameter="35"></mat-spinner>
-          </div>
+        </div>
+
+        <div *ngIf="!(sending || running)">
+          <button mat-raised-button (click)="send()"
+                  [disabled]="isSendDisabled()"
+                  color="primary">Проверить
+          </button>
+
+          <button style="margin-left: 10px;" mat-raised-button (click)="run()"
+                  [disabled]="isSendDisabled()"
+                  color="primary">Запустить
+          </button>
+
+          <app-next-step style="margin-left: 10px;"
+                         *ngIf="status"
+                         [problemId]="problemId"
+                         [lessonId]="lessonId"></app-next-step>
+        </div>
+
+        <div *ngIf="(sending || running)">
+          <mat-spinner diameter="35"></mat-spinner>
         </div>
       </div>
 

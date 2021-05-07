@@ -58,7 +58,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   input: string;
   sending = false;
   running: boolean;
-  size = window.innerHeight;
+  size = window;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
   runSubmission: RunSubmission;
 
@@ -127,7 +127,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.size = event.target.innerHeight;
+    this.size = event.target;
   }
 
   @HostListener('window:beforeunload', ['$event'])

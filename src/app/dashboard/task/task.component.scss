@@ -4,13 +4,13 @@
 }
 
 .test .data {
-  font-family: "Roboto Mono", "DejaVu Sans Mono", Consolas, monospace;
+  font-family: "Roboto Mono", monospace;
   background-color: #fff;
   padding: 10px;
 }
 
 .send textarea {
-  font-family: "Roboto Mono", "DejaVu Sans Mono", Consolas, monospace;
+  font-family: "Roboto Mono", monospace;
   width: 100%;
 }
 
@@ -22,12 +22,6 @@
 .button-hint-bottom {
   display: flex;
   justify-content: flex-end;
-}
-
-.panel-button {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
 }
 
 .as-split-gutter {
@@ -69,12 +63,14 @@
 }
 
 .input-textarea, .output-textarea {
+  font-family: "Roboto Mono", monospace;
   padding: 0;
   resize: none;
   outline: none;
   border: none;
   width: 100%;
   height: calc(100% - 21px);
+  font-size: 12px;
 }
 
 .ace {
@@ -87,11 +83,11 @@
 }
 
 .result {
+  white-space: nowrap;
   bottom: 10px;
   position: absolute;
 
   a {
-    white-space: nowrap;
     cursor: pointer;
     text-decoration: underline;
     color: #673ab7;

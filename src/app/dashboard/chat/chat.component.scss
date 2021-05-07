@@ -28,7 +28,7 @@
 
   .body {
     height: calc(100% - 40px);
-    font-family: "Roboto Mono", "DejaVu Sans Mono", Consolas, monospace;
+    font-family: "Roboto Mono", monospace;
 
     .messages {
       height: 100%;
@@ -51,6 +51,7 @@
       overflow: hidden;
 
       textarea {
+        font-family: "Roboto Mono", monospace;
         resize: none;
         outline: none;
         border: none;

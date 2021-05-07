@@ -57,7 +57,6 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
       });
       this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
         this.futurePlan = futurePlan;
-        console.log(futurePlan);
       });
     });
   }
