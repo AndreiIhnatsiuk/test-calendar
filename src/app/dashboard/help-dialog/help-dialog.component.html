@@ -1,0 +1,51 @@
+<div class="container">
+  <button class="help-button" mat-fab
+          *ngIf="!isOpen"
+          (click)="isOpen = true"
+          title="Где можно получить помощь">
+    <mat-icon>question_answer</mat-icon>
+  </button>
+  <div class="help-content" *ngIf="isOpen">
+    <div class="header">
+      <button class="close-button" mat-icon-button (click)="isOpen = false" title="Закрыть">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div>Требуется помощь?</div>
+    </div>
+    <div class="content">
+      <a href="https://t.me/itman_community" target="_blank">
+        <mat-card>
+          <mat-card-header>
+            <div mat-card-avatar><img src="/assets/tg-logo.svg" alt="Telegram logo"></div>
+            <mat-card-title>Обратитесь в наше сообщество</mat-card-title>
+            <mat-card-subtitle>Опытные пользователи помогут в любое время</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </a>
+      <a href="https://meet.google.com/gqg-hnsa-wqe" target="_blank">
+        <mat-card>
+          <mat-card-header>
+            <div mat-card-avatar>
+              <mat-icon>voice_chat</mat-icon>
+            </div>
+            <mat-card-title>Посетите онлайн консультацию</mat-card-title>
+            <mat-card-subtitle>
+              Ментор ответит на Ваши вопросы по понедельникам и четвергам в 21:00 по минскому времени
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </a>
+      <a (click)="openGoogleCalendarInNewTab()">
+        <mat-card>
+          <mat-card-header>
+            <div mat-card-avatar>
+              <mat-icon>event</mat-icon>
+            </div>
+            <mat-card-title>Назначьте персональную консультацию с ментором</mat-card-title>
+            <mat-card-subtitle>Доступно со второго модуля</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+</div>

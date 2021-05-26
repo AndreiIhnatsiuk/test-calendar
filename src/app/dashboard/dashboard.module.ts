@@ -36,6 +36,7 @@ import {CountdownModule} from 'ngx-countdown';
 import {PersonalPlanComponent} from './personal-plan/personal-plan.component';
 import {PersonalPlanContentComponent} from './personal-plan-content/personal-plan-content.component';
 import {ButtonProblemComponent} from './button-problem/button-problem.component';
+import {HelpDialogComponent} from './help-dialog/help-dialog.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -103,7 +104,8 @@ const routes: Routes = [
     PersonalPlanProgressComponent,
     PersonalPlanComponent,
     PersonalPlanContentComponent,
-    ButtonProblemComponent
+    ButtonProblemComponent,
+    HelpDialogComponent
   ],
   entryComponents: [
     SubmissionComponent
