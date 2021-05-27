@@ -12,12 +12,16 @@ export class ProblemComponent implements OnInit {
   problems: Array<Problem>;
   problemId: number;
   lessonId: number;
+  moduleId: number;
   type: string;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService) { }
 
   ngOnInit(): void {
+    this.route.parent.paramMap.subscribe(map => {
+      this.moduleId = +map.get('moduleId');
+    });
     this.route.paramMap.subscribe(map => {
       this.lessonId = +map.get('lessonId');
       const problemId = +map.get('problemId');

@@ -9,6 +9,10 @@
   pre {
     overflow-x: scroll;
   }
+
+  app-next-step {
+    padding: 10px 0 10px;
+  }
 }
 
 .topic-part-youtube {
@@ -25,8 +29,4 @@
   background-color: lightblue;
   padding: 10px;
   margin-bottom: 10px;
-}
-
-.button {
-  padding: 10px 0 10px;
 }

@@ -1,3 +1,14 @@
-<app-task *ngIf="type === 'Task'" [problemId]="problemId" [lessonId]="lessonId"></app-task>
-<app-git-task *ngIf="type === 'GitTask' || type === 'GitManualTask'" [problemId]="problemId" [lessonId]="lessonId" [type]="type"></app-git-task>
-<app-question *ngIf="type === 'Question'" [problemId]="problemId" [lessonId]="lessonId"></app-question>
+<app-task *ngIf="type === 'Task'"
+          [problemId]="problemId"
+          [lessonId]="lessonId">
+</app-task>
+<app-git-task *ngIf="type === 'GitTask' || type === 'GitManualTask'"
+              [problemId]="problemId"
+              [lessonId]="lessonId"
+              [type]="type">
+</app-git-task>
+<app-question *ngIf="type === 'Question'"
+              [problemId]="problemId"
+              [lessonId]="lessonId"
+              [moduleId]="moduleId">
+</app-question>

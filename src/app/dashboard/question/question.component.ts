@@ -10,6 +10,8 @@ import {Gtag} from 'angular-gtag';
 import {ConfigurationService} from '../../services/configurations.service';
 import {QuestionConfig} from '../../entities/question-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import * as routes from '../routes';
+import {StoredAnswers} from '../../entities/stored-answers';
 
 @Component({
   selector: 'app-question',
@@ -20,15 +22,17 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class QuestionComponent implements OnChanges {
   @Input() problemId: number;
   @Input() lessonId: number;
+  @Input() moduleId: number;
 
   problem: FullProblem;
   userAnswer: UserAnswer = null;
   bestLastUserAnswer: BestLastUserAnswer;
   disabledButton = true;
-  disabledCheckBox = false;
   sending = false;
   config: QuestionConfig;
   seconds: number;
+  urlToLesson: Array<any>;
+  wasAcceptedAnswerAndPageWasNotReloaded: boolean;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -41,21 +45,47 @@ export class QuestionComponent implements OnChanges {
 
   onSelectAnswer() {
     this.disabledButton = this.problem.answers.findIndex(answer => answer.selected) === -1;
+    const selectedAnswers = this.problem.answers
+      .filter(answer => answer.selected)
+      .map(answer => answer.id);
+    const stored: StoredAnswers = {
+      problemId: this.problemId,
+      selectedAnswers: selectedAnswers
+    };
+    this.submissionService.storeSolution(stored);
   }
 
   ngOnChanges() {
+    this.wasAcceptedAnswerAndPageWasNotReloaded = false;
+    this.urlToLesson = ['/' + routes.DASHBOARD + '/' + routes.MODULE, this.moduleId, routes.LESSON, this.lessonId];
     this.configurationService.getConfiguration().subscribe(configuration => {
       this.config = configuration.questions;
     });
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
+      const stored = this.submissionService.getSolution<StoredAnswers>(this.problemId);
+      if (stored) {
+        const selectedAnswers = stored.selectedAnswers;
+        this.disabledButton = selectedAnswers.length === 0;
+        this.problem.answers.forEach(answer => {
+          for (const selectedAnswer of selectedAnswers) {
+            if (selectedAnswer === answer.id) {
+              answer.selected = true;
+            }
+          }
+        });
+      } else {
+        this.disabledButton = true;
+      }
     });
     this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
       this.bestLastUserAnswer = bestLastUserAnswer;
-      this.disabledCheckBox = bestLastUserAnswer.last !== null;
       this.userAnswer = bestLastUserAnswer.last;
       if (bestLastUserAnswer.last === null) {
-        this.disabledButton = true;
+        const stored = this.submissionService.getSolution<StoredAnswers>(this.problemId);
+        if (!stored || stored.selectedAnswers.length === 0) {
+          this.disabledButton = true;
+        }
         this.seconds = null;
       } else {
         this.calculateRemainingTimeForSecondAnswer();
@@ -76,10 +106,15 @@ export class QuestionComponent implements OnChanges {
       if (this.bestLastUserAnswer.best === null || userAnswer.right) {
         this.bestLastUserAnswer.best = userAnswer;
       }
+      if (userAnswer.right) {
+        this.wasAcceptedAnswerAndPageWasNotReloaded = true;
+      }
       this.bestLastUserAnswer.last = userAnswer;
+      this.calculateRemainingTimeForSecondAnswer();
       this.userAnswer = userAnswer;
-      this.disabledCheckBox = true;
       this.sending = false;
+      this.submissionService.removeSolution(this.problemId);
+      this.problem.answers.forEach(answer => answer.selected = false);
     }, error => {
       this.sending = false;
       this.snackBar.open(error.error.message, undefined, {
@@ -94,18 +129,6 @@ export class QuestionComponent implements OnChanges {
     if (this.seconds <= 0) {
       this.seconds = null;
     }
-  }
-
-  reset() {
-    this.calculateRemainingTimeForSecondAnswer();
-    this.gtag.event('reset', {
-      event_category: 'question',
-      event_label: '' + this.problemId
-    });
-    this.userAnswer = null;
-    this.problem.answers.forEach(answer => answer.selected = false);
-    this.disabledButton = true;
-    this.disabledCheckBox = false;
   }
 
   onEvent($event) {

@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {concat, EMPTY, Observable, Subject, timer} from 'rxjs';
 import {SubmissionRequest} from '../entities/submission-request';
 import {FullSubmission} from '../entities/full-submission';
-import {StoredSolution} from '../entities/stored-solution';
+import {Stored} from '../entities/stored';
 import {LocalStorageService} from './local-storage.service';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {SubmissionStatus} from '../entities/submission-status';
@@ -126,13 +126,17 @@ export class SubmissionService {
       .pipe(tap(() => this.runningRun.add(submissionRequest.problemId)));
   }
 
-  public storeSolution(storedSolution: StoredSolution): void {
+  public storeSolution(storedSolution: Stored): void {
     this.localStorage.setItem('solution-' + storedSolution.problemId, JSON.stringify(storedSolution));
   }
 
-  public getSolution(problemId: number): StoredSolution {
+  public getSolution<T>(problemId: number): T {
     const json = this.localStorage.getItem('solution-' + problemId);
-    return json ? JSON.parse(json) as StoredSolution : null;
+    return json ? JSON.parse(json) as T : null;
+  }
+
+  public removeSolution(problemId: number): void {
+    this.localStorage.removeItem('solution-' + problemId);
   }
 
   public sendAnswerUser(problemId: number, answer: number[]): Observable<UserAnswer> {

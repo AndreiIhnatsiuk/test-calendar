@@ -5,15 +5,14 @@
     <li *ngFor="let answer of problem.answers">
       <mat-checkbox [(ngModel)]="answer.selected"
                     color="primary"
-                    (ngModelChange)="onSelectAnswer()"
-                    [disabled]="disabledCheckBox">
+                    (ngModelChange)="onSelectAnswer()">
         <div class="answer-content" [innerHTML]="answer.text | marked"></div>
       </mat-checkbox>
     </li>
   </ul>
-  <div style="height: 25px;">
-    <div *ngIf="userAnswer !== null && !seconds" style="display: flex; flex-direction: row">
-      <div class="verdict" [ngClass]="userAnswer.right ? 'true' : 'false'">
+  <div class="problem-status">
+    <div class="verdict" *ngIf="userAnswer !== null">
+      <div class="verdict-content" [ngClass]="userAnswer.right ? 'true' : 'false'">
         <div *ngIf="bestLastUserAnswer.best.right && !bestLastUserAnswer.last.right">
           Неверный ответ.
           <span>
@@ -33,25 +32,26 @@
         </div>
       </div>
     </div>
-    <countdown *ngIf="seconds"
+    <countdown *ngIf="seconds && !wasAcceptedAnswerAndPageWasNotReloaded"
                [config]="{leftTime: seconds, format: 'Повторно ответить можно через mm:ss'}"
                (event)="onEvent($event)">
     </countdown>
   </div>
   <div class="button" *ngIf="!sending">
-    <app-next-step style="margin-right: 10px"
-                   *ngIf="userAnswer && userAnswer.right"
+    <button *ngIf="!wasAcceptedAnswerAndPageWasNotReloaded"
+            mat-raised-button color="primary"
+            (click)="send()"
+            [disabled]="disabledButton || seconds">
+      Отправить
+    </button>
+    <app-next-step *ngIf="userAnswer && userAnswer.right"
                    [problemId]="problemId"
                    [lessonId]="lessonId">
     </app-next-step>
-    <button *ngIf="userAnswer === null"
-            mat-raised-button color="primary"
-            (click)="send()"
-            [disabled]="disabledButton || seconds">Отправить
-    </button>
-    <button *ngIf="userAnswer !== null"
-            mat-raised-button color="primary"
-            (click)="reset()">Решить снова
+    <button *ngIf="bestLastUserAnswer && bestLastUserAnswer.last && !bestLastUserAnswer.last.right"
+            [routerLink]="urlToLesson"
+            mat-raised-button color="primary">
+      Повторить теорию
     </button>
   </div>
   <div *ngIf="sending">

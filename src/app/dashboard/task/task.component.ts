@@ -14,7 +14,6 @@ import 'brace/theme/github';
 import {Gtag} from 'angular-gtag';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
-import {StoredSolution} from '../../entities/stored-solution';
 import {HintService} from '../../services/hint.services';
 import {Hint} from '../../entities/hint';
 import {MatAccordion} from '@angular/material/expansion';
@@ -27,6 +26,7 @@ import {SplitAreaDirective} from 'angular-split';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {TaskPageAreas} from '../../entities/task-page-areas';
 import {RunSubmission} from '../../entities/run-submission';
+import {StoredSolution} from '../../entities/stored-solution';
 
 @Component({
   selector: 'app-task',
@@ -235,7 +235,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   }
 
   storeSolution(solution: string, input: string, submissionId?: string) {
-    const old = submissionId ? null : this.submissionService.getSolution(this.problemId);
+    const old = submissionId ? null : this.submissionService.getSolution<StoredSolution>(this.problemId);
     if (!old || old.problemId !== this.problemId || old.solution !== solution || old.input !== input) {
       const storedSolution: StoredSolution = {
         problemId: this.problemId,

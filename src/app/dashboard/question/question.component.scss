@@ -1,25 +1,36 @@
 .question {
   max-width: 780px;
   margin: 10px 0 0 10px;
-}
 
-.verdict {
-  div {
-    font-weight: 500;
-
-    span {
-      font-weight: 400;
-      color: #828282;
-    }
+  h2 {
+    font-size: 16px;
   }
 }
 
-.verdict.true {
-  color: green;
-}
+.problem-status {
+  height: 38px;
 
-.verdict.false {
-  color: red;
+  .verdict {
+    display: flex;
+    flex-direction: row;
+
+    .verdict-content {
+      font-weight: 500;
+
+      span {
+        font-weight: 400;
+        color: #828282;
+      }
+    }
+
+    .verdict-content.true {
+      color: green;
+    }
+
+    .verdict-content.false {
+      color: red;
+    }
+  }
 }
 
 ul.answers {
@@ -38,6 +49,10 @@ ul.answers {
 
     .answer-content {
       margin-left: 5px;
+
+      p {
+        white-space: break-spaces;
+      }
     }
 
     label, .answer-content {
@@ -52,4 +67,8 @@ ul.answers {
 
 .button {
   margin: 10px 0;
+
+  button {
+    margin-right: 10px;
+  }
 }
