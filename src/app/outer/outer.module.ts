@@ -13,6 +13,7 @@ import {UserAgreementContentComponent} from './user-agreement-content/user-agree
 import {UserAgreementDialogComponent} from './user-agreement-dialog/user-agreement-dialog.component';
 import {SharedModule} from '../shared/shared.module';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {ConfirmEmailComponent} from './confirm-email/confirm-email.component';
 
 const routes: Routes = [
   {
@@ -48,7 +49,11 @@ const routes: Routes = [
       {
         path: 'user-agreement',
         component: UserAgreementComponent
-      }
+      },
+      {
+        path: 'confirm/:id',
+        component: ConfirmEmailComponent,
+      },
     ]
   }
 ];
@@ -64,6 +69,7 @@ const routes: Routes = [
     AuthorizationComponent,
     UserAgreementContentComponent,
     UserAgreementDialogComponent,
+    ConfirmEmailComponent
   ],
     imports: [
         CommonModule,

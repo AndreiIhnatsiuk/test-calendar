@@ -9,6 +9,9 @@
       <mat-label>Эл. Почта</mat-label>
       <input [disabled]="true" [(ngModel)]="personal.email" matInput>
     </mat-form-field>
+    <p *ngIf="!personal.confirmedEmail">Email не подтвержден.
+      <a href="javascript:void(0)" (click)="confirmEmail()">Отправить ссылку для подтверждения на email.</a>
+    </p>
     <mat-form-field class="full-width">
       <mat-label>Телефон</mat-label>
       <input [disabled]="personal.phone"

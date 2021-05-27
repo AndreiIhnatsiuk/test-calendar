@@ -45,11 +45,11 @@ export class AuthService {
   }
 
   public resetPassword(email: string): Observable<any> {
-    return this.http.post('/api/reset-password-tokens', {email: email});
+    return this.http.post('/api/reset-password-tokens', {email});
   }
 
   public updatePassword(token: string, password: string): Observable<any> {
-    return this.http.put('/api/user-passwords', {token: token, password: password});
+    return this.http.patch('/api/reset-password-tokens/' + token, {password});
   }
 
   logout() {
@@ -76,6 +76,14 @@ export class AuthService {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa('web:web'));
 
-    return this.http.post('/api/users', {name, email, level: 'Beginner', password, offerNotification}, {headers: headers});
+    return this.http.post('/api/users', {name, email, level: 'Beginner', password, offerNotification}, {headers});
+  }
+
+  public requestMailConfirmation(): Observable<any> {
+      return this.http.post('/api/confirmation-email-tokens', {});
+  }
+
+  public confirmEmail(token: string): Observable<any> {
+    return this.http.patch('/api/confirmation-email-tokens/' + token, {});
   }
 }

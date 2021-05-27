@@ -46,4 +46,16 @@ export class ProfileComponent implements OnInit {
         });
       });
   }
+
+  confirmEmail() {
+    this.authService.requestMailConfirmation().subscribe((() => {
+      this.snackBar.open('На Вашу почту отправлено письмо с инструкциями.', undefined, {
+        duration: 10000
+      });
+    }), e => {
+      this.snackBar.open(e.error.message, undefined, {
+        duration: 10000
+      });
+    });
+  }
 }

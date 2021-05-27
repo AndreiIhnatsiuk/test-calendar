@@ -8,4 +8,5 @@ export interface Personal {
   email: string;
   repository: string;
   emailNotifications: EmailNotifications;
+  confirmedEmail: boolean;
 }
