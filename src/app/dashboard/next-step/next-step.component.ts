@@ -44,7 +44,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   ngOnInit() {
     this.moduleId = Number.parseFloat(this.route.parent.snapshot.paramMap.get('moduleId'));
     zip(
-      this.topicService.getTopics(this.moduleId),
+      this.topicService.getAllByModuleId(this.moduleId),
       this.problemService.getProblemsByLessonId(this.lessonId),
     ).subscribe(([topics, problems]) => {
       this.topics = topics;

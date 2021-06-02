@@ -64,7 +64,7 @@ export class DashboardContentComponent implements OnInit {
   public goToPageLastLesson(moduleId: number) {
     zip(
       this.availableTopicsService.getAvailableLessons(moduleId),
-      this.topicService.getTopics(moduleId),
+      this.topicService.getAllByModuleId(moduleId),
     ).subscribe(([availableTopics, topics]) => {
       for (const topic of topics.reverse()) {
         for (const lesson of topic.lessons.reverse()) {

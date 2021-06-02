@@ -36,7 +36,7 @@ export class ModuleComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const moduleId = Number.parseFloat(this.route.snapshot.paramMap.get('moduleId'));
-    this.topicService.getTopics(moduleId)
+    this.topicService.getAllByModuleId(moduleId)
       .subscribe(topics => this.topics = topics);
     this.acceptedProblemsByLessonsSubscription = this.acceptedSubmissionService.getAcceptedByLessons(moduleId)
       .subscribe(accepted => this.acceptedProblemsByLessons = accepted);

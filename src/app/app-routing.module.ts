@@ -1,9 +1,14 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { AuthGuard } from './guards/auth.guard';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {NotFoundComponent} from './not-found/not-found.component';
+import {AuthGuard} from './guards/auth.guard';
+import {RedirectComponent} from './redirect/redirect.component';
 
 const routes: Routes = [
+  {
+    path: 'problem/:problemId',
+    component: RedirectComponent
+  },
   {
     path: '404',
     component: NotFoundComponent
@@ -27,4 +32,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

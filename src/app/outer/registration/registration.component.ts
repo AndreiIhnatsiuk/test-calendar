@@ -60,7 +60,7 @@ export class RegistrationComponent implements OnInit {
           });
           this.personalPlanService.generatePlan().subscribe(() => {
             this.moduleService.getModules().subscribe(modules => {
-              this.topicService.getTopics(modules[0].id).subscribe(topics => {
+              this.topicService.getAllByModuleId(modules[0].id).subscribe(topics => {
                 this.router.navigate(['/dashboard/module/' + modules[0].id + '/lesson/' + topics[0].lessons[0].id]);
               });
             });
