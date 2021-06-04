@@ -1,15 +1,19 @@
 mat-sidenav-container {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 50px;
   bottom: 0;
   left: 0;
   right: 0;
-}
 
-mat-sidenav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  mat-sidenav-content {
+    order: 1;
+  }
+
+  mat-sidenav {
+    order: 2;
+  }
 }
 
 .status {
@@ -122,14 +126,6 @@ mat-expansion-panel {
   }
 }
 
-.nav-tasks {
-  width: 180px;
-}
-
-mat-sidenav-content {
-  background-color: #f3f4f6;
-}
-
 .active-list-item {
   color: #673ab7; /* Note: You could also use a custom theme */
 }
@@ -150,7 +146,6 @@ mat-sidenav-content {
 
   mat-sidenav {
     position: relative;
-    margin-bottom: 2px;
   }
 
   mat-sidenav-content {
@@ -160,9 +155,6 @@ mat-sidenav-content {
     overflow: visible;
     clear: both;
     margin-left: 0 !important;
-  }
-
-  .nav-tasks {
-    float: right;
+    padding-bottom: 16px;
   }
 }
