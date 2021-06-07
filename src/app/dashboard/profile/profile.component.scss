@@ -1,7 +1,15 @@
 .center {
-  margin: 10% auto auto;
+  height: 90%;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile {
   max-width: 550px;
-  padding: 0 5%;
+  max-height: 100%;
 }
 
 .left-align {
@@ -28,4 +36,8 @@
 
 ::ng-deep .mat-checkbox-layout .mat-checkbox-label {
   line-height: 21px;
+}
+
+.box-button {
+  height: 40px;
 }

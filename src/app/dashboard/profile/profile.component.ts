@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   phone: string;
   repository: string;
   sending: boolean;
+  sendingEmail: boolean;
 
   constructor(private authService: AuthService,
               private snackBar: MatSnackBar) {
@@ -48,11 +49,14 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmEmail() {
+    this.sendingEmail = true;
     this.authService.requestMailConfirmation().subscribe((() => {
+      this.sendingEmail = false;
       this.snackBar.open('На Вашу почту отправлено письмо с инструкциями.', undefined, {
         duration: 10000
       });
     }), e => {
+      this.sendingEmail = false;
       this.snackBar.open(e.error.message, undefined, {
         duration: 10000
       });
