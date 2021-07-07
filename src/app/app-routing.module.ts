@@ -7,7 +7,8 @@ import {RedirectComponent} from './redirect/redirect.component';
 const routes: Routes = [
   {
     path: 'problem/:problemId',
-    component: RedirectComponent
+    component: RedirectComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '404',
