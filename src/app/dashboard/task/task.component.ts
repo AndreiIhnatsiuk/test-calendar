@@ -169,6 +169,9 @@ export class TaskComponent implements OnChanges, OnDestroy {
       .subscribe(runSubmission => {
         this.runSubmission = runSubmission;
         this.running = this.isRunRunning(runSubmission);
+        if (SubmissionStatus[runSubmission.status] === SubmissionStatus.CompilationError) {
+          this.parseErrors(runSubmission.errorString);
+        }
       });
     this.taskSubmissionsSubscription = this.submissionService
       .getTaskSubmissionsByProblemId(this.problemId)
