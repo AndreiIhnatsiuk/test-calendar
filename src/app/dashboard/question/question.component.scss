@@ -1,14 +1,9 @@
 .question {
-  max-width: 780px;
+  max-width: 732px;
   margin: 10px 0 0 10px;
 
   .question-content {
     font-size: 16px;
-  }
-
-  h5 {
-    font-size: 12px;
-    margin: 24px 0 0 0;
   }
 }
 
@@ -60,8 +55,8 @@ ul.answers {
       }
     }
 
-    label, .answer-content {
-      width: 760px;
+    label, .answer-content, .mat-checkbox-label {
+      width: 100%;
     }
 
     .mat-checkbox-inner-container {

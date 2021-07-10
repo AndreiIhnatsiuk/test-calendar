@@ -4,11 +4,7 @@
   display: flex;
   height: 100%;
   flex-direction: column;
-  max-width: 780px;
-
-  pre {
-    overflow-x: scroll;
-  }
+  max-width: 732px;
 
   app-next-step {
     padding: 10px 0 10px;

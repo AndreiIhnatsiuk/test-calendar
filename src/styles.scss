@@ -35,6 +35,9 @@ pre {
   padding: 10px;
   margin: 0 0 12px 0;
   line-height: normal;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 
   code {
     padding: 0;
