@@ -9,16 +9,16 @@
 
     <div *ngIf="futurePlan.status === 'Active' && !planCompleted">
 
-      <div class="timer" *ngIf="seconds <= secondsInDay">
-        <span>Осталось: </span>
-        <countdown #cd [config]="{leftTime: seconds, format: 'HH:mm:ss'}" (event)="onEvent($event)"></countdown>
+      <div class="timer" *ngIf="secondsToSample < secondsInDay">
+        <span>Осталось: {{secondsToSample*1000 | date:'HH:mm:ss':'+0000'}}</span>
       </div>
 
-      <div class="timer" *ngIf="seconds > secondsInDay">
-        <span>Осталось </span>
-        <countdown #cd [config]="{leftTime: seconds, format: 'd'}"></countdown>
-        <span>{{day | i18nPlural: days:'ru'}}</span>
+      <div class="timer" *ngIf="secondsToSample >= secondsInDay">
+        <span>{{dayToSample | i18nPlural: left:'ru'}}</span>
+        {{dayToSample}}
+        <span>{{dayToSample | i18nPlural: days:'ru'}}</span>
       </div>
+
 
     </div>
 

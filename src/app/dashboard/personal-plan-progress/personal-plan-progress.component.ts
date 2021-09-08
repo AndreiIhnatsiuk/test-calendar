@@ -1,9 +1,8 @@
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {CountdownComponent} from 'ngx-countdown';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PersonalPlanService} from '../../services/personal-plan.service';
 import {ActivePlan} from '../../entities/active-plan';
 import {FuturePlan} from '../../entities/future-plan';
-import {Subscription} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
 
 @Component({
@@ -12,19 +11,27 @@ import {AcceptedSubmissionService} from '../../services/accepted-submission.serv
   styleUrls: ['./personal-plan-progress.component.scss']
 })
 export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
-  @ViewChild('cd', {static: false}) private countdown: CountdownComponent;
   seconds: number;
+  startSeconds: number;
+  secondsToSample: number;
+  dayToSample: number;
   activePlan: ActivePlan;
   futurePlan: FuturePlan;
   problemsStatuses: Map<number, string>;
   private acceptedProblemsSubscription: Subscription;
   private personalPlanChangesSubscription: Subscription;
+  private countdownTimerSubscription: Subscription;
   count = 0;
   planCompleted: boolean;
-  days: {[k: string]: string} = {
+  days: { [k: string]: string } = {
     'one': ' день',
     'few': ' дня',
     'many': ' дней'
+  };
+  left: { [k: string]: string } = {
+    'one': 'Остался ',
+    'few': 'Осталось ',
+    'many': 'Осталось '
   };
   day: number;
   secondsInDay = 86400;
@@ -35,6 +42,7 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.personalPlanChangesSubscription = this.personalPlanService.getChanges().subscribe(() => {
       if (this.acceptedProblemsSubscription) {
         this.acceptedProblemsSubscription.unsubscribe();
@@ -44,21 +52,34 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
         if (this.activePlan.problems) {
           this.acceptedProblemsSubscription =
             this.acceptedSubmissionService.getProblemsStatuses(this.activePlan.problems.map(x => x.problemId))
-            .subscribe(accepted => {
-              this.problemsStatuses = accepted;
-              this.count = this.countCompletedTasks();
-            });
+              .subscribe(accepted => {
+                this.problemsStatuses = accepted;
+                this.count = this.countCompletedTasks();
+              });
         }
-        this.seconds = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
-        this.day = Math.floor((this.seconds + 3600 * 12) / (3600 * 24));
-        if (this.countdown) {
-          this.countdown.begin();
-        }
+        this.startSeconds = (new Date(activePlan.deadline).getTime() - new Date().getTime()) / 1000;
+        this.day = Math.ceil((this.seconds) / (3600 * 24));
+        this.startCountdownTimer();
       });
       this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
         this.futurePlan = futurePlan;
       });
     });
+  }
+
+  startCountdownTimer() {
+    this.countdownTimerSubscription = timer(0, 1000)
+      .subscribe((count) => {
+        this.secondsToSample = this.startSeconds - count;
+        this.dayToSample = Math.ceil((this.secondsToSample) / (this.secondsInDay));
+        if (this.secondsToSample === 0) {
+          setTimeout(() => {
+            this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
+              this.futurePlan = futurePlan;
+            });
+          }, 1000);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -67,6 +88,9 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
     }
     if (this.personalPlanChangesSubscription) {
       this.personalPlanChangesSubscription.unsubscribe();
+    }
+    if (this.countdownTimerSubscription) {
+      this.countdownTimerSubscription.unsubscribe();
     }
   }
 
@@ -85,13 +109,4 @@ export class PersonalPlanProgressComponent implements OnInit, OnDestroy {
     return cnt * 100 / countProblemsInPlan.length;
   }
 
-  onEvent($event) {
-    if ($event.action === 'done') {
-      setTimeout(() => {
-        this.personalPlanService.getFuturePlan().subscribe(futurePlan => {
-          this.futurePlan = futurePlan;
-        });
-      }, 1000);
-    }
-  }
 }
