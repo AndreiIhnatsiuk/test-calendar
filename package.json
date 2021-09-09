@@ -28,6 +28,7 @@
     "core-js": "^3.6.5",
     "marked": "^0.8.2",
     "ngx-ace-wrapper": "^9.0.1",
+    "ngx-clipboard": "^13.0.0",
     "ngx-countdown": "^11.0.3",
     "ngx-mask": "^9.0.0",
     "rxjs": "~6.5.5",

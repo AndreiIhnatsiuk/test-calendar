@@ -37,6 +37,7 @@ import {PersonalPlanComponent} from './personal-plan/personal-plan.component';
 import {PersonalPlanContentComponent} from './personal-plan-content/personal-plan-content.component';
 import {ButtonProblemComponent} from './button-problem/button-problem.component';
 import {HelpDialogComponent} from './help-dialog/help-dialog.component';
+import { ButtonCopylinkComponent } from './button-copylink/button-copylink.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -105,7 +106,8 @@ const routes: Routes = [
     PersonalPlanComponent,
     PersonalPlanContentComponent,
     ButtonProblemComponent,
-    HelpDialogComponent
+    HelpDialogComponent,
+    ButtonCopylinkComponent
   ],
   entryComponents: [
     SubmissionComponent
@@ -126,7 +128,7 @@ const routes: Routes = [
     MatMenuModule,
     IMaskModule,
     MatProgressBarModule,
-    CountdownModule
+    CountdownModule,
   ],
   providers: [
     {

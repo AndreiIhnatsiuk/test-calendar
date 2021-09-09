@@ -1,4 +1,5 @@
 <div class="question" *ngIf="problem">
+  <h2>Вопрос #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
   <div class="question-content" [innerHTML]="problem.text | marked"></div>
   <p>Выберите все правильные варианты ответа:</p>
   <ul class="answers">
@@ -41,7 +42,7 @@
     <button *ngIf="!wasAcceptedAnswerAndPageWasNotReloaded"
             mat-raised-button color="primary"
             (click)="send()"
-            [disabled]="disabledButton || seconds">
+            [disabled]="disabledButton || !!seconds">
       Отправить
     </button>
     <app-next-step *ngIf="userAnswer && userAnswer.right"

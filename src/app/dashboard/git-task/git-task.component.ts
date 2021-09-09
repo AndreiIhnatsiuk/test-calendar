@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SubmissionService} from '../../services/submission.service';
 import {MatDialog} from '@angular/material/dialog';

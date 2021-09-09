@@ -2,12 +2,12 @@
   <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndWindow('percent', $event)">
     <as-split-area minSize="30" size="{{taskPageAreas.windowLeft}}">
       <div class="task" *ngIf="problem">
-
         <div style="height: {{size.innerHeight - 85}}px;">
           <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical"
                     (dragEnd)="dragEndLeft('percent', $event)">
             <as-split-area minSize="20" size="90" #areaTask="asSplitArea">
               <div class="area-task">
+                <h2>Задача #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
                 <div class="content" [innerHTML]="problem.text | marked"></div>
                 <div class="tests" *ngIf="problem.tests.length">
                   <h2>Примеры</h2>

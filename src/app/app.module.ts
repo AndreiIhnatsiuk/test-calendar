@@ -27,7 +27,7 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     HttpClientModule,
     GtagModule.forRoot({trackingId: environment.googleTrackingId, trackPageviews: true}),
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   providers: [
     {

@@ -136,4 +136,5 @@ export class QuestionComponent implements OnChanges {
       this.seconds = null;
     }
   }
+
 }
