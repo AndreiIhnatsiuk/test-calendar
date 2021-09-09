@@ -5,8 +5,16 @@
   .question-content {
     font-size: 16px;
   }
-}
+  .split_view {
+    height: calc(100vh - 155px);
+  }
+  @media screen and (max-width: 992px) {
+    .split_view {
+      height: calc(100vh - 200px);
+    }
+  }
 
+}
 .problem-status {
   height: 38px;
 

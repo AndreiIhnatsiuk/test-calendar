@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnDestroy, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
@@ -12,6 +12,8 @@ import {QuestionConfig} from '../../entities/question-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import * as routes from '../routes';
 import {StoredAnswers} from '../../entities/stored-answers';
+import {QuestionPageAreas} from '../../entities/question-page-areas';
+import {LocalStorageService} from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-question',
@@ -19,11 +21,12 @@ import {StoredAnswers} from '../../entities/stored-answers';
   styleUrls: ['./question.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class QuestionComponent implements OnChanges {
+export class QuestionComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
   @Input() lessonId: number;
   @Input() moduleId: number;
 
+  questionPageAreas: QuestionPageAreas = new QuestionPageAreas();
   problem: FullProblem;
   userAnswer: UserAnswer = null;
   bestLastUserAnswer: BestLastUserAnswer;
@@ -40,7 +43,26 @@ export class QuestionComponent implements OnChanges {
               private problemService: ProblemService,
               private configurationService: ConfigurationService,
               private gtag: Gtag,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private localStorage: LocalStorageService) {
+    const questionPageAreas: string = localStorage.getItem('questionPageAreas');
+    if (questionPageAreas) {
+      this.questionPageAreas = JSON.parse(questionPageAreas);
+      if (!this.questionPageAreas.question) {
+        this.questionPageAreas.question = 50;
+        this.questionPageAreas.answers = 50;
+      }
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler() {
+    this.localStorage.setItem('questionPageAreas', JSON.stringify(this.questionPageAreas));
+  }
+
+  dragEndWindow(unit, {sizes}) {
+    this.questionPageAreas.question = sizes[0];
+    this.questionPageAreas.answers = sizes[1];
   }
 
   onSelectAnswer() {
@@ -53,6 +75,10 @@ export class QuestionComponent implements OnChanges {
       selectedAnswers: selectedAnswers
     };
     this.submissionService.storeSolution(stored);
+  }
+
+  ngOnDestroy(): void {
+    this.localStorage.setItem('questionPageAreas', JSON.stringify(this.questionPageAreas));
   }
 
   ngOnChanges() {

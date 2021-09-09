@@ -1,16 +1,26 @@
 <div class="question" *ngIf="problem">
-  <h2>Вопрос #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
-  <div class="question-content" [innerHTML]="problem.text | marked"></div>
-  <p>Выберите все правильные варианты ответа:</p>
-  <ul class="answers">
-    <li *ngFor="let answer of problem.answers">
-      <mat-checkbox [(ngModel)]="answer.selected"
-                    color="primary"
-                    (ngModelChange)="onSelectAnswer()">
-        <div class="answer-content" [innerHTML]="answer.text | marked"></div>
-      </mat-checkbox>
-    </li>
-  </ul>
+
+  <as-split class="split_view" unit="percent" direction="vertical" (dragEnd)="dragEndWindow('percent', $event)" >
+    <as-split-area minSize="20" size="{{questionPageAreas.question}}">
+      <h2>Вопрос #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
+      <div class="question-content" [innerHTML]="problem.text | marked"></div>
+    </as-split-area>
+    <as-split-area  minSize="20" size="{{questionPageAreas.answers}}">
+
+      <p>Выберите все правильные варианты ответа:</p>
+      <ul class="answers">
+        <li *ngFor="let answer of problem.answers">
+          <mat-checkbox [(ngModel)]="answer.selected"
+                        color="primary"
+                        (ngModelChange)="onSelectAnswer()">
+            <div class="answer-content" [innerHTML]="answer.text | marked"></div>
+          </mat-checkbox>
+        </li>
+      </ul>
+    </as-split-area>
+  </as-split>
+
+
   <div class="problem-status">
     <div class="verdict" *ngIf="userAnswer !== null">
       <div class="verdict-content" [ngClass]="userAnswer.right ? 'true' : 'false'">

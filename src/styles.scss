@@ -43,3 +43,7 @@ pre {
     padding: 0;
   }
 }
+
+as-split {  // fixing error touch devices
+  touch-action: pan-y;
+}
