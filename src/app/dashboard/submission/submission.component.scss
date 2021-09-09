@@ -2,7 +2,15 @@
   font-family: "Roboto Mono", monospace;
   background-color: lightgrey;
   padding: 10px;
-  margin: 2px 0;
+  margin: 2px 0 5px 0;
   overflow: auto;
-  max-height: 15vh
+  max-height: 15vh;
+}
+
+.bold{
+  font-weight: 500;
+}
+
+.button-margin{
+  margin-top: 10px;
 }

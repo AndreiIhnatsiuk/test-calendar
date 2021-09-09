@@ -78,7 +78,7 @@
 }
 
 .area-input-and-output {
-  height: calc(100% - 20px);
+  height: calc(100% - 40px);
   background-color: white;
 }
 
@@ -92,8 +92,25 @@
     text-decoration: underline;
     color: #673ab7;
   }
+
+  &__button {
+    line-height: 20px;
+    margin-top: 10px;
+  }
 }
 
 .closed {
   overflow: hidden !important;
+}
+
+.wrong {
+  color: red;
+}
+
+.accepted {
+  color: #66cd66;
+}
+
+.bold {
+  font-weight: bold;
 }

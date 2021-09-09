@@ -9,8 +9,10 @@ import {FullSubmission} from '../../entities/full-submission';
 })
 export class SubmissionComponent implements OnInit {
 
+
   constructor(private dialogRef: MatDialogRef<SubmissionComponent>,
-              @Inject(MAT_DIALOG_DATA) public submission: FullSubmission) {
+              @Inject(MAT_DIALOG_DATA) public data: {submission: FullSubmission, totalTests: string}
+              ) {
   }
 
   ngOnInit() {

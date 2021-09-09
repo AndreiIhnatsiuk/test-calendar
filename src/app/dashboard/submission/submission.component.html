@@ -1,26 +1,33 @@
-<div class="submission" *ngIf="submission">
-  <div>
-    <b style="font-size: 15px; font-weight: 500">
-      Статус: {{submission.status}},
-      время: {{submission.maxExecutionTime}}ms,
-      память: {{submission.maxUsedMemory}}kb
-    </b>
+<div class="submission" *ngIf="data.submission">
+  <div class="submission-status">
+    <p class="bold" *ngIf="!!data.submission.wrongTest">
+      Не пройден тест {{data.submission.wrongTest}} из {{data.totalTests}}. Ваше решение должно работать на всех тестах.
+    </p>
+    <p class="line-height">
+      Вердикт: <span [style.color]="data.submission.status==='Accepted'?'green':'red'">{{data.submission.status}}</span>,
+      время: {{data.submission.maxExecutionTime}}ms,
+      память: {{data.submission.maxUsedMemory}}kb
+    </p>
+    <p class="line-height">
+      Задача #{{data.submission.problemId}}.
+      Решение #{{data.submission.id.substr(0, 8)}} от {{data.submission.sentDate | date: 'dd.MM.yyyy, HH:mm:ss'}}
+    </p>
   </div>
   <div>
-    <i>Код</i>
-    <pre class="data">{{submission.solution}}</pre>
+    <i>Код решения:</i>
+    <pre class="data">{{data.submission.solution}}</pre>
   </div>
-  <div *ngIf="submission.test">
-    <i>Входные данные</i>
-    <pre class="data">{{submission.test.input}}</pre>
-    <i>Выходные данные</i>
-    <pre class="data">{{submission.test.output}}</pre>
-    <i>Вывод программы</i>
-    <pre class="data">{{submission.errorString}}</pre>
+  <div *ngIf="data.submission.test">
+    <i>Входные данные:</i>
+    <pre class="data">{{data.submission.test.input}}</pre>
+    <i>Ожидаемый результат:</i>
+    <pre class="data">{{data.submission.test.output}}</pre>
+    <i>Результат вашего решения:</i>
+    <pre class="data">{{data.submission.errorString}}</pre>
   </div>
-  <div *ngIf="!submission.test && submission.status !== 'Accepted'
-  && submission.status !== 'InQueue' && submission.status !== 'Running'">
+  <div *ngIf="!data.submission.test && data.submission.status !== 'Accepted'
+      && data.submission.status !== 'InQueue' && data.submission.status !== 'Running'">
     <pre class="data">Тест не доступен для просмотра. Самостоятельно придумайте тесты, на которых решение не будет работать.</pre>
   </div>
 </div>
-<button style="margin-top: 10px" mat-raised-button color="primary" (click)="close()">Закрыть</button>
+<button class="button-margin" mat-raised-button color="primary" (click)="close()">Закрыть</button>

@@ -61,6 +61,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
   size = window;
   taskPageAreas: TaskPageAreas = new TaskPageAreas();
   runSubmission: RunSubmission;
+  hiddenBadge: boolean;
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
@@ -139,6 +140,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     this.runSubmission = null;
     this.sending = false;
     this.running = null;
+    this.hiddenBadge = true;
     this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
       if (this.storedSolution == null || !this.storedSolution.solution) {
@@ -274,6 +276,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
     this.ace.directiveRef.ace().getSession().setAnnotations([]);
     const submission = new SubmissionRequest(this.problemId, this.solution);
     this.submissionService.postTaskSubmission(submission).subscribe(added => {
+      this.hiddenBadge = false;
       this.gtag.event('sent', {
         event_category: 'submission',
         event_label: this.problemId.toString()
@@ -343,7 +346,8 @@ export class TaskComponent implements OnChanges, OnDestroy {
     return !(status === SubmissionStatus.InQueue || status === SubmissionStatus.Running);
   }
 
-  seeMore(submission: FullSubmission) {
+  seeMore(submission: FullSubmission, totalTests: string = '') {
+    this.hiddenBadge = true;
     if (!this.showMore(submission)) {
       return;
     }
@@ -351,7 +355,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
       event_category: 'submission',
       event_label: '' + this.problemId
     });
-    this.dialog.open(SubmissionComponent, {data: submission});
+    this.dialog.open(SubmissionComponent, {data: {submission: submission, totalTests: totalTests  }});
   }
 
   isSendDisabled(): boolean {
