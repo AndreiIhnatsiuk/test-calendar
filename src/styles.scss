@@ -1,16 +1,17 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~@angular/material/theming';
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
-$custom-typography: mat-typography-config(
-  $subheading-1: mat-typography-level(14px, 21px),
-  $body-1: mat-typography-level(14px, 21px),
-  $button: mat-typography-level(14px, 21px)
+$custom-typography: mat.define-typography-config(
+  $subheading-1: mat.define-typography-level(14px, 21px),
+  $body-1: mat.define-typography-level(14px, 21px),
+  $button: mat.define-typography-level(14px, 21px)
 );
 
-@include mat-base-typography($custom-typography);
-@include angular-material-typography($custom-typography);
-@include mat-core($custom-typography);
+@include mat.typography-hierarchy($custom-typography);
+@include mat.all-component-typographies($custom-typography);
+@include mat.core($custom-typography);
 
 html, body {
   height: 100%;
