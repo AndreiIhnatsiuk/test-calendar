@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {LessonService} from '../../services/lesson.service';
 import {FullLesson} from '../../entities/full-lesson';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {ProblemService} from '../../services/problem.service';
+import * as routes from '../routes';
 
 @Component({
   selector: 'app-lesson',
@@ -12,30 +13,26 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 })
 export class LessonComponent implements OnInit {
   lesson: FullLesson;
-  safeVideoUrl: Map<string, SafeUrl>;
   lessonId: number;
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private lessonService: LessonService,
-              private sanitizer: DomSanitizer) {
+              private problemService: ProblemService) {
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(map => {
       this.lessonId = +map.get('lessonId');
+      const moduleId = +this.route.parent.snapshot.paramMap.get('moduleId');
       this.lessonService.getLessonById(this.lessonId).subscribe(fullTopic => {
         this.lesson = fullTopic;
-        // https://github.com/ionic-team/ionic-v3/issues/605
-        const videos = fullTopic.parts
-          .filter(x => x.youtubeId)
-          .map(x => [x.youtubeId, this.generateYoutubeLink(x.youtubeId)] as [string, SafeUrl]);
-        this.safeVideoUrl = new Map(videos);
+      });
+      this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
+        const problemId = problems[0].id;
+        this.router.navigate([routes.DASHBOARD, routes.MODULE, moduleId,
+          routes.LESSON, this.lessonId, routes.PROBLEM, problemId]);
       });
     });
   }
-
-  generateYoutubeLink(link: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + link);
-  }
-
 }
