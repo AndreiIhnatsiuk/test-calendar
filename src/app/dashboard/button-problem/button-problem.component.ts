@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 
 @Component({
   selector: 'app-button-problem',
@@ -18,9 +18,13 @@ export class ButtonProblemComponent implements OnChanges {
   status: string;
 
   title: { [k: string]: string } = {
-    'Question': 'Вопрос',
+    'OptionQuestion': 'Вопрос',
+    'InputQuestion': 'Вопрос',
     'Task': 'Задача',
     'GitTask': 'Задача',
+    'ManualTask': 'Задача',
+    'FeedbackProblem': 'Отзыв',
+    'Theory': 'Теория',
     'GitManualTask': 'Задача с ручной проверкой'
   };
 
