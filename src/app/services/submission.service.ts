@@ -31,16 +31,8 @@ export class SubmissionService {
     return this.changes;
   }
 
-  public getGitTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
-    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/git-task-submissions');
-  }
-
-  public getGitManualTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
-    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/git-manual-task-submissions');
-  }
-
-  public getTaskSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
-    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/task-submissions');
+  public getSubmissionsByProblemId(problemId: number): Observable<BestLastFullSubmission> {
+    return this.getSubmissionByProblemIdAndUrlApi(problemId, '/api/submissions');
   }
 
   private getSubmissionByProblemIdAndUrlApi(problemId: number, url: string): Observable<BestLastFullSubmission> {
@@ -67,7 +59,7 @@ export class SubmissionService {
 
   public getRunSubmissionsByProblemIdOnce(problemId: number): Observable<RunSubmission> {
     const params = new HttpParams().append('problemId', '' + problemId);
-    return this.http.get<RunSubmission>('/api/run-submissions', {params}).pipe(
+    return this.http.get<RunSubmission>('/api/submissions', {params}).pipe(
       catchError(error => {
         if (error.status === 404) {
           return EMPTY;
@@ -107,22 +99,22 @@ export class SubmissionService {
   }
 
   public postGitTaskSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {
-    return this.http.post<FullSubmission>('/api/git-task-submissions', submissionRequest)
+    return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
   public postGitTaskManualSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {
-    return this.http.post<FullSubmission>('/api/git-manual-task-submissions', submissionRequest)
+    return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
   public postTaskSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
-    return this.http.post<FullSubmission>('/api/task-submissions', submissionRequest)
+    return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
   public postRunSubmission(submissionRequest: RunSubmissionRequest): Observable<RunSubmission> {
-    return this.http.post<RunSubmission>('/api/run-submissions', submissionRequest)
+    return this.http.post<RunSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningRun.add(submissionRequest.problemId)));
   }
 
@@ -140,7 +132,34 @@ export class SubmissionService {
   }
 
   public sendAnswerUser(problemId: number, answer: number[]): Observable<UserAnswer> {
-    return this.http.post<UserAnswer>('/api/question-submissions/', {problemId, answer})
+    return this.http.post<UserAnswer>('/api/submissions/', {problemId, answer, type: 'OptionQuestion'})
+      .pipe(tap(answers => {
+        if (answers != null) {
+          this.changes.next(problemId);
+        }
+      }));
+  }
+
+  public confirmTheory(problemId: number): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/submissions/', {problemId, type: 'Theory'})
+      .pipe(tap(answers => {
+        if (answers != null) {
+          this.changes.next(problemId);
+        }
+      }));
+  }
+
+  public sendAnswerForInputQuestion(problemId: number, answer: string): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/submissions/', {problemId, answer, type: 'InputQuestion'})
+      .pipe(tap(answers => {
+        if (answers != null) {
+          this.changes.next(problemId);
+        }
+      }));
+  }
+
+  public sentFeedback(problemId: number, grade: number, comment: string): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/submissions/', {problemId, grade, comment, type: 'FeedbackProblem'})
       .pipe(tap(answers => {
         if (answers != null) {
           this.changes.next(problemId);
@@ -149,6 +168,6 @@ export class SubmissionService {
   }
 
   public getAnswerUser(problemId: number): Observable<BestLastUserAnswer> {
-    return this.http.get<BestLastUserAnswer>('/api/question-submissions?problemId=' + problemId);
+    return this.http.get<BestLastUserAnswer>('/api/submissions?problemId=' + problemId);
   }
 }

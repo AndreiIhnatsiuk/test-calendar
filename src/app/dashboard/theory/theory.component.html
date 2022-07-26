@@ -1,0 +1,18 @@
+<div class="theory" *ngIf="problem">
+  <h2>Теория #{{problem.id}}
+    <app-button-copylink [problemId]="problem.id"></app-button-copylink>
+  </h2>
+  <div *ngIf="problem.text" [innerHTML]="problem.text | marked"></div>
+  <div class="button">
+    <button *ngIf="!wasAcceptedAnswerAndPageWasNotReloaded && userAnswer === null"
+            mat-raised-button color="primary"
+            (click)="send()"
+            [disabled]="disabledButton"
+            title="Понятно">Понятно
+    </button>
+    <app-next-step *ngIf="userAnswer && userAnswer.right"
+                   [problemId]="problemId"
+                   [lessonId]="lessonId">
+    </app-next-step>
+  </div>
+</div>

@@ -55,18 +55,10 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
     if (this.taskSubmissionsSubscription) {
       this.taskSubmissionsSubscription.unsubscribe();
     }
-    if (this.type === 'GitTask') {
-      this.taskSubmissionsSubscription = this.submissionService
-        .getGitTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
-          this.update(bestLastSubmission);
-        });
-    }
-    if (this.type === 'GitManualTask') {
-      this.taskSubmissionsSubscription =
-        this.submissionService.getGitManualTaskSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
-          this.update(bestLastSubmission);
-        });
-    }
+    this.taskSubmissionsSubscription = this.submissionService
+      .getSubmissionsByProblemId(this.problemId).subscribe(bestLastSubmission => {
+        this.update(bestLastSubmission);
+      });
   }
 
   update(bestLastSubmission: BestLastFullSubmission) {

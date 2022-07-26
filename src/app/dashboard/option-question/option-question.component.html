@@ -59,11 +59,6 @@
                    [problemId]="problemId"
                    [lessonId]="lessonId">
     </app-next-step>
-    <button *ngIf="bestLastUserAnswer && bestLastUserAnswer.last && !bestLastUserAnswer.last.right"
-            [routerLink]="urlToLesson"
-            mat-raised-button color="primary">
-      Повторить теорию
-    </button>
   </div>
   <div *ngIf="sending">
     <mat-spinner diameter="35"></mat-spinner>

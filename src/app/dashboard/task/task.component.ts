@@ -176,7 +176,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
         }
       });
     this.taskSubmissionsSubscription = this.submissionService
-      .getTaskSubmissionsByProblemId(this.problemId)
+      .getSubmissionsByProblemId(this.problemId)
       .subscribe(bestLastSubmission => {
         this.bestLastSubmission = bestLastSubmission;
         this.status = this.bestLastSubmission && this.bestLastSubmission.last && this.bestLastSubmission.last.status === 'Accepted';

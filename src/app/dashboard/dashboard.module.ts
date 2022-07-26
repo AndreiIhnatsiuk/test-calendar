@@ -13,7 +13,7 @@ import {AceModule} from 'ngx-ace-wrapper';
 import {ACE_CONFIG} from 'ngx-ace-wrapper';
 import {AceConfigInterface} from 'ngx-ace-wrapper';
 import {NgxMaskModule} from 'ngx-mask';
-import {QuestionComponent} from './question/question.component';
+import {OptionQuestionComponent} from './option-question/option-question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {ChatComponent} from './chat/chat.component';
@@ -39,6 +39,11 @@ import {ButtonProblemComponent} from './button-problem/button-problem.component'
 import {HelpDialogComponent} from './help-dialog/help-dialog.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import {ButtonCopylinkComponent} from './button-copylink/button-copylink.component';
+import { TheoryComponent } from './theory/theory.component';
+import { InputQuestionComponent } from './input-question/input-question.component';
+import { FeedbackProblemComponent } from './feedback-problem/feedback-problem.component';
+import { NgxMaterialRatingModule } from 'ngx-material-rating';
+import {MatSelectModule} from '@angular/material/select';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -80,7 +85,7 @@ const routes: Routes = [
           {
             path: url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
             component: ProblemComponent
-          },
+          }
         ]
       }
     ]
@@ -94,7 +99,7 @@ const routes: Routes = [
     ModuleComponent,
     TaskComponent,
     SubmissionComponent,
-    QuestionComponent,
+    OptionQuestionComponent,
     ChatComponent,
     ProgressComponent,
     DashboardContentComponent,
@@ -108,30 +113,35 @@ const routes: Routes = [
     PersonalPlanContentComponent,
     ButtonProblemComponent,
     HelpDialogComponent,
-    ButtonCopylinkComponent
+    ButtonCopylinkComponent,
+    TheoryComponent,
+    InputQuestionComponent,
+    FeedbackProblemComponent,
   ],
   entryComponents: [
     SubmissionComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatSidenavModule,
-    MatListModule,
-    MatTableModule,
-    AceModule,
-    NgxMaskModule.forRoot(),
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatIconModule,
-    SharedModule,
-    AngularSplitModule,
-    MatMenuModule,
-    IMaskModule,
-    MatProgressBarModule,
-    CountdownModule,
-    MatBadgeModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatSidenavModule,
+        MatListModule,
+        MatTableModule,
+        AceModule,
+        NgxMaskModule.forRoot(),
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatIconModule,
+        SharedModule,
+        AngularSplitModule,
+        MatMenuModule,
+        IMaskModule,
+        MatProgressBarModule,
+        CountdownModule,
+        MatBadgeModule,
+        NgxMaterialRatingModule,
+        MatSelectModule
+    ],
   providers: [
     {
       provide: ACE_CONFIG,

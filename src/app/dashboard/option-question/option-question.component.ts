@@ -16,12 +16,12 @@ import {QuestionPageAreas} from '../../entities/question-page-areas';
 import {LocalStorageService} from '../../services/local-storage.service';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss'],
+  selector: 'app-option-question',
+  templateUrl: './option-question.component.html',
+  styleUrls: ['./option-question.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class QuestionComponent implements OnChanges, OnDestroy {
+export class OptionQuestionComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
   @Input() lessonId: number;
   @Input() moduleId: number;
