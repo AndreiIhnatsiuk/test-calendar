@@ -12,6 +12,7 @@ import localeRu from '@angular/common/locales/ru';
 import {environment} from '../environments/environment';
 import {RedirectComponent} from './redirect/redirect.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {CourseInterceptor} from './interceptors/course.interceptor';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -33,6 +34,11 @@ registerLocaleData(localeRu, 'ru');
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CourseInterceptor,
       multi: true
     }
   ],
