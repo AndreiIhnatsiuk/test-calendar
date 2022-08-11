@@ -1,0 +1,41 @@
+<div class="example-large-box mat-elevation-z0" *ngIf="personal">
+  <mat-form-field class="full-width">
+    <mat-label>Имя</mat-label>
+    <input [disabled]="true" [(ngModel)]="personal.name" matInput>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Эл. Почта</mat-label>
+    <input [disabled]="true" [(ngModel)]="personal.email" matInput>
+  </mat-form-field>
+  <p *ngIf="!personal.confirmedEmail">Email не подтвержден.<br>
+    <a *ngIf="!sendingEmail" href="javascript:void(0)" (click)="confirmEmail()">Отправить ссылку для
+      подтверждения
+      на email.</a>
+    <mat-spinner *ngIf="sendingEmail" diameter="21"></mat-spinner>
+  </p>
+  <mat-form-field class="full-width">
+    <mat-label>Телефон</mat-label>
+    <input [disabled]="personal.phone"
+           matInput
+           name="phone"
+           placeholder="Телефон"
+           [(ngModel)]="personal.phone ? personal.phone : phone"
+           prefix="{{personal.phone ? '' : '+375 '}}"
+           mask="{{personal.phone ? '+000 (00) 000-00-00' : '(00) 000-00-00'}}"
+           [showMaskTyped]="true">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Git Repository</mat-label>
+    <input [disabled]="personal.repository"
+           [(ngModel)]="personal.repository ? personal.repository : repository"
+           matInput type="text"
+           placeholder="nickname/repository" autocomplete="off">
+  </mat-form-field>
+  <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
+  <div class="box-button">
+    <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary">
+      Сохранить
+    </button>
+    <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
+  </div>
+</div>

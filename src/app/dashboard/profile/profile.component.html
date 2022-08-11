@@ -1,50 +1,15 @@
 <div class="center">
   <div class="profile">
-    <mat-card *ngIf="personal">
+    <mat-card>
       <h1>Профиль</h1>
-      <mat-form-field class="full-width">
-        <mat-label>Имя</mat-label>
-        <input [disabled]="true" [(ngModel)]="personal.name" matInput>
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>Эл. Почта</mat-label>
-        <input [disabled]="true" [(ngModel)]="personal.email" matInput>
-      </mat-form-field>
-      <p *ngIf="!personal.confirmedEmail">Email не подтвержден.<br>
-        <a *ngIf="!sendingEmail" href="javascript:void(0)" (click)="confirmEmail()">Отправить ссылку для подтверждения на email.</a>
-        <mat-spinner *ngIf="sendingEmail" diameter="21"></mat-spinner>
-      </p>
-      <mat-form-field class="full-width">
-        <mat-label>Телефон</mat-label>
-        <input [disabled]="personal.phone"
-               matInput
-               name="phone"
-               placeholder="Телефон"
-               [(ngModel)]="personal.phone ? personal.phone : phone"
-               prefix="{{personal.phone ? '' : '+375 '}}"
-               mask="{{personal.phone ? '+000 (00) 000-00-00' : '(00) 000-00-00'}}"
-               [showMaskTyped]="true">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>Git Repository</mat-label>
-        <input [disabled]="personal.repository"
-               [(ngModel)]="personal.repository ? personal.repository : repository"
-               matInput type="text"
-               placeholder="nickname/repository" autocomplete="off">
-      </mat-form-field>
-      <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
-      <mat-checkbox color="primary" [(ngModel)]="personal.emailNotifications.Offer">
-        Я хочу получать письма со специальными предложениями, новостями и персональными рекомендациями по обучению.
-      </mat-checkbox>
-      <mat-checkbox color="primary" [(ngModel)]="personal.emailNotifications.Study">
-        Получать письма связанные с процессом обучения
-      </mat-checkbox>
-      <div class="box-button">
-        <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary">
-          Сохранить
-        </button>
-        <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
-      </div>
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Общее">
+          <app-profile-general></app-profile-general>
+        </mat-tab>
+        <mat-tab label="Уведомления">
+          <app-notification-table></app-notification-table>
+        </mat-tab>
+      </mat-tab-group>
     </mat-card>
   </div>
 </div>

@@ -44,6 +44,9 @@ import { InputQuestionComponent } from './input-question/input-question.componen
 import { FeedbackProblemComponent } from './feedback-problem/feedback-problem.component';
 import { NgxMaterialRatingModule } from 'ngx-material-rating';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTabsModule} from '@angular/material/tabs';
+import { NotificationTableComponent } from './notification-table/notification-table.component';
+import { ProfileGeneralComponent } from './profile-general/profile-general.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -117,6 +120,8 @@ const routes: Routes = [
     TheoryComponent,
     InputQuestionComponent,
     FeedbackProblemComponent,
+    NotificationTableComponent,
+    ProfileGeneralComponent,
   ],
   entryComponents: [
     SubmissionComponent
@@ -140,7 +145,8 @@ const routes: Routes = [
         CountdownModule,
         MatBadgeModule,
         NgxMaterialRatingModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTabsModule
     ],
   providers: [
     {

@@ -35,26 +35,6 @@
   width: 100%;
 }
 
-::ng-deep mat-checkbox {
-  label {
-    margin-bottom: 20px;
-
-    &.mat-checkbox-layout {
-      white-space: normal;
-      margin-top: 15px;
-    }
-  }
-}
-
-::ng-deep .mat-checkbox-layout .mat-checkbox-label {
-  line-height: 21px;
-}
-
-table {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
 th {
   text-align: left;
 }
