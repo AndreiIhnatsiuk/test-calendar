@@ -1,0 +1,40 @@
+.task {
+  box-sizing: border-box;
+  padding: 10px 0 0 10px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  max-width: 732px;
+
+  .button {
+    padding: 10px 0 10px;
+  }
+}
+
+.task {
+  max-width: 732px;
+  margin: 10px 0 10px 10px;
+}
+
+.git-result {
+  font-weight: 500;
+
+  a {
+    font-weight: 400;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #673ab7;
+
+    &.disabled {
+      pointer-events: none;
+      text-decoration: none;
+      color: black;
+
+      span {
+        font-weight: 500;
+        color: #66cd66;
+      }
+    }
+  }
+}

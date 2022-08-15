@@ -1,0 +1,31 @@
+<div class="task" *ngIf="problem && bestLastSubmission">
+  <h2>Задача #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
+  <div [innerHTML]="problem.text | marked"></div>
+
+  <p class="git-result" *ngIf="bestLastSubmission.last">
+    Статус:
+    <a
+      [ngClass]="bestLastSubmission.last.status === 'Accepted' ? 'disabled' : ''"
+      (click)="seeMore(bestLastSubmission.last)">
+      <span>{{bestLastSubmission.last.status}}</span>
+      {{bestLastSubmission.last.wrongTest ? ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' : '' }}
+      {{bestLastSubmission.last.sentDate | date:'dd MMMM yyyy':null:'ru'}}.</a>
+  </p>
+
+  <div *ngIf="!(sending || running)" style="display: flex; flex-direction: column;">
+    <div>
+      <button *ngIf="!bestLastSubmission.last || bestLastSubmission.last.status !== 'Accepted'" mat-raised-button
+              (click)="send()"
+              style="margin-right: 10px;"
+              [disabled]="isSendDisabled()"
+              color="primary">Проверить
+      </button>
+      <app-next-step *ngIf="status" [problemId]="problemId"
+                     [lessonId]="lessonId"></app-next-step>
+    </div>
+  </div>
+
+  <div *ngIf="(sending || running)">
+    <mat-spinner diameter="35"></mat-spinner>
+  </div>
+</div>

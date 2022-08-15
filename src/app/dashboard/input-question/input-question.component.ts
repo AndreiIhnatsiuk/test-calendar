@@ -25,7 +25,6 @@ export class InputQuestionComponent implements OnChanges {
   bestLastUserAnswer: BestLastUserAnswer;
   seconds: number;
   config: QuestionConfig;
-  disabledButton = true;
   InputQuestionUserAnswer: any;
 
 

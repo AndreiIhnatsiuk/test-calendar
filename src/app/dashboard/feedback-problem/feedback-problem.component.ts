@@ -50,7 +50,7 @@ export class FeedbackProblemComponent implements OnChanges {
   }
 
   send() {
-    this.submissionService.sentFeedback(this.problemId, this.rating.value, this.UserFeedback).subscribe(userAnswer => {
+    this.submissionService.sendFeedback(this.problemId, this.rating.value, this.UserFeedback).subscribe(userAnswer => {
       if (this.bestLastUserAnswer.best === null || userAnswer.right) {
         this.bestLastUserAnswer.best = userAnswer;
       }

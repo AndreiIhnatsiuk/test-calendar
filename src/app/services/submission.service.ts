@@ -13,6 +13,7 @@ import {BestLastFullSubmission} from '../entities/best-last-full-submission';
 import {RunSubmission} from '../entities/run-submission';
 import {RunSubmissionRequest} from '../entities/run-submission-request';
 import {GitTaskSubmissionRequest} from '../entities/git-task-submission-request';
+import {ManualTaskSubmissionRequest} from '../entities/ManualTaskSubmissionRequest';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
@@ -108,6 +109,11 @@ export class SubmissionService {
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
+  public postManualTaskSubmission(submissionRequest: ManualTaskSubmissionRequest): Observable<FullSubmission> {
+    return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
+      .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
+  }
+
   public postTaskSubmission(submissionRequest: SubmissionRequest): Observable<FullSubmission> {
     return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
@@ -158,8 +164,17 @@ export class SubmissionService {
       }));
   }
 
-  public sentFeedback(problemId: number, grade: number, comment: string): Observable<UserAnswer> {
+  public sendFeedback(problemId: number, grade: number, comment: string): Observable<UserAnswer> {
     return this.http.post<UserAnswer>('/api/submissions/', {problemId, grade, comment, type: 'FeedbackProblem'})
+      .pipe(tap(answers => {
+        if (answers != null) {
+          this.changes.next(problemId);
+        }
+      }));
+  }
+
+  public sentManualTaskRequest(problemId: number): Observable<UserAnswer> {
+    return this.http.post<UserAnswer>('/api/submissions/', {problemId, type: 'ManualTask'})
       .pipe(tap(answers => {
         if (answers != null) {
           this.changes.next(problemId);
