@@ -16,6 +16,7 @@ import {FullSubmission} from '../../entities/full-submission';
 import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 import {GitTaskSubmissionRequest} from '../../entities/git-task-submission-request';
 import {GitSubmissionComponent} from '../git-submission/git-submission.component';
+import {GitManualTaskSubmissionRequest} from '../../entities/git-manual-task-submission-request';
 
 @Component({
   selector: 'app-git-task',
@@ -77,7 +78,12 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
 
   send() {
     this.sending = true;
-    const submission = new GitTaskSubmissionRequest(this.problemId, this.pullRequestId);
+    let submission;
+    if (this.type === 'GitTask') {
+      submission = new GitTaskSubmissionRequest(this.problemId, this.pullRequestId);
+    } else if (this.type === 'GitManualTask') {
+      submission = new GitManualTaskSubmissionRequest(this.problemId, this.pullRequestId);
+    }
     this.pullRequestId = null;
     if (this.type === 'GitTask') {
       this.submissionService.postGitTaskSubmission(submission)

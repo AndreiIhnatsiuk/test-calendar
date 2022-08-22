@@ -13,7 +13,7 @@ import {BestLastFullSubmission} from '../entities/best-last-full-submission';
 import {RunSubmission} from '../entities/run-submission';
 import {RunSubmissionRequest} from '../entities/run-submission-request';
 import {GitTaskSubmissionRequest} from '../entities/git-task-submission-request';
-import {ManualTaskSubmissionRequest} from '../entities/ManualTaskSubmissionRequest';
+import {GitManualTaskSubmissionRequest} from '../entities/git-manual-task-submission-request';
 
 @Injectable({providedIn: 'root'})
 export class SubmissionService {
@@ -104,12 +104,7 @@ export class SubmissionService {
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }
 
-  public postGitTaskManualSubmission(submissionRequest: GitTaskSubmissionRequest): Observable<FullSubmission> {
-    return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
-      .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
-  }
-
-  public postManualTaskSubmission(submissionRequest: ManualTaskSubmissionRequest): Observable<FullSubmission> {
+  public postGitTaskManualSubmission(submissionRequest: GitManualTaskSubmissionRequest): Observable<FullSubmission> {
     return this.http.post<FullSubmission>('/api/submissions', submissionRequest)
       .pipe(tap(() => this.runningTask.add(submissionRequest.problemId)));
   }

@@ -1,4 +1,4 @@
-export class GitTaskSubmissionRequest {
+export class GitManualTaskSubmissionRequest {
   problemId: number;
   pullRequestId: number;
   type: string;
@@ -6,6 +6,6 @@ export class GitTaskSubmissionRequest {
   constructor(problemId: number, pullRequestId: number) {
     this.problemId = problemId;
     this.pullRequestId = pullRequestId;
-    this.type = 'GitTask';
+    this.type = 'GitManualTask';
   }
 }
