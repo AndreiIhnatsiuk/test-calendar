@@ -9,4 +9,5 @@ export interface Personal {
   repository: string;
   emailNotifications: EmailNotifications;
   confirmedEmail: boolean;
+  telegramUsername: string;
 }

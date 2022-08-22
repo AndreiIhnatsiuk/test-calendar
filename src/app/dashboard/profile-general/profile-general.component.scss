@@ -7,24 +7,13 @@
   justify-content: center;
 }
 
-.example-large-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin: 16px;
-  padding: 16px;
-  border-radius: 8px;
-  width: 450px;
-}
-
-.profile {
-  max-width: 550px;
-  max-height: 100%;
-}
-
 .left-align {
   text-align: center;
+}
+
+.left {
+  text-align: left;
+  justify-content: left;
 }
 
 ::ng-deep.mat-tab-header {
@@ -41,4 +30,10 @@ th {
 
 .box-button {
   height: 40px;
+}
+
+.button {
+  text-align: left;
+  height: 30px;
+  padding-left: 0;
 }

@@ -48,6 +48,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { NotificationTableComponent } from './notification-table/notification-table.component';
 import { ProfileGeneralComponent } from './profile-general/profile-general.component';
 import { ManualTaskComponent } from './manual-task/manual-task.component';
+import { TelegramTokenComponent } from './telegram-token/telegram-token.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -124,6 +125,7 @@ const routes: Routes = [
     ManualTaskComponent,
     NotificationTableComponent,
     ProfileGeneralComponent,
+    TelegramTokenComponent,
   ],
   entryComponents: [
     SubmissionComponent

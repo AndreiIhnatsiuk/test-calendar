@@ -1,0 +1,30 @@
+<div>
+  <h1 mat-dialog-title *ngIf="telegramTokenLifetime">Ваш токен для регистрации</h1>
+  <h1 mat-dialog-title *ngIf="!telegramTokenLifetime">Время действия токена истекло</h1>
+  <div>
+    <h1 class="token"
+        *ngIf="telegramTokenLifetime"><b>{{token.token}}</b>
+    </h1>
+    <button class="button"
+            *ngIf="!telegramTokenLifetime && !sending"
+            (click)="requestTokenAgain()"
+            mat-flat-button color="primary">Получить токен повторно
+    </button>
+    <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
+  </div>
+  <countdown class="countdown"
+             *ngIf="telegramTokenLifetime"
+             [config]="{leftTime: telegramTokenLifetime, format: 'Время действия токена mm:ss'}"
+             (event)="onEvent($event)">
+  </countdown>
+  <p></p>
+  <div mat-dialog-content *ngIf="telegramTokenLifetime">
+    Как привязать
+    <ol>
+      <li>Необходиимо найти бот в поиске телеграма или пройти по ссылке
+        <a href="https://t.me/itman_superbot">@itman_superbot</a></li>
+      <li>Отправить сообщение <b>/confirm {{token.token}}</b></li>
+    </ol>
+  </div>
+</div>
+

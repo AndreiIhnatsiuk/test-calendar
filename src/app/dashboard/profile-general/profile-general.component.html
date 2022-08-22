@@ -1,4 +1,4 @@
-<div class="example-large-box mat-elevation-z0" *ngIf="personal">
+<div *ngIf="personal">
   <mat-form-field class="full-width">
     <mat-label>Имя</mat-label>
     <input [disabled]="true" [(ngModel)]="personal.name" matInput>
@@ -13,6 +13,17 @@
       на email.</a>
     <mat-spinner *ngIf="sendingEmail" diameter="21"></mat-spinner>
   </p>
+  <mat-form-field class="full-width">
+    <mat-label>Telegram</mat-label>
+    <input [disabled]="true"
+           [(ngModel)]="personal.telegramUsername" matInput>
+    <button class="button"
+            mat-button color="primary"
+            *ngIf="!bindingTelegram && !personal.telegramUsername"
+            (click)="telegramBinding()">Привязать
+    </button>
+    <mat-spinner *ngIf="bindingTelegram" diameter="35"></mat-spinner>
+  </mat-form-field>
   <mat-form-field class="full-width">
     <mat-label>Телефон</mat-label>
     <input [disabled]="personal.phone"
