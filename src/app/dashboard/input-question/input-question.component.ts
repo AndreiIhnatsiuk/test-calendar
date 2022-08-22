@@ -9,6 +9,7 @@ import {ConfigurationService} from '../../services/configurations.service';
 import {QuestionConfig} from '../../entities/question-config';
 import {Gtag} from 'angular-gtag';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-input-question',
@@ -40,7 +41,7 @@ export class InputQuestionComponent implements OnChanges {
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   send(): void {
-    this.submissionService.sendAnswerForInputQuestion(this.problemId, this.InputQuestionUserAnswer ).subscribe(userAnswer => {
+    this.submissionService.sendAnswerForInputQuestion(this.problemId, this.InputQuestionUserAnswer).subscribe(userAnswer => {
       this.gtag.event('answer', {
         event_category: 'question',
         event_label: '' + this.problemId
@@ -58,13 +59,13 @@ export class InputQuestionComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.configurationService.getConfiguration().subscribe(configuration => {
+    zip(
+      this.configurationService.getConfiguration(),
+      this.problemService.getProblemById(this.problemId),
+      this.submissionService.getAnswerUser(this.problemId)
+    ).subscribe(([configuration, fullProblem, bestLastUserAnswer]) => {
       this.config = configuration.questions;
-    });
-    this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
-    });
-    this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
       this.bestLastUserAnswer = bestLastUserAnswer;
       this.userAnswer = bestLastUserAnswer.last;
       if (bestLastUserAnswer.last === null) {

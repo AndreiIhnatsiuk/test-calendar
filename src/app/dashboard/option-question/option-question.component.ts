@@ -14,6 +14,7 @@ import * as routes from '../routes';
 import {StoredAnswers} from '../../entities/stored-answers';
 import {QuestionPageAreas} from '../../entities/question-page-areas';
 import {LocalStorageService} from '../../services/local-storage.service';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-option-question',
@@ -84,11 +85,15 @@ export class OptionQuestionComponent implements OnChanges, OnDestroy {
   ngOnChanges() {
     this.wasAcceptedAnswerAndPageWasNotReloaded = false;
     this.urlToLesson = ['/' + routes.DASHBOARD + '/' + routes.MODULE, this.moduleId, routes.LESSON, this.lessonId];
-    this.configurationService.getConfiguration().subscribe(configuration => {
+    zip(
+      this.configurationService.getConfiguration(),
+      this.problemService.getProblemById(this.problemId),
+      this.submissionService.getAnswerUser(this.problemId)
+    ).subscribe(([configuration, fullProblem, bestLastUserAnswer]) => {
       this.config = configuration.questions;
-    });
-    this.problemService.getProblemById(this.problemId).subscribe(fullProblem => {
       this.problem = fullProblem;
+      this.bestLastUserAnswer = bestLastUserAnswer;
+      this.userAnswer = bestLastUserAnswer.last;
       const stored = this.submissionService.getSolution<StoredAnswers>(this.problemId);
       if (stored) {
         const selectedAnswers = stored.selectedAnswers;
@@ -103,12 +108,7 @@ export class OptionQuestionComponent implements OnChanges, OnDestroy {
       } else {
         this.disabledButton = true;
       }
-    });
-    this.submissionService.getAnswerUser(this.problemId).subscribe(bestLastUserAnswer => {
-      this.bestLastUserAnswer = bestLastUserAnswer;
-      this.userAnswer = bestLastUserAnswer.last;
       if (bestLastUserAnswer.last === null) {
-        const stored = this.submissionService.getSolution<StoredAnswers>(this.problemId);
         if (!stored || stored.selectedAnswers.length === 0) {
           this.disabledButton = true;
         }
