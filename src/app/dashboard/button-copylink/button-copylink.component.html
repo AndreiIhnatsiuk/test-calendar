@@ -1,1 +1,10 @@
-<span><button mat-button (click)="copyToClipboard()" >Копировать ссылку</button></span>
+<span>
+  <button mat-button class="button-copy"
+          (click)="copyToClipboard()"
+          [matTooltip]="'Скопировать ссылку'">
+    <mat-icon
+      inline=true
+    > <span class="icon"> share </span>
+    </mat-icon>
+  </button>
+</span>

@@ -7,7 +7,10 @@
                     (dragEnd)="dragEndLeft('percent', $event)">
             <as-split-area minSize="20" size="90" #areaTask="asSplitArea">
               <div class="area-task">
-                <h2>Задача #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
+                <h2>Задача #{{problem.id}}
+                  <app-rating [problemId]="problem.id"></app-rating>
+                  <app-button-copylink [problemId]="problem.id"></app-button-copylink>
+                </h2>
                 <div class="content" [innerHTML]="problem.text | marked"></div>
                 <div class="tests" *ngIf="problem.tests.length">
                   <h2>Примеры</h2>
@@ -114,12 +117,14 @@
       </div>
 
       <div class="result">
-        <div style="margin-bottom: 10px;" *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
+        <div style="margin-bottom: 10px;"
+             *ngIf="problem && bestLastSubmission && bestLastSubmission.last && bestLastSubmission.best">
           <div>
             Последний результат:
             <span
-              [class.bold]="!hiddenBadge" [class.wrong]="bestLastSubmission.last.wrongTest" [class.accepted]="bestLastSubmission.last.status === 'Accepted'"
-              >
+              [class.bold]="!hiddenBadge" [class.wrong]="bestLastSubmission.last.wrongTest"
+              [class.accepted]="bestLastSubmission.last.status === 'Accepted'"
+            >
               {{bestLastSubmission.last.wrongTest ?
               bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' :
               bestLastSubmission.last.status  }}
@@ -129,7 +134,8 @@
                     [color]="bestLastSubmission.last.wrongTest ? 'warn' : 'primary'"
                     mat-stroked-button class="result__button"
                     (click)="seeMore(bestLastSubmission.last,  problem.totalTests); "
-                    matBadge="!" [matBadgeHidden]="hiddenBadge || bestLastSubmission.last.status === 'Accepted'" [matBadgeColor]="bestLastSubmission.last.wrongTest ? 'warn' : 'primary'"
+                    matBadge="!" [matBadgeHidden]="hiddenBadge || bestLastSubmission.last.status === 'Accepted'"
+                    [matBadgeColor]="bestLastSubmission.last.wrongTest ? 'warn' : 'primary'"
             >Подробнее
             </button>
 
@@ -140,7 +146,8 @@
             Лучший результат:
 
             <span
-              [class.wrong]="bestLastSubmission.best.wrongTest"  [class.accepted]="bestLastSubmission.best.status === 'Accepted'"
+              [class.wrong]="bestLastSubmission.best.wrongTest"
+              [class.accepted]="bestLastSubmission.best.status === 'Accepted'"
             >
               {{bestLastSubmission.best.wrongTest ?
               bestLastSubmission.best.status + ' (тест ' + bestLastSubmission.best.wrongTest + '/' + problem.totalTests + ')' :

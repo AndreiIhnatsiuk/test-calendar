@@ -1,0 +1,33 @@
+<div style="display:inline-block">
+  <span style="margin-left: 10px"
+        [ngClass]="triesRank ? {'red-badge': triesRank.rank < 30, 'green-badge': triesRank.rank >= 70
+        , 'yellow-badge': triesRank.rank >= 30 && triesRank.rank < 70} : 'default-badge'"
+        [matTooltipHideDelay]="300"
+        [matTooltip]="triesRank ? 'Вы решили эту задачу аккуратнее, чем ' + triesRank.rank  + '% пользователей'
+        : errorTriesRankMsg">
+    <mat-icon
+      [ngClass]="triesRank ? 'color-black' : 'default-badge'"
+      inline=true>
+      <span class="icon">crisis_alert</span>
+    </mat-icon>
+    <span class="rank-number">
+    {{triesRank ? triesRank.rank + '%' : '—'}}
+    </span>
+  </span>
+
+  <span style="margin-left: 10px"
+        [ngClass]="timeRank ? {'red-badge': timeRank.rank < 30, 'green-badge': timeRank.rank >= 70
+        , 'yellow-badge': timeRank.rank >= 30 && timeRank.rank < 70} : 'default-badge'"
+        [matTooltipHideDelay]="300"
+        [matTooltip]="timeRank ? 'Вы дошли до этого места курса быстрее, чем ' + timeRank.rank + '% пользователей'
+        : errorTimeRankMsg">
+    <mat-icon
+      [ngClass]="timeRank? 'color-black' : 'default-badge'"
+      inline=true>
+      <span class="icon">speed</span>
+    </mat-icon>
+    <span class="rank-number">
+    {{timeRank ? timeRank.rank + '%' : '—'}}
+    </span>
+  </span>
+</div>

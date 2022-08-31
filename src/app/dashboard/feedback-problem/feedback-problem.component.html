@@ -1,5 +1,6 @@
 <div class="feedback" *ngIf="problem">
   <h2>Отзыв #{{problem.id}}
+    <app-rating [problemId]="problem.id"></app-rating>
     <app-button-copylink [problemId]="problem.id"></app-button-copylink>
   </h2>
   <div *ngIf="userAnswer && userAnswer.right">

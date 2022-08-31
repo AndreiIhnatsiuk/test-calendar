@@ -4,7 +4,7 @@
       <th mat-header-cell *matHeaderCellDef>
         {{column.columnDef}}
       </th>
-      <td mat-cell *matCellDef="let element; let i = index" title="{{element.type.description}}">
+      <td mat-cell *matCellDef="let element; let i = index" [matTooltip]="element.type.description">
         <mat-label *ngIf="column.columnDef === columns[0].columnDef"> {{element.type.name}}
         </mat-label>
         <mat-checkbox *ngIf="column.columnDef !== columns[0].columnDef" color="primary"

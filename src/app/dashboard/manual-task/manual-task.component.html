@@ -1,5 +1,7 @@
 <div class="task" *ngIf="problem && bestLastSubmission">
-  <h2>Задача #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
+  <h2>Задача #{{problem.id}}
+    <app-rating [problemId]="problem.id"></app-rating>
+    <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
   <div [innerHTML]="problem.text | marked"></div>
 
   <p class="git-result" *ngIf="bestLastSubmission.last">

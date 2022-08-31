@@ -1,0 +1,39 @@
+.icon {
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: 28px;
+  margin-left: 10px;
+  margin-right: 3px;
+}
+
+.rank-number {
+  display: inline-block;
+  font-size: 14px;
+  vertical-align: top;
+  line-height: 37px;
+  font-weight: bold;
+}
+
+.red-badge {
+  color: red;
+}
+
+.green-badge {
+  color: #66cd66;
+}
+
+.yellow-badge {
+  color: gold;
+}
+
+.default-badge {
+  color: grey;
+}
+
+.color-black {
+  color: #1a1b1f;
+}
+
+
+
+

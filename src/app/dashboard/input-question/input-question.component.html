@@ -1,5 +1,6 @@
 <div class="input-question" *ngIf="problem">
   <h2>Вопрос #{{problem.id}}
+    <app-rating [problemId]="problem.id"></app-rating>
     <app-button-copylink [problemId]="problem.id"></app-button-copylink>
   </h2>
   <div *ngIf="problem.text" [innerHTML]="problem.text | marked"></div>

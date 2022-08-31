@@ -2,7 +2,10 @@
 
   <as-split class="split_view" unit="percent" direction="vertical" (dragEnd)="dragEndWindow('percent', $event)" >
     <as-split-area minSize="20" size="{{questionPageAreas.question}}">
-      <h2>Вопрос #{{problem.id}} <app-button-copylink [problemId]="problem.id"></app-button-copylink></h2>
+      <h2 style="padding-top: 2px">Вопрос #{{problem.id}}
+        <app-rating [problemId]="problem.id"></app-rating>
+        <app-button-copylink [problemId]="problem.id"></app-button-copylink>
+      </h2>
       <div class="question-content" [innerHTML]="problem.text | marked"></div>
     </as-split-area>
     <as-split-area  minSize="20" size="{{questionPageAreas.answers}}">

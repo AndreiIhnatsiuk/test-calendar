@@ -49,6 +49,8 @@ import { NotificationTableComponent } from './notification-table/notification-ta
 import { ProfileGeneralComponent } from './profile-general/profile-general.component';
 import { ManualTaskComponent } from './manual-task/manual-task.component';
 import { TelegramTokenComponent } from './telegram-token/telegram-token.component';
+import { RatingComponent } from './rating/rating.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -126,6 +128,7 @@ const routes: Routes = [
     NotificationTableComponent,
     ProfileGeneralComponent,
     TelegramTokenComponent,
+    RatingComponent,
   ],
   entryComponents: [
     SubmissionComponent
@@ -150,7 +153,8 @@ const routes: Routes = [
         MatBadgeModule,
         NgxMaterialRatingModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatTooltipModule
     ],
   providers: [
     {
