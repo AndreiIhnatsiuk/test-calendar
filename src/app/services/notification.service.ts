@@ -8,8 +8,7 @@ import {EnabledNotification} from '../entities/Notification/enabled-notification
 
 @Injectable({providedIn: 'root'})
 export class NotificationService {
-  constructor(private http: HttpClient
-  ) {
+  constructor(private http: HttpClient) {
   }
 
   public getNotificationsTypes(): Observable<Array<NotificationType>> {
