@@ -22,27 +22,7 @@
           </mat-card-header>
         </mat-card>
       </a>
-      <a href="{{consultation.conferenceLink}}" target="_blank">
-        <mat-card>
-          <mat-card-header>
-            <div mat-card-avatar>
-              <mat-icon>voice_chat</mat-icon>
-            </div>
-            <mat-card-title *ngIf="consultation">Посетите онлайн консультацию</mat-card-title>
-            <mat-card-title *ngIf="!consultation">Консультации временно не проводятся</mat-card-title>
-            <mat-card-subtitle *ngIf="consultation">
-              Ментор ответит на Ваши вопросы в:
-              <ul class="row" *ngFor="let schedule of consultation.schedule">
-                <li>
-                  <span>{{dayOfWeekAsString(schedule.dayOfWeek)}}
-                  </span> в {{toDate(schedule.startTime) | date:'HH:mm'}}
-                </li>
-              </ul>
-              по минскому времени.
-            </mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      </a>
+      <app-consultation-schedule></app-consultation-schedule>
       <a (click)="openGoogleCalendarInNewTab()">
         <mat-card>
           <mat-card-header>

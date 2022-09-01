@@ -49,6 +49,8 @@ import { NotificationTableComponent } from './notification-table/notification-ta
 import { ProfileGeneralComponent } from './profile-general/profile-general.component';
 import { ManualTaskComponent } from './manual-task/manual-task.component';
 import { TelegramTokenComponent } from './telegram-token/telegram-token.component';
+import { ConsultationScheduleComponent } from './consultation-schedule/consultation-schedule.component';
+import { CallScheduleComponent } from './call-schedule/call-schedule.component';
 import { RatingComponent } from './rating/rating.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 
@@ -68,6 +70,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'call-schedule',
+        component: CallScheduleComponent,
       },
       {
         path: 'plan',
@@ -128,6 +134,8 @@ const routes: Routes = [
     NotificationTableComponent,
     ProfileGeneralComponent,
     TelegramTokenComponent,
+    ConsultationScheduleComponent,
+    CallScheduleComponent,
     RatingComponent,
   ],
   entryComponents: [
