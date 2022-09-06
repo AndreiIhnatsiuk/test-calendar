@@ -39,20 +39,23 @@ import {ButtonProblemComponent} from './button-problem/button-problem.component'
 import {HelpDialogComponent} from './help-dialog/help-dialog.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import {ButtonCopylinkComponent} from './button-copylink/button-copylink.component';
-import { TheoryComponent } from './theory/theory.component';
-import { InputQuestionComponent } from './input-question/input-question.component';
-import { FeedbackProblemComponent } from './feedback-problem/feedback-problem.component';
-import { NgxMaterialRatingModule } from 'ngx-material-rating';
+import {TheoryComponent} from './theory/theory.component';
+import {InputQuestionComponent} from './input-question/input-question.component';
+import {FeedbackProblemComponent} from './feedback-problem/feedback-problem.component';
+import {NgxMaterialRatingModule} from 'ngx-material-rating';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
-import { NotificationTableComponent } from './notification-table/notification-table.component';
-import { ProfileGeneralComponent } from './profile-general/profile-general.component';
-import { ManualTaskComponent } from './manual-task/manual-task.component';
-import { TelegramTokenComponent } from './telegram-token/telegram-token.component';
-import { ConsultationScheduleComponent } from './consultation-schedule/consultation-schedule.component';
-import { CallScheduleComponent } from './call-schedule/call-schedule.component';
-import { RatingComponent } from './rating/rating.component';
+import {NotificationTableComponent} from './notification-table/notification-table.component';
+import {ProfileGeneralComponent} from './profile-general/profile-general.component';
+import {ManualTaskComponent} from './manual-task/manual-task.component';
+import {TelegramTokenComponent} from './telegram-token/telegram-token.component';
+import {ConsultationScheduleComponent} from './consultation-schedule/consultation-schedule.component';
+import {CallScheduleComponent} from './call-schedule/call-schedule.component';
+import {RatingComponent} from './rating/rating.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MentorDashboardComponent} from './mentor-dashboard/mentor-dashboard.component';
+import {MentorSubmissionDialogComponent} from './mentor-submission-dialog/mentor-submission-dialog.component';
+import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
@@ -74,6 +77,10 @@ const routes: Routes = [
       {
         path: 'call-schedule',
         component: CallScheduleComponent,
+      },
+      {
+        path: 'mentor-dashboard',
+        component: MentorDashboardComponent,
       },
       {
         path: 'plan',
@@ -137,37 +144,44 @@ const routes: Routes = [
     ConsultationScheduleComponent,
     CallScheduleComponent,
     RatingComponent,
+    MentorDashboardComponent,
+    MentorSubmissionDialogComponent,
   ],
   entryComponents: [
     SubmissionComponent
   ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        MatSidenavModule,
-        MatListModule,
-        MatTableModule,
-        AceModule,
-        NgxMaskModule.forRoot(),
-        MatCheckboxModule,
-        MatExpansionModule,
-        MatIconModule,
-        SharedModule,
-        AngularSplitModule,
-        MatMenuModule,
-        IMaskModule,
-        MatProgressBarModule,
-        CountdownModule,
-        MatBadgeModule,
-        NgxMaterialRatingModule,
-        MatSelectModule,
-        MatTabsModule,
-        MatTooltipModule
-    ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    MatSidenavModule,
+    MatListModule,
+    MatTableModule,
+    AceModule,
+    NgxMaskModule.forRoot(),
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatIconModule,
+    SharedModule,
+    AngularSplitModule,
+    MatMenuModule,
+    IMaskModule,
+    MatProgressBarModule,
+    CountdownModule,
+    MatBadgeModule,
+    NgxMaterialRatingModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatTooltipModule,
+    MatRadioModule
+  ],
   providers: [
     {
       provide: ACE_CONFIG,
       useValue: DEFAULT_ACE_CONFIG
+    },
+    {
+      provide: MAT_RADIO_DEFAULT_OPTIONS,
+      useValue: {color: 'primary'},
     }
   ]
 })

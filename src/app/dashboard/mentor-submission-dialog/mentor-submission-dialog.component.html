@@ -1,0 +1,30 @@
+<div class="dialog">
+  <label id="example-radio-group-label">Выберите статус</label>
+  <mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group"
+    [(ngModel)]="status">
+    <mat-radio-button class="example-radio-button" *ngFor="let status of statuses" [value]="status">
+      {{status}}
+    </mat-radio-button>
+  </mat-radio-group>
+  <div>
+    <mat-form-field style="min-width: 230px">
+      <mat-label>Введите свой комментарий здесь</mat-label>
+      <textarea
+        matInput autocomplete="off"
+        type="text"
+        [(ngModel)]="comment"
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5">
+      </textarea>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button
+          color="primary"
+          (click)="send(comment, status, this.id)">
+    Отправить
+  </button>
+</div>
