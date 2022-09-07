@@ -14,7 +14,7 @@ export class MentorSubmissionService {
   }
 
   public sentMentorReviewOnSubmission(mentorSubmissionRequest: MentorSubmissionRequest, id: string): Observable<any> {
-    return this.http.patch<MentorSubmissionRequest>('mentor/api/submissions/' + id, {mentorSubmissionRequest});
+    return this.http.patch<MentorSubmissionRequest>('mentor/api/submissions/' + id, mentorSubmissionRequest);
   }
 
 }

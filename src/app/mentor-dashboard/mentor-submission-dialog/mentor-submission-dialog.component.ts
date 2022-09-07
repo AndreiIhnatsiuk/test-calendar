@@ -1,15 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MentorSubmissionRequest} from '../../entities/mentor-submission-request';
 import {MentorSubmissionService} from '../../services/mentor-submission.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MentorSubmissionRequest} from '../../entities/mentor-submission-request';
 
 @Component({
   selector: 'app-mentor-submission-dialog',
   templateUrl: './mentor-submission-dialog.component.html',
   styleUrls: ['./mentor-submission-dialog.component.scss']
 })
-export class MentorSubmissionDialogComponent implements OnInit {
+export class MentorSubmissionDialogComponent {
   status: string;
   comment: string;
   statuses: string[] = ['Accepted', 'WrongAnswer'];
@@ -18,9 +18,6 @@ export class MentorSubmissionDialogComponent implements OnInit {
               private dialogRef: MatDialogRef<MentorSubmissionDialogComponent>,
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public id: string) {
-  }
-
-  ngOnInit(): void {
   }
 
   send(comment: string, status: string, id: string): void {

@@ -1,8 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {MentorSubmissionService} from '../../services/mentor-submission.service';
-import {MentorSubmission} from '../../entities/mentor-submission';
+import { Component, OnInit } from '@angular/core';
+import {MentorSubmission} from '../entities/mentor-submission';
+import {MentorSubmissionService} from '../services/mentor-submission.service';
 import {MatDialog} from '@angular/material/dialog';
-import {MentorSubmissionDialogComponent} from '../mentor-submission-dialog/mentor-submission-dialog.component';
+import {MentorSubmissionDialogComponent} from './mentor-submission-dialog/mentor-submission-dialog.component';
+import {Personal} from '../entities/personal';
+import {AuthService} from '../services/auth.service';
+import {Gtag} from 'angular-gtag';
 
 @Component({
   selector: 'app-mentor-dashboard',
@@ -10,11 +13,13 @@ import {MentorSubmissionDialogComponent} from '../mentor-submission-dialog/mento
   styleUrls: ['./mentor-dashboard.component.scss']
 })
 export class MentorDashboardComponent implements OnInit {
-
+  personal: Personal;
   mentorSubmissions: Array<MentorSubmission>;
   dialogRef: any;
 
   constructor(private mentorService: MentorSubmissionService,
+              private authService: AuthService,
+              private gtag: Gtag,
               private dialog: MatDialog) {
   }
 

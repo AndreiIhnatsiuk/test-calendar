@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {NotificationType} from '../../entities/Notification/notification-type';
-import {NotificationChannelInfo} from '../../entities/Notification/notification-channel-info';
-import {EnabledNotification} from '../../entities/Notification/enabled-notification';
+import {NotificationType} from '../../entities/notification/notification-type';
+import {NotificationChannelInfo} from '../../entities/notification/notification-channel-info';
+import {EnabledNotification} from '../../entities/notification/enabled-notification';
 import {AuthService} from '../../services/auth.service';
 import {NotificationService} from '../../services/notification.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {zip} from 'rxjs';
-import {EnabledNotificationRequest} from '../../entities/Notification/enabled-notification-request';
+import {EnabledNotificationRequest} from '../../entities/notification/enabled-notification-request';
 
 @Component({
   selector: 'app-notification-table',

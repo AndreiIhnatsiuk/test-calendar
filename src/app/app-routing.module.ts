@@ -20,6 +20,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'mentor-dashboard',
+    loadChildren: () => import('./mentor-dashboard/mentor-dashboard.module').then(m => m.MentorDashboardModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     loadChildren: () => import('./outer/outer.module').then(m => m.OuterModule)
   },

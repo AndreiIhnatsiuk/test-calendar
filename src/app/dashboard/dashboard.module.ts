@@ -53,8 +53,6 @@ import {ConsultationScheduleComponent} from './consultation-schedule/consultatio
 import {CallScheduleComponent} from './call-schedule/call-schedule.component';
 import {RatingComponent} from './rating/rating.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MentorDashboardComponent} from './mentor-dashboard/mentor-dashboard.component';
-import {MentorSubmissionDialogComponent} from './mentor-submission-dialog/mentor-submission-dialog.component';
 import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -77,10 +75,6 @@ const routes: Routes = [
       {
         path: 'call-schedule',
         component: CallScheduleComponent,
-      },
-      {
-        path: 'mentor-dashboard',
-        component: MentorDashboardComponent,
       },
       {
         path: 'plan',
@@ -144,8 +138,6 @@ const routes: Routes = [
     ConsultationScheduleComponent,
     CallScheduleComponent,
     RatingComponent,
-    MentorDashboardComponent,
-    MentorSubmissionDialogComponent,
   ],
   entryComponents: [
     SubmissionComponent

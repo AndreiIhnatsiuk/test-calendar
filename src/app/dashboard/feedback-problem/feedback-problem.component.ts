@@ -5,7 +5,7 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 import {ProblemService} from '../../services/problem.service';
 import {SubmissionService} from '../../services/submission.service';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
-import {Rating} from '../../entities/Rating';
+import {Rating} from '../../entities/rating';
 
 @Component({
   selector: 'app-feedback-problem',
