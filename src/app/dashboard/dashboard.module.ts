@@ -139,9 +139,6 @@ const routes: Routes = [
     CallScheduleComponent,
     RatingComponent,
   ],
-  entryComponents: [
-    SubmissionComponent
-  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

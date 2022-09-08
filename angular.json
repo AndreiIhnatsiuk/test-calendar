@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "@stomp/rx-stomp",
-              "brace/mode/java",
+              "@stomp/stompjs",
+              "brace",
               "marked"
             ],
             "outputPath": "dist/itman-study",
@@ -178,13 +179,15 @@
       }
     }
   },
-  "defaultProject": "itman-study",
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "cache": {
+      "enabled": false
+    }
   }
 }
