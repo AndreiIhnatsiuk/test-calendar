@@ -1,0 +1,86 @@
+.cal-hour-segment {
+  size: 10px;
+}
+.cal-event-container.cal-starts-within-day.cal-ends-within-day.ng-star-inserted {
+  max-width: 80% !important;
+}
+
+.mat-tooltip {
+  max-width: unset !important;
+  font-size: 10px;
+  line-height: 16px;
+  vertical-align: top;
+  padding: 0 16px 0 5px;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.change-week-button {
+  margin-right: 5px;
+  width: 20px;
+}
+
+.today-button {
+  width: 30px;
+}
+
+mat-toolbar {
+
+  .month-header {
+    overflow: hidden;
+    text-overflow: fade;
+  }
+
+  @media screen and (max-width: 700px) {
+    .month-header {
+      display: none;
+    }
+  }
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mentors {
+  font-size: 14px;
+  max-width: 145px;
+  padding-bottom: 0;
+}
+
+.cal-week-view {
+  margin: 0 20px 10px 20px;
+  font-size: 12px;
+
+  .cal-header.cal-today {
+    color: white;
+    background-color: #1a73e8;
+  }
+
+  .cal-day-headers {
+    padding-left: 50px;
+    font-size: 17px;
+  }
+
+  .cal-day-headers span {
+    font-size: 26px;
+  }
+
+  .cal-time-events {
+    .cal-event {
+      font-size: 11px;
+      line-height: normal;
+    }
+  }
+
+  .cal-time {
+    padding-top: 0;
+    width: 50px;
+    font-size: 11px;
+  }
+
+  .cal-time-label-column {
+    width: 50px;
+  }
+}
+

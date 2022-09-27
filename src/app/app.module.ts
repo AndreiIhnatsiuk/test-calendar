@@ -13,6 +13,8 @@ import {environment} from '../environments/environment';
 import {RedirectComponent} from './redirect/redirect.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {CourseInterceptor} from './interceptors/course.interceptor';
+import {CalendarModule, DateAdapter} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -26,6 +28,10 @@ registerLocaleData(localeRu, 'ru');
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
     HttpClientModule,
     GtagModule.forRoot({trackingId: environment.googleTrackingId, trackPageviews: true}),
     MatSnackBarModule,

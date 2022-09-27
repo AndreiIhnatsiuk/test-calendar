@@ -1,0 +1,31 @@
+<div *ngIf="appointmentTypes">
+  <h1>Выберите типы слотов:</h1>
+  <mat-checkbox [checked]="allComplete"
+                color="primary"
+                [indeterminate]="someComplete()"
+                (change)="setAll($event.checked)">
+    Выбрать все
+  </mat-checkbox>
+</div>
+<div *ngFor="let type of appointmentTypes">
+  <mat-checkbox color="primary"
+                [(ngModel)]="type.selected"
+                (ngModelChange)="updateAllComplete()"
+                (change)="addTypeId(type.id)">
+    {{type.title}}
+  </mat-checkbox>
+</div>
+<div>
+  <button class="button-create-delete"
+          mat-raised-button
+          color="primary"
+          (click)="createSlots()">
+    Создать
+  </button>
+  <button class="button-create-delete"
+          mat-raised-button
+          color="primary"
+          (click)="confirm()">
+    Удалить
+  </button>
+</div>

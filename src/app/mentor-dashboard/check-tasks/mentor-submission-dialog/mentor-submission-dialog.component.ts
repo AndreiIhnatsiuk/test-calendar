@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MentorSubmissionService} from '../../services/mentor-submission.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MentorSubmissionRequest} from '../../entities/mentor-submission-request';
+import {MentorSubmissionService} from '../../../services/mentor-submission.service';
+import {MentorSubmissionRequest} from '../../../entities/mentor-submission-request';
 
 @Component({
   selector: 'app-mentor-submission-dialog',

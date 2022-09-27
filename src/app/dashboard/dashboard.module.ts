@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe, registerLocaleData} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
 import {LessonComponent} from './lesson/lesson.component';
@@ -54,7 +54,13 @@ import {CallScheduleComponent} from './call-schedule/call-schedule.component';
 import {RatingComponent} from './rating/rating.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
+import {CalendarCommonModule, CalendarWeekModule} from 'angular-calendar';
+import localeRu from '@angular/common/locales/ru';
+import {CalendarComponent} from './calendar/calendar.component';
+import {EventDialogComponent} from './calendar/event-dialog/event-dialog.component';
+import {AddEventDialogComponent} from './calendar/add-event-dialog/add-event-dialog.component';
 
+registerLocaleData(localeRu);
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
   useSoftTabs: true
 };
@@ -67,6 +73,10 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardContentComponent,
+      },
+      {
+        path: 'calendar',
+        component: CalendarComponent,
       },
       {
         path: 'profile',
@@ -138,6 +148,9 @@ const routes: Routes = [
     ConsultationScheduleComponent,
     CallScheduleComponent,
     RatingComponent,
+    CalendarComponent,
+    EventDialogComponent,
+    AddEventDialogComponent
   ],
   imports: [
     CommonModule,
@@ -161,9 +174,12 @@ const routes: Routes = [
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
-    MatRadioModule
+    MatRadioModule,
+    CalendarWeekModule,
+    CalendarCommonModule,
   ],
   providers: [
+    DatePipe,
     {
       provide: ACE_CONFIG,
       useValue: DEFAULT_ACE_CONFIG

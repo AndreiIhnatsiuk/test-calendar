@@ -1,34 +1,6 @@
-<h1 class="header">Список задач в очереди</h1>
-<div *ngIf="mentorSubmissions">
-  <mat-card class="card"
-            *ngFor="let sub of mentorSubmissions; let i = index">
-    <mat-card-title>
-      ProblemID: {{sub.problemId}}
-    </mat-card-title>
-    <mat-card-subtitle>
-      CreatedDate: {{sub.createdDate | date:'dd MMMM yyyy HH:mm':null:'ru'}}
-    </mat-card-subtitle>
-    <mat-card-content class="content">
-      <b>ID: </b>{{sub.id}}
-    </mat-card-content>
-    <mat-card-content class="content">
-      <b>Name: </b>{{sub.name}}
-    </mat-card-content>
-    <mat-card-content class="content">
-      <b>Email: </b>{{sub.email}}
-    </mat-card-content>
-    <mat-card-content class="content">
-      <b>Type: </b>{{sub.type}}
-    </mat-card-content>
-    <mat-card-content class="content">
-      <b>Repository: </b>{{sub.repository}}
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button
-              *ngIf="sub.type === 'ManualTask'"
-              color="primary"
-              (click)="check(sub.id)"> Проверить
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+<button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+<mat-menu #menu="matMenu">
+  <button routerLink="/mentor-dashboard/calendar" mat-menu-item><mat-icon>calendar_month</mat-icon>Календарь</button>
+  <button routerLink="/mentor-dashboard/check-tasks" mat-menu-item><mat-icon>task</mat-icon>Задачи</button>
+</mat-menu>
+<router-outlet></router-outlet>

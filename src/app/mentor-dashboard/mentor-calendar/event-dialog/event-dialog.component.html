@@ -1,0 +1,34 @@
+<mat-card class="mat-elevation-z0">
+  <mat-card-title>
+    {{event.meta.eventTitle}}
+  </mat-card-title>
+  <mat-card-content>
+    {{event.meta.eventDescription}}
+  </mat-card-content>
+  <mat-card-content>
+    {{event.start | date: 'dd MMMM yyyy HH:mm': null: 'ru'}}
+  </mat-card-content>
+  <mat-card-content>
+    <a href="{{event.meta.eventConferenceLink}}">Ссылка на встречу</a>
+  </mat-card-content>
+  <mat-card-content>
+    Список участников: {{event.meta.eventParticipants}}
+  </mat-card-content>
+  <mat-card-content>
+    <button mat-flat-button
+            (click)="confirm(event.meta.appointmentId)"
+            [matTooltip]="'Удалить'">
+      <mat-icon>
+        <span class="icon"> delete </span>
+      </mat-icon>
+    </button>
+    <button mat-flat-button
+            (click)="usePatchDialog()"
+            [matTooltip]="'Изменить'">
+      <mat-icon>
+        <span class="icon"> edit </span>
+      </mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
+

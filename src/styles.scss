@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '@angular/material/theming';
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
 $custom-typography: mat.define-typography-config(
