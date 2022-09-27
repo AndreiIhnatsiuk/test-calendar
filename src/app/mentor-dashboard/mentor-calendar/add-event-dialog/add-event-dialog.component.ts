@@ -36,10 +36,8 @@ export class MentorAddEventDialogComponent implements OnInit {
   }
 
   addEvent(): void {
-    console.log(this.data.event.start);
     const appointmentRequest =
       new AppointmentRequest(this.data.mentorId, this.chosenAppointmentTypeId, this.description, this.data.event.start);
-    console.log(appointmentRequest.startDate);
     this.appointmentsService.addAppointment(appointmentRequest).subscribe(() => {
       this.snackBar.open('Отправлено', undefined, {
         duration: 10000

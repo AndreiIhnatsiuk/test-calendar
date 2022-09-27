@@ -9,6 +9,8 @@ import {AppointmentService} from '../../services/calendar-service/appointment.se
 import {SlotService} from '../../services/calendar-service/slot.service';
 import {MentorService} from '../../services/mentor.service';
 import {EventMeta} from '../../entities/calendar/event-meta';
+import {isSameISOWeek} from 'date-fns';
+import {AppointmentTime} from '../../entities/calendar/appointment-time';
 
 @Injectable()
 export class CustomDateFormatter extends CalendarDateFormatter {
@@ -53,7 +55,8 @@ export class CalendarComponent implements OnInit {
   dialogRef: any;
   mentors: Mentor[];
   chosenMentorId: number;
-
+  availableTime: AppointmentTime[];
+  displayedAvailableTime: number;
 
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -64,10 +67,22 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.appointmentService.getAvailableTime().subscribe(time => {
+      this.availableTime = time;
+    });
     this.getAppointments();
     this.mentorService.get(1).subscribe(mentors => {
       this.mentors = mentors;
     });
+  }
+
+  getTimeForThisWeek() {
+    this.displayedAvailableTime = 0;
+    for (let i = 0; i < this.availableTime.length; i++) {
+      if (isSameISOWeek(new Date(this.viewDate), new Date(this.availableTime[i].startDate))) {
+        this.displayedAvailableTime = this.availableTime[i].minutes;
+      }
+    }
   }
 
   getAppointments() {
@@ -92,6 +107,7 @@ export class CalendarComponent implements OnInit {
         newEvents.push(newEvent);
       });
       this.events = newEvents;
+      this.getTimeForThisWeek();
       this.refresh();
     });
   }

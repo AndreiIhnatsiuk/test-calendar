@@ -5,6 +5,7 @@ import {Appointment} from '../../entities/calendar/appointment';
 import {AppointmentType} from '../../entities/calendar/appointment-type';
 import {AppointmentRequest} from '../../entities/calendar/appointment-request';
 import {AppointmentUpdate} from '../../entities/calendar/appointment-update';
+import {AppointmentTime} from '../../entities/calendar/appointment-time';
 
 @Injectable({providedIn: 'root'})
 export class AppointmentService {
@@ -31,4 +32,7 @@ export class AppointmentService {
     return this.http.patch<AppointmentUpdate>('/api/appointments/' + appointmentId, update);
   }
 
+  public getAvailableTime(): Observable<Array<AppointmentTime>> {
+    return this.http.get<Array<AppointmentTime>>('/api/appointments/time');
+  }
 }

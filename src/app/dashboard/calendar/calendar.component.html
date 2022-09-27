@@ -4,6 +4,7 @@
             mat-icon-button
             mwlCalendarToday
             [(viewDate)]="viewDate"
+            (click)="getTimeForThisWeek()"
             matTooltip='Сегодня'>
             <mat-icon>today</mat-icon>
     </button>
@@ -13,6 +14,7 @@
             mwlCalendarPreviousView
             [view]="'week'"
             [(viewDate)]="viewDate"
+            (click)="getTimeForThisWeek()"
             matTooltip='Предыдущая неделя'>
       <mat-icon>chevron_left</mat-icon>
     </button>
@@ -22,9 +24,16 @@
             mwlCalendarNextView
             [view]="'week'"
             [(viewDate)]="viewDate"
+            (click)="getTimeForThisWeek()"
             matTooltip='Следующая неделя'>
       <mat-icon>chevron_right</mat-icon>
     </button>
+  </span>
+  <mat-icon class="time-icon"
+            matTooltip='Минут доступно для назначения консультации'>schedule
+  </mat-icon>
+  <span>
+    {{displayedAvailableTime}}
   </span>
   <span class="example-spacer"></span>
   <span class="month-header">

@@ -3,4 +3,6 @@ export interface EventMeta {
   eventDescription: string;
   eventConferenceLink: string;
   eventParticipants: string;
+  mentorId: number;
+  appointmentId: number;
 }
