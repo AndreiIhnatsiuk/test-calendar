@@ -1,8 +1,16 @@
 .timer {
   position: relative;
   bottom: 32px;
+  font-size: 14px;
+  left: 16px;
+  text-align: center;
+  max-width: 210px;
   font-weight: 500;
   color: black;
+  cursor: pointer;
+}
+.mat-button {
+  vertical-align: top;
 }
 
 ::ng-deep .mat-menu-panel {
