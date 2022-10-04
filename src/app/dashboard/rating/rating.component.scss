@@ -1,17 +1,19 @@
 .icon {
   display: inline-flex;
-  vertical-align: middle;
+  vertical-align: bottom;
   font-size: 28px;
-  margin-left: 10px;
   margin-right: 3px;
 }
 
 .rank-number {
   display: inline-block;
   font-size: 14px;
-  vertical-align: top;
-  line-height: 37px;
+  vertical-align: bottom;
   font-weight: bold;
+}
+
+.rate {
+  margin-left: 10px;
 }
 
 .red-badge {

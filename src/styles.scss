@@ -49,3 +49,7 @@ pre {
 as-split {  // fixing error touch devices
   touch-action: pan-y;
 }
+
+.mat-tooltip.tooltip {
+  font-size: 15px;
+}
