@@ -21,6 +21,7 @@ export class AddSlotsDialogComponent implements OnInit {
   appointmentTypeIds = [];
   appointmentTypes: AppointmentType[];
   allComplete = false;
+  sending = false;
 
   constructor(private slotService: SlotService,
               private appointmentsService: AppointmentService,
@@ -36,31 +37,41 @@ export class AddSlotsDialogComponent implements OnInit {
   }
 
   createSlots(): void {
+    this.sending = true;
     const slotDto = new SlotDto(this.data.date, this.data.start,
       this.data.end, this.appointmentTypeIds);
     this.slotService.set(slotDto).subscribe(() => {
+      this.sending = false;
       this.snackBar.open('Слоты созданы успешно', undefined, {
         duration: 10000
       });
     }, (err) => {
+      this.sending = false;
       this.snackBar.open(err.error.message, undefined, {
         duration: 10000
       });
     });
-    this.dialogRef.close();
+    this.close();
   }
 
   deleteSlots() {
+    this.sending = true;
     this.slotService.delete(this.data.date, this.data.start, this.data.end)
       .subscribe(() => {
+        this.sending = false;
         this.snackBar.open('Слоты удалены', undefined, {
           duration: 10000
         });
       }, (err) => {
+        this.sending = false;
         this.snackBar.open(err.error.message, undefined, {
           duration: 5000
         });
       });
+    this.close();
+  }
+
+  close(): void {
     this.dialogRef.close();
   }
 

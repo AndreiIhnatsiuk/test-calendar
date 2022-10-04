@@ -8,10 +8,8 @@
     <input [disabled]="true" [(ngModel)]="personal.email" matInput>
   </mat-form-field>
   <p *ngIf="!personal.confirmedEmail">Email не подтвержден.<br>
-    <a *ngIf="!sendingEmail" href="javascript:void(0)" (click)="confirmEmail()">Отправить ссылку для
-      подтверждения
-      на email.</a>
-    <mat-spinner *ngIf="sendingEmail" diameter="21"></mat-spinner>
+    <a *appSpinOn="sendingEmail; diameter: 21" href="javascript:void(0)" (click)="confirmEmail()">Отправить ссылку для
+      подтверждения на email.</a>
   </p>
   <mat-form-field class="full-width">
     <mat-label>Telegram</mat-label>
@@ -22,7 +20,7 @@
             *ngIf="!bindingTelegram && !personal.telegramUsername"
             (click)="telegramBinding()">Привязать
     </button>
-    <mat-spinner *ngIf="bindingTelegram" diameter="35"></mat-spinner>
+    <span *appSpinOn="bindingTelegram; diameter: 21"></span>
   </mat-form-field>
   <mat-form-field class="full-width">
     <mat-label>Телефон</mat-label>
@@ -44,9 +42,8 @@
   </mat-form-field>
   <p>Данные после сохранения нельзя изменить. Для повторного изменения обратитесь в тех. поддержку.</p>
   <div class="box-button">
-    <button *ngIf="!sending" (click)="send()" mat-flat-button color="primary">
+    <button *appSpinOn="sending" (click)="send()" mat-flat-button color="primary">
       Сохранить
     </button>
-    <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
   </div>
 </div>

@@ -16,13 +16,15 @@
   </mat-checkbox>
 </div>
 <div>
-  <button class="button-create-delete"
+  <span *appSpinOn="sending"></span>
+  <button *ngIf="!sending" class="button-create-delete"
           mat-raised-button
           color="primary"
           (click)="createSlots()">
     Создать
   </button>
-  <button class="button-create-delete"
+  <button *ngIf="!sending"
+          class="button-create-delete"
           mat-raised-button
           color="primary"
           (click)="confirm()">

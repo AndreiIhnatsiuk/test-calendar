@@ -16,6 +16,7 @@ export class CheckTasksComponent implements OnInit {
   personal: Personal;
   mentorSubmissions: Array<MentorSubmission>;
   dialogRef: any;
+  sending = false;
 
   constructor(private mentorService: MentorSubmissionService,
               private authService: AuthService,
@@ -34,8 +35,12 @@ export class CheckTasksComponent implements OnInit {
   }
 
   useDialog(id: string) {
+    this.sending = true;
     this.dialogRef = this.dialog.open(MentorSubmissionDialogComponent, {data: id});
-    this.dialogRef.afterClosed().subscribe(() => this.getSubmissionsInQueue());
+    this.dialogRef.afterClosed().subscribe(() => {
+      this.sending = false;
+      this.getSubmissionsInQueue();
+    });
   }
 
   check(id: string): void {

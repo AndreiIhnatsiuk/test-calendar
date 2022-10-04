@@ -77,7 +77,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         MatTabsModule,
         SharedModule,
-        MatCheckboxModule
+        MatCheckboxModule,
     ]
 })
 export class OuterModule { }

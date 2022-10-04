@@ -15,14 +15,17 @@
     Список участников: {{event.meta.eventParticipants}}
   </mat-card-content>
   <mat-card-content>
-    <button mat-flat-button
+    <span *appSpinOn="sending"></span>
+    <button *ngIf="!sending"
+            mat-flat-button
             (click)="confirm(event.meta.appointmentId)"
             [matTooltip]="'Удалить'">
       <mat-icon>
         <span class="icon"> delete </span>
       </mat-icon>
     </button>
-    <button mat-flat-button
+    <button *ngIf="!sending"
+            mat-flat-button
             (click)="usePatchDialog()"
             [matTooltip]="'Изменить'">
       <mat-icon>

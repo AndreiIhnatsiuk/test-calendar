@@ -2,7 +2,7 @@
   <as-split unit="percent" direction="horizontal" (dragEnd)="dragEndWindow('percent', $event)">
     <as-split-area minSize="30" size="{{taskPageAreas.windowLeft}}">
       <div class="task" *ngIf="problem">
-        <div style="height: {{size.innerHeight - 85}}px;">
+        <div style="height:{{size.innerHeight - 85}}px">
           <as-split useTransition="true" disabled="{{!panelOpenState}}" unit="percent" direction="vertical"
                     (dragEnd)="dragEndLeft('percent', $event)">
             <as-split-area minSize="20" size="90" #areaTask="asSplitArea">
@@ -70,7 +70,7 @@
     </as-split-area>
 
     <as-split-area minSize="40" size="{{taskPageAreas.windowRight}}">
-      <div style="height: {{this.size.innerHeight - (this.size.innerWidth <= 992 ? 185 : 150)}}px;">
+      <div style="height: {{this.size.innerHeight - (this.size.innerWidth <= 992 ? 185 : 150)}}px">
         <as-split unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $event)">
           <div class="code">
             Код
@@ -129,7 +129,6 @@
               bestLastSubmission.last.status + ' (тест ' + bestLastSubmission.last.wrongTest + '/' + problem.totalTests + ')' :
               bestLastSubmission.last.status  }}
             </span>
-
             <button *ngIf="bestLastSubmission.last.status !== 'InQueue' && bestLastSubmission.last.status !== 'Running'"
                     [color]="bestLastSubmission.last.wrongTest ? 'warn' : 'primary'"
                     mat-stroked-button class="result__button"
@@ -138,8 +137,6 @@
                     [matBadgeColor]="bestLastSubmission.last.wrongTest ? 'warn' : 'primary'"
             >Подробнее
             </button>
-
-
           </div>
 
           <div *ngIf="!(bestLastSubmission.last.id === bestLastSubmission.best.id)">
@@ -164,11 +161,10 @@
           </div>
         </div>
 
-        <div *ngIf="!(sending || running)">
+        <div *appSpinOn="(sending || running)">
           <button mat-raised-button (click)="send()"
                   [disabled]="isSendDisabled()"
-                  color="primary"
-          >Проверить
+                  color="primary">Проверить
           </button>
 
           <button style="margin-left: 10px;" mat-raised-button (click)="run()"
@@ -179,11 +175,8 @@
           <app-next-step style="margin-left: 10px;"
                          *ngIf="status"
                          [problemId]="problemId"
-                         [lessonId]="lessonId"></app-next-step>
-        </div>
-
-        <div *ngIf="(sending || running)">
-          <mat-spinner diameter="35"></mat-spinner>
+                         [lessonId]="lessonId">
+          </app-next-step>
         </div>
       </div>
 

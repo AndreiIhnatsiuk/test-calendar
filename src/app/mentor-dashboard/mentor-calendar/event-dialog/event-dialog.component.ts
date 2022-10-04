@@ -12,6 +12,7 @@ import {MentorAddEventDialogComponent} from '../add-event-dialog/add-event-dialo
 })
 export class MentorEventDialogComponent {
   dialogPatch: any;
+  sending = false;
 
   constructor(private dialogRef: MatDialogRef<MentorEventDialogComponent>,
               private dialog: MatDialog,
@@ -27,11 +28,14 @@ export class MentorEventDialogComponent {
   }
 
   delete(id: number): void {
+    this.sending = true;
     this.appointmentService.deleteAppointment(id).subscribe(() => {
+      this.sending = false;
       this.snackBar.open('Удалено', undefined, {
         duration: 10000
       });
     }, (err) => {
+      this.sending = false;
       this.snackBar.open(err.error.message, undefined, {
         duration: 5000
       });

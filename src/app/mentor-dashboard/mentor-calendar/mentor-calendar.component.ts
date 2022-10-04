@@ -61,6 +61,7 @@ export class CustomDateFormatter extends CalendarDateFormatter {
 export class MentorCalendarComponent implements OnInit {
   viewDate = new Date();
   events: CalendarEvent[] = [];
+  scheduleEvents: CalendarEvent[] = [];
   locale = 'ru';
   dragToCreateActive = false;
   weekStartsOn: 1 = 1;

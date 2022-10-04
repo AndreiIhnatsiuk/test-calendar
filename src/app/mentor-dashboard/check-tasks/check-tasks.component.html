@@ -25,10 +25,11 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button
-              *ngIf="sub.type === 'ManualTask'"
+              *ngIf="sub.type === 'ManualTask' && !sending"
               color="primary"
               (click)="check(sub.id)"> Проверить
       </button>
+      <span *appSpinOn="sub.type === 'ManualTask' && sending"></span>
     </mat-card-actions>
   </mat-card>
 </div>

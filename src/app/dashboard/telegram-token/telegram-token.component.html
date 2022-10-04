@@ -10,7 +10,7 @@
             (click)="requestTokenAgain()"
             mat-flat-button color="primary">Получить токен повторно
     </button>
-    <mat-spinner *ngIf="sending" diameter="35"></mat-spinner>
+    <div *appSpinOn="sending"></div>
   </div>
   <countdown class="countdown"
              *ngIf="telegramTokenLifetime"

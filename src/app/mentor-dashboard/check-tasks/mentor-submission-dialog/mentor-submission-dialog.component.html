@@ -22,7 +22,8 @@
       </textarea>
     </mat-form-field>
   </div>
-  <button mat-raised-button
+  <button *appSpinOn="sending"
+          mat-raised-button
           color="primary"
           (click)="send(comment, status, this.id)">
     Отправить

@@ -13,6 +13,7 @@ export class MentorSubmissionDialogComponent {
   status: string;
   comment: string;
   statuses: string[] = ['Accepted', 'WrongAnswer'];
+  sending = false;
 
   constructor(private mentorSubmissionService: MentorSubmissionService,
               private dialogRef: MatDialogRef<MentorSubmissionDialogComponent>,
@@ -21,13 +22,16 @@ export class MentorSubmissionDialogComponent {
   }
 
   send(comment: string, status: string, id: string): void {
+    this.sending = true;
     const sub = new MentorSubmissionRequest(status, comment);
     this.mentorSubmissionService.sentMentorReviewOnSubmission(sub, id).subscribe((() => {
+      this.sending = false;
       this.snackBar.open('Отправлено', undefined, {
         duration: 10000
       });
       this.close();
     }), err => {
+      this.sending = false;
       this.snackBar.open(err.error.message, undefined, {
         duration: 10000
       });

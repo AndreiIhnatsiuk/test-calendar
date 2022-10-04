@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDialogModule} from '@angular/material/dialog';
+import {SpinOnModule} from '../spin-on/spin-on.directive';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     FormsModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    SpinOnModule
   ]
 })
 export class SharedModule { }

@@ -22,6 +22,7 @@ export class AddEventDialogComponent implements OnInit {
   appointmentTypes: AppointmentType[];
   chosenAppointmentTypeId: number;
   description: string;
+  sending = false;
 
   constructor(private appointmentsService: AppointmentService,
               private snackBar: MatSnackBar,
@@ -36,13 +37,16 @@ export class AddEventDialogComponent implements OnInit {
   }
 
   addEvent(): void {
+    this.sending = true;
     const appointmentRequest =
       new AppointmentRequest(this.data.mentorId, this.chosenAppointmentTypeId, this.description, this.data.event.start);
     this.appointmentsService.addAppointment(appointmentRequest).subscribe(() => {
+      this.sending = false;
       this.snackBar.open('Отправлено', undefined, {
         duration: 10000
       });
     }, (err) => {
+      this.sending = false;
       this.snackBar.open(err.error.message, undefined, {
         duration: 10000
       });
@@ -51,12 +55,15 @@ export class AddEventDialogComponent implements OnInit {
   }
 
   patchEvent(): void {
+    this.sending = true;
     const update = new AppointmentUpdate(this.description);
     this.appointmentsService.patchAppointment(this.data.event.meta.appointmentId, update).subscribe(() => {
+      this.sending = false;
       this.snackBar.open('Изменено', undefined, {
         duration: 10000
       });
     }, (err) => {
+      this.sending = false;
       this.snackBar.open(err.error.message, undefined, {
         duration: 10000
       });

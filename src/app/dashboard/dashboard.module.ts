@@ -150,7 +150,7 @@ const routes: Routes = [
     RatingComponent,
     CalendarComponent,
     EventDialogComponent,
-    AddEventDialogComponent
+    AddEventDialogComponent,
   ],
   imports: [
     CommonModule,

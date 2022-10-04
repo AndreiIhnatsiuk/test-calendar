@@ -21,7 +21,7 @@
   </mat-form-field>
 </div>
 <div>
-  <button mat-raised-button color="primary"
+  <button *appSpinOn="sending" mat-raised-button color="primary"
           (click)="data.event.meta ? patchEvent() : addEvent()"
           title="Отправить">Отправить
   </button>

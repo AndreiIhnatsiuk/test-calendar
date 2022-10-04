@@ -13,8 +13,13 @@
       </mat-form-field>
 
       <div>
-        <button mat-raised-button color="primary" *ngIf="!sending" [disabled]="!(password && password2)" (click)="renew()">Отправить</button>
-        <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
+        <button *appSpinOn="sending"
+                mat-raised-button
+                color="primary"
+                [disabled]="!(password && password2)"
+                (click)="renew()">
+          Отправить
+        </button>
       </div>
 
       <br>

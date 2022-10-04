@@ -20,10 +20,12 @@
       Регистрируясь вы принимаете <a class="dialog" (click)="openDialog()">пользовательское
       соглашение</a>
     </p>
-    <button (click)="create()" mat-raised-button color="primary" [disabled]="!(email && password && name)" *ngIf="(!sending)">
+    <button *appSpinOn="sending"
+            (click)="create()"
+            mat-raised-button color="primary"
+            [disabled]="!(email && password && name)">
       Зарегистрироваться
     </button>
-    <mat-spinner *ngIf="(sending)" diameter="35"></mat-spinner>
   </div>
 </form>
 

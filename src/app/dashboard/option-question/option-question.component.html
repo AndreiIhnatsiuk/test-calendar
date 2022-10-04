@@ -1,6 +1,6 @@
 <div class="question" *ngIf="problem">
 
-  <as-split class="split_view" unit="percent" direction="vertical" (dragEnd)="dragEndWindow('percent', $event)" >
+  <as-split class="split_view" unit="percent" direction="vertical" (dragEnd)="dragEndWindow('percent', $event)">
     <as-split-area minSize="20" size="{{questionPageAreas.question}}">
       <h2 style="padding-top: 2px">Вопрос #{{problem.id}}
         <app-rating [problemId]="problem.id"></app-rating>
@@ -8,7 +8,7 @@
       </h2>
       <div class="question-content" [innerHTML]="problem.text | marked"></div>
     </as-split-area>
-    <as-split-area  minSize="20" size="{{questionPageAreas.answers}}">
+    <as-split-area minSize="20" size="{{questionPageAreas.answers}}">
 
       <p>Выберите все правильные варианты ответа:</p>
       <ul class="answers">
@@ -51,7 +51,7 @@
                (event)="onEvent($event)">
     </countdown>
   </div>
-  <div class="button" *ngIf="!sending">
+  <div *appSpinOn="sending" class="button">
     <button *ngIf="!wasAcceptedAnswerAndPageWasNotReloaded"
             mat-raised-button color="primary"
             (click)="send()"
@@ -62,8 +62,5 @@
                    [problemId]="problemId"
                    [lessonId]="lessonId">
     </app-next-step>
-  </div>
-  <div *ngIf="sending">
-    <mat-spinner diameter="35"></mat-spinner>
   </div>
 </div>
