@@ -1,3 +1,16 @@
-<pre class="submission" *ngIf="submission">{{submission.errorString}}
-</pre>
-<button style="margin-top: 10px" mat-raised-button color="primary" (click)="close()">Закрыть</button>
+<div class="submission" *ngIf="submission">
+  <p class="line-height">
+    Вердикт: <span [style.color]="submission.status==='Accepted'?'green':'red'">{{submission.status}}</span>
+    <span *ngIf="submission.maxExecutionTime">, время: {{submission.maxExecutionTime}}ms</span>
+    <span *ngIf="submission.maxUsedMemory">, память: {{submission.maxUsedMemory}}kb</span>
+    </p>
+    <p class="line-height">
+      Задача #{{submission.problemId}}.
+      Решение #{{submission.id.substr(0, 8)}} от {{submission.sentDate | date: 'dd.MM.yyyy, HH:mm:ss'}}
+    </p>
+  <div>
+    <pre class="data">{{submission.errorString}}</pre>
+  </div>
+</div>
+
+<button class="button-margin" mat-raised-button color="primary" (click)="close()">Закрыть</button>
