@@ -4,12 +4,18 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppointmentService} from '../../../services/calendar-service/appointment.service';
 import {AppointmentType} from '../../../entities/calendar/appointment-type';
-import {SlotDto} from '../../../entities/calendar/slotDto';
+import {SlotRequest} from '../../../entities/calendar/slot-request';
+import {SlotScheduleTime} from '../../../entities/calendar/slot-schedule-time';
+import {CalendarEvent} from 'angular-calendar';
 
 class DialogData {
   date: string;
   start: string;
   end: string;
+  slotScheduleTimes: SlotScheduleTime[];
+  isPlanningMode: boolean;
+  scheduleEvents: CalendarEvent[];
+  currentEvent: CalendarEvent;
 }
 
 @Component({
@@ -38,7 +44,7 @@ export class AddSlotsDialogComponent implements OnInit {
 
   createSlots(): void {
     this.sending = true;
-    const slotDto = new SlotDto(this.data.date, this.data.start,
+    const slotDto = new SlotRequest(this.data.date, this.data.start,
       this.data.end, this.appointmentTypeIds);
     this.slotService.set(slotDto).subscribe(() => {
       this.sending = false;
@@ -107,5 +113,14 @@ export class AddSlotsDialogComponent implements OnInit {
     if (confirm('Действительно хотите удалить слоты с ' + this.data.start + ' по ' + this.data.end + '?')) {
       this.deleteSlots();
     }
+  }
+
+  addSlotScheduleTimes(): void {
+    const slotScheduleTime = new SlotScheduleTime(this.data.date, this.data.start, this.data.end, this.appointmentTypeIds);
+    this.data.scheduleEvents.push(this.data.currentEvent);
+    this.data.slotScheduleTimes.push(slotScheduleTime);
+    console.log(slotScheduleTime);
+    console.log(this.data.slotScheduleTimes);
+    this.dialogRef.close();
   }
 }

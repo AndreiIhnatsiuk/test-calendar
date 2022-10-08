@@ -8,12 +8,16 @@ import {DatePipe, formatDate} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {AppointmentService} from '../../services/calendar-service/appointment.service';
 import {SlotService} from '../../services/calendar-service/slot.service';
-import {EventMeta} from '../../entities/calendar/event-meta';
+import {AppointmentMeta} from '../../entities/calendar/appointment-meta';
 import {MentorEventDialogComponent} from './event-dialog/event-dialog.component';
 import {MentorAddEventDialogComponent} from './add-event-dialog/add-event-dialog.component';
 import {AddSlotsDialogComponent} from './add-slots-dialog/add-slots-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
+import {FormControl, FormGroup} from '@angular/forms';
+import {SlotScheduleRequest} from '../../entities/calendar/slot-schedule-request';
+import {SlotScheduleTime} from '../../entities/calendar/slot-schedule-time';
+import {DateAdapter, NativeDateAdapter} from '@angular/material/core';
 
 function floorToNearest(amount: number, precision: number) {
   return Math.floor(amount / precision) * precision;
@@ -42,6 +46,13 @@ export class CustomDateFormatter extends CalendarDateFormatter {
   }
 }
 
+@Injectable()
+export class CustomDateAdapter extends NativeDateAdapter {
+  getFirstDayOfWeek(): number {
+    return 1;
+  }
+}
+
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +63,8 @@ export class CustomDateFormatter extends CalendarDateFormatter {
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
-    }
+    },
+    {provide: DateAdapter, useClass: CustomDateAdapter},
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './mentor-calendar.component.html',
@@ -60,13 +72,19 @@ export class CustomDateFormatter extends CalendarDateFormatter {
 })
 export class MentorCalendarComponent implements OnInit {
   viewDate = new Date();
-  events: CalendarEvent[] = [];
   scheduleEvents: CalendarEvent[] = [];
+  events: CalendarEvent[] = [];
   locale = 'ru';
   dragToCreateActive = false;
   weekStartsOn: 1 = 1;
   dialogRef: any;
   mentorId: number;
+  isPlanningMode = false;
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+  slotScheduleTimes: SlotScheduleTime[] = [];
 
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -89,20 +107,20 @@ export class MentorCalendarComponent implements OnInit {
     this.appointmentService.getAppointments().subscribe(data => {
       const newEvents: CalendarEvent[] = [];
       data.forEach(element => {
-        const newEvent: CalendarEvent<EventMeta> = {
+        const newEvent: CalendarEvent = {
           title: element.appointmentType.title + ' | ' + element.mentor.name + ' ' +
             this.datePipe.transform(element.startDate, 'HH:mm') + '-' + this.datePipe.transform(element.endDate, 'HH:mm'),
           start: new Date(element.startDate),
           end: new Date(element.endDate),
           color: {primary: 'rgb(63, 81, 181)', secondary: 'rgb(63, 81, 181)', secondaryText: 'white'},
-          meta: {
-            eventTitle: element.appointmentType.title,
-            eventDescription: element.description,
-            eventConferenceLink: element.conferenceLink,
-            eventParticipants: element.mentor.name + ' | ' + element.user.name,
-            mentorId: element.mentor.id,
-            appointmentId: element.id
-          } as EventMeta,
+          meta: new AppointmentMeta(
+            element.appointmentType.title,
+            element.description,
+            element.conferenceLink,
+            element.mentor.name + ' | ' + element.user.name,
+            element.mentor.id,
+            element.id
+          ),
         };
         newEvents.push(newEvent);
       });
@@ -119,8 +137,8 @@ export class MentorCalendarComponent implements OnInit {
         const newEvent: CalendarEvent = {
           title: '',
           start: new Date(element.startDate),
-          end: new Date(new Date(element.startDate).getTime() + 15 * 60000),
-          color: {primary: '#51ab86', secondary: '#51ab86', secondaryText: 'white'},
+          end: addMinutes(new Date(element.startDate), 15),
+          color: {primary: 'rgb(51, 182, 121)', secondary: 'rgb(51, 182, 121)', secondaryText: 'white'},
         };
         slotsEvent.push(newEvent);
       });
@@ -137,7 +155,7 @@ export class MentorCalendarComponent implements OnInit {
   }
 
   eventClicked({event}: { event: CalendarEvent }): void {
-    if (event.meta !== undefined) {
+    if (event.meta instanceof AppointmentMeta) {
       this.useDialog(event);
     } else {
       this.addEvent(event);
@@ -151,16 +169,21 @@ export class MentorCalendarComponent implements OnInit {
     });
   }
 
+
   startDragToCreate(segment: WeekViewHourSegment, mouseDownEvent: MouseEvent, segmentElement: HTMLElement) {
+    const color1 = {primary: '#ead137', secondary: '#ead137', secondaryText: 'white'};
+    const color2 = {primary: 'rgb(131,199,231)', secondary: 'rgb(131,199,231)', secondaryText: 'white'};
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
       title: 'New slots',
+      color: this.isPlanningMode ? color1 : color2,
       start: segment.date,
       meta: {
         tmpEvent: true,
       },
     };
     this.events = [...this.events, dragToSelectEvent];
+    console.log(dragToSelectEvent);
     const segmentPosition = segmentElement.getBoundingClientRect();
     this.dragToCreateActive = true;
     const endOfView = endOfWeek(this.viewDate, {
@@ -196,17 +219,51 @@ export class MentorCalendarComponent implements OnInit {
         if (dragToSelectEvent.end === undefined) {
           dragToSelectEvent.end = addMinutes(dragToSelectEvent.start, 15);
         }
-        const startedDate = this.datePipe.transform(dragToSelectEvent.start, 'yyyy-MM-dd');
-        const startedTime = this.datePipe.transform(dragToSelectEvent.start, 'HH:mm');
-        const endedTime = this.datePipe.transform(dragToSelectEvent.end, 'HH:mm');
+        console.log(dragToSelectEvent);
         this.dialogRef = this.dialog
-          .open(AddSlotsDialogComponent, {data: {date: startedDate, start: startedTime, end: endedTime}});
+          .open(AddSlotsDialogComponent,
+            {
+              data:
+                {
+                  date: this.isPlanningMode ? this.datePipe.transform(dragToSelectEvent.start, 'EEEE').toUpperCase()
+                    : this.datePipe.transform(dragToSelectEvent.start, 'yyyy-MM-dd'),
+                  start: this.datePipe.transform(dragToSelectEvent.start, 'HH:mm'),
+                  end: this.datePipe.transform(dragToSelectEvent.end, 'HH:mm'),
+                  slotScheduleTimes: this.slotScheduleTimes,
+                  isPlanningMode: this.isPlanningMode,
+                  scheduleEvents: this.scheduleEvents,
+                  currentEvent: dragToSelectEvent
+                }
+            });
         this.dialogRef.afterClosed().subscribe(() => {
+          console.log(dragToSelectEvent);
+          console.log(this.events);
+          console.log(this.scheduleEvents);
           this.getAppointments();
           this.getSlots(this.mentorId);
           this.refresh();
         });
       });
+  }
+
+  switchPlanningMode() {
+    this.isPlanningMode ? this.isPlanningMode = false : this.isPlanningMode = true;
+  }
+
+  createSchedule() {
+    const slotScheduleRequest = new SlotScheduleRequest(new Date(this.range.value.start),
+      new Date(this.range.value.end), this.slotScheduleTimes);
+    this.slotService.createSchedule(slotScheduleRequest).subscribe(() => {
+      this.snackBar.open('Отправлено', undefined, {
+        duration: 10000
+      });
+    }, (err) => {
+      this.snackBar.open(err.error.message, undefined, {
+        duration: 10000
+      });
+    });
+    this.isPlanningMode = false;
+    this.scheduleEvents = [];
   }
 
   private refresh() {

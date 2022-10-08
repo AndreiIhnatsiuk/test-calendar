@@ -17,7 +17,15 @@
 </div>
 <div>
   <span *appSpinOn="sending"></span>
-  <button *ngIf="!sending" class="button-create-delete"
+  <button *ngIf="data.isPlanningMode && !sending"
+          class="button-create-delete"
+          mat-raised-button
+          color="primary"
+          (click)="addSlotScheduleTimes()">
+    Добавить в расписание
+  </button>
+  <button *ngIf="!data.isPlanningMode && !sending"
+          class="button-create-delete"
           mat-raised-button
           color="primary"
           (click)="createSlots()">

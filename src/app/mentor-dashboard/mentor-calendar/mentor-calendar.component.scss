@@ -1,8 +1,17 @@
 .cal-hour-segment {
   size: 10px;
 }
+.datepicker {
+  font-size: 12px;
+  max-width: 200px;
+}
+
 .cal-event-container.cal-starts-within-day.cal-ends-within-day.ng-star-inserted {
   max-width: 80% !important;
+}
+
+.saveButton {
+  margin-left: 10px;
 }
 
 .mat-tooltip {

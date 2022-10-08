@@ -12,7 +12,7 @@ import localeRu from '@angular/common/locales/ru';
 import {MentorCalendarComponent} from './mentor-calendar/mentor-calendar.component';
 import {MentorEventDialogComponent} from './mentor-calendar/event-dialog/event-dialog.component';
 import {MentorAddEventDialogComponent} from './mentor-calendar/add-event-dialog/add-event-dialog.component';
-import {MatOptionModule} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -20,6 +20,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {AddSlotsDialogComponent} from './mentor-calendar/add-slots-dialog/add-slots-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 registerLocaleData(localeRu);
 
@@ -54,26 +55,31 @@ const routes: Routes = [
     MentorAddEventDialogComponent,
     AddSlotsDialogComponent
   ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        SharedModule,
-        MatRadioModule,
-        CalendarWeekModule,
-        CalendarCommonModule,
-        MatOptionModule,
-        MatIconModule,
-        MatSelectModule,
-        MatTooltipModule,
-        MatMenuModule,
-        ReactiveFormsModule,
-        MatCheckboxModule,
-    ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    SharedModule,
+    MatRadioModule,
+    CalendarWeekModule,
+    CalendarCommonModule,
+    MatOptionModule,
+    MatIconModule,
+    MatSelectModule,
+    MatTooltipModule,
+    MatMenuModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+  ],
   providers: [
-      DatePipe,
+    DatePipe,
     {
       provide: ACE_CONFIG,
       useValue: DEFAULT_ACE_CONFIG
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'ru-Ru'
     },
     {
       provide: MAT_RADIO_DEFAULT_OPTIONS,
@@ -82,4 +88,7 @@ const routes: Routes = [
   ]
 })
 export class MentorDashboardModule {
+  constructor(private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('en-en');
+  }
 }

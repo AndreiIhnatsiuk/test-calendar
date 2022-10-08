@@ -1,4 +1,4 @@
-export class SlotDto {
+export class SlotRequest {
   date: string;
   from: string;
   to: string;

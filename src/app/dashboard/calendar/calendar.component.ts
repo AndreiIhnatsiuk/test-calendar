@@ -8,8 +8,8 @@ import {Mentor} from '../../entities/mentor';
 import {AppointmentService} from '../../services/calendar-service/appointment.service';
 import {SlotService} from '../../services/calendar-service/slot.service';
 import {MentorService} from '../../services/mentor.service';
-import {EventMeta} from '../../entities/calendar/event-meta';
-import {isSameISOWeek} from 'date-fns';
+import {AppointmentMeta} from '../../entities/calendar/appointment-meta';
+import {addMinutes, isSameISOWeek} from 'date-fns';
 import {AppointmentTime} from '../../entities/calendar/appointment-time';
 
 @Injectable()
@@ -89,7 +89,7 @@ export class CalendarComponent implements OnInit {
     this.appointmentService.getAppointments().subscribe(data => {
       const newEvents: CalendarEvent[] = [];
       data.forEach(element => {
-        const newEvent: CalendarEvent<EventMeta> = {
+        const newEvent: CalendarEvent<AppointmentMeta> = {
           title: element.appointmentType.title + ' | ' + element.mentor.name + ' ' +
             this.datePipe.transform(element.startDate, 'HH:mm') + '-' + this.datePipe.transform(element.endDate, 'HH:mm'),
           start: new Date(element.startDate),
@@ -102,7 +102,7 @@ export class CalendarComponent implements OnInit {
             eventParticipants: element.mentor.name + ' | ' + element.user.name,
             mentorId: element.mentor.id,
             appointmentId: element.id
-          } as EventMeta,
+          } as AppointmentMeta,
         };
         newEvents.push(newEvent);
       });
@@ -120,7 +120,7 @@ export class CalendarComponent implements OnInit {
         const newEvent: CalendarEvent = {
           title: '',
           start: new Date(element.startDate),
-          end: new Date(new Date(element.startDate).getTime() + 15 * 60000),
+          end: addMinutes(new Date(element.startDate), 15),
           color: {primary: '#51ab86', secondary: '#51ab86', secondaryText: 'white'},
         };
         slotsEvent.push(newEvent);
