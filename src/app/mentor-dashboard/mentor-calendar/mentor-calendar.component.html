@@ -1,5 +1,5 @@
-<mat-toolbar xmlns="http://www.w3.org/1999/html">
-  <span *ngIf="!isPlanningMode">
+<mat-toolbar>
+  <span *ngIf="!isPlanningMode && !isReschedulingMode">
     <button class="today-button"
             mat-icon-button
             mwlCalendarToday
@@ -8,7 +8,7 @@
             <mat-icon>today</mat-icon>
     </button>
   </span>
-  <span *ngIf="!isPlanningMode" class="change-week-button">
+  <span *ngIf="!isPlanningMode && !isReschedulingMode" class="change-week-button">
     <button mat-icon-button
             mwlCalendarPreviousView
             [view]="'week'"
@@ -17,7 +17,7 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
   </span>
-  <span *ngIf="!isPlanningMode" class="change-week-button">
+  <span *ngIf="!isPlanningMode && !isReschedulingMode" class="change-week-button">
     <button mat-icon-button
             mwlCalendarNextView
             [view]="'week'"
@@ -28,17 +28,37 @@
   </span>
   <span class="example-spacer"></span>
   <span class="month-header">
-    <h1 style="font-size: 30px">{{ viewDate | calendarDate:('weekViewTitle'): locale: weekStartsOn }}</h1>
+    <h1 style="font-size: 33px">{{ viewDate | calendarDate:('weekViewTitle'): locale: weekStartsOn }}</h1>
   </span>
   <span class="example-spacer"></span>
   <span>
-    <button *ngIf="!isPlanningMode"
+    <button *ngIf="!isPlanningMode && !isReschedulingMode"
             (click)="switchPlanningMode()"
             mat-button>
     Создать расписание
     </button>
-  <mat-form-field *ngIf="isPlanningMode" appearance="legacy" class="datepicker">
-  <mat-label>Время действия расписания</mat-label>
+    <span *ngIf="!isPlanningMode && !isReschedulingMode" class="change-week-button">
+    <button mat-icon-button
+            (click)="switchReschedulingMode()"
+            matTooltip='Расписания'>
+      <mat-icon>event_repeat</mat-icon>
+    </button>
+  </span>
+    <span *ngIf="isReschedulingMode || isReschedulingMode">
+    <mat-form-field class="schedules" appearance="legacy">
+      <mat-label>Расписания</mat-label>
+      <mat-select [(value)]="chosenSlotScheduleRequest">
+        <mat-option
+          *ngFor="let schedule of slotScheduleRequest"
+          [value]="schedule"
+          (click)="displayScheduleInReschedulingMode(chosenSlotScheduleRequest)">
+          {{(schedule.startDate | date: 'dd-MM-yyyy') + ' — ' + (schedule.endDate | date: 'dd-MM-yyyy')}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </span>
+  <mat-form-field *ngIf="isPlanningMode || isReschedulingMode" appearance="legacy" class="datepicker">
+  <mat-label>Период</mat-label>
   <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
     <input matStartDate formControlName="start" placeholder="Start date">
     <input matEndDate formControlName="end" placeholder="End date">
@@ -49,25 +69,29 @@
   <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
   <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
 </mat-form-field>
-
-  <button class="saveButton"
-          *ngIf="isPlanningMode"
-          (click)="createSchedule()"
-          mat-button>
-    Сохранить
-  </button>
-  <button *ngIf="isPlanningMode"
+  <button *ngIf="isReschedulingMode"
           class="today-button"
           mat-icon-button
-          (click)="switchPlanningMode()"
+          (click)="changeScheduleEndTime(chosenSlotScheduleRequest.id)"
+          matTooltip='Изменить'>
+          <mat-icon>restore</mat-icon>
+  </button>
+  <button *ngIf="isPlanningMode || isReschedulingMode"
+          class="today-button"
+          mat-icon-button
+          (click)="createSchedule()"
+          matTooltip='Сохранить'>
+          <mat-icon>save</mat-icon>
+  </button>
+  <button *ngIf="isPlanningMode || isReschedulingMode"
+          class="today-button"
+          mat-icon-button
+          (click)="isPlanningMode ? switchPlanningMode() : switchReschedulingMode()"
           matTooltip='Отменить'>
           <mat-icon>clear</mat-icon>
   </button>
 
   </span>
-  <span class="example-spacer"></span>
-
-
 </mat-toolbar>
 <ng-template
   #weekViewHourSegmentTemplate
@@ -94,16 +118,18 @@
 <mwl-calendar-week-view
   style="width: 80%"
   [viewDate]="viewDate"
-  [events]="isPlanningMode ? events.concat(scheduleEvents) : events"
+  [events]="isPlanningMode || isReschedulingMode ? events.concat(scheduleEvents) : events"
   [hourSegmentTemplate]="weekViewHourSegmentTemplate"
   [weekStartsOn]="weekStartsOn"
   [locale]="locale"
   [hourDuration]="60"
   [hourSegments]="4"
   [hourSegmentHeight]="16"
-  [eventSnapSize]="20"
+  [eventSnapSize]="16"
   [eventTemplate]=""
+  [refresh]="refreshTime"
   [minimumEventHeight]="16"
   [weekendDays]=[0,6]
+  (eventTimesChanged)="eventTimesChanged($event)"
   (eventClicked)="eventClicked($event)">
 </mwl-calendar-week-view>

@@ -1,4 +1,4 @@
-<div *ngIf="!data.event.meta">
+<div *ngIf="data.mentorId">
   <mat-form-field appearance="legacy">
     <mat-label>Выберите тип</mat-label>
     <mat-select [(value)]="chosenAppointmentTypeId">
@@ -23,7 +23,7 @@
 <div *appSpinOn="sending"></div>
 <div>
   <button
-    *ngIf="!data.event.meta && !sending"
+    *ngIf="data.mentorId && !sending"
     mat-raised-button color="primary"
     (click)="addEvent()"
     title="Отправить">Отправить
@@ -31,7 +31,7 @@
 </div>
 <div>
   <button
-    *ngIf="data.event.meta && !sending"
+    *ngIf="!data.mentorId && !sending"
     mat-raised-button color="primary"
     (click)="patchEvent()"
     title="Отправить">Отправить

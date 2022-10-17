@@ -5,14 +5,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppointmentService} from '../../../services/calendar-service/appointment.service';
 import {AppointmentType} from '../../../entities/calendar/appointment-type';
 import {SlotRequest} from '../../../entities/calendar/slot-request';
-import {SlotScheduleTime} from '../../../entities/calendar/slot-schedule-time';
 import {CalendarEvent} from 'angular-calendar';
 
 class DialogData {
   date: string;
   start: string;
   end: string;
-  slotScheduleTimes: SlotScheduleTime[];
   isPlanningMode: boolean;
   scheduleEvents: CalendarEvent[];
   currentEvent: CalendarEvent;
@@ -63,16 +61,19 @@ export class AddSlotsDialogComponent implements OnInit {
   deleteSlots() {
     this.sending = true;
     this.slotService.delete(this.data.date, this.data.start, this.data.end)
-      .subscribe(() => {
-        this.sending = false;
-        this.snackBar.open('Слоты удалены', undefined, {
-          duration: 10000
-        });
-      }, (err) => {
-        this.sending = false;
-        this.snackBar.open(err.error.message, undefined, {
-          duration: 5000
-        });
+      .subscribe({
+        next: () => {
+          this.sending = false;
+          this.snackBar.open('Слоты удалены', undefined, {
+            duration: 10000
+          });
+        },
+        error: (err) => {
+          this.sending = false;
+          this.snackBar.open(err.error.message, undefined, {
+            duration: 5000
+          });
+        },
       });
     this.close();
   }
@@ -102,7 +103,7 @@ export class AddSlotsDialogComponent implements OnInit {
     this.appointmentTypes.forEach(t => (t.selected = completed));
     if (completed) {
       const x = [];
-      this.appointmentTypes.forEach(y => x.push(y.id));
+      this.appointmentTypes.forEach(t => x.push(t.id));
       this.appointmentTypeIds = x;
     } else {
       this.appointmentTypeIds = [];
@@ -116,11 +117,8 @@ export class AddSlotsDialogComponent implements OnInit {
   }
 
   addSlotScheduleTimes(): void {
-    const slotScheduleTime = new SlotScheduleTime(this.data.date, this.data.start, this.data.end, this.appointmentTypeIds);
+    this.data.currentEvent.meta = {appointmentTypes: this.appointmentTypeIds};
     this.data.scheduleEvents.push(this.data.currentEvent);
-    this.data.slotScheduleTimes.push(slotScheduleTime);
-    console.log(slotScheduleTime);
-    console.log(this.data.slotScheduleTimes);
     this.dialogRef.close();
   }
 }

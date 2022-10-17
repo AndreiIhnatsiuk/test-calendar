@@ -1,17 +1,15 @@
 .cal-hour-segment {
   size: 10px;
 }
+
 .datepicker {
   font-size: 12px;
-  max-width: 200px;
+  max-width: 160px;
+  margin: 0 10px 0 10px;
 }
 
 .cal-event-container.cal-starts-within-day.cal-ends-within-day.ng-star-inserted {
   max-width: 80% !important;
-}
-
-.saveButton {
-  margin-left: 10px;
 }
 
 .mat-tooltip {
@@ -36,8 +34,10 @@
 mat-toolbar {
 
   .month-header {
+    font-size: 45px;
     overflow: hidden;
     text-overflow: fade;
+    position: center;
   }
 
   @media screen and (max-width: 700px) {
@@ -51,10 +51,10 @@ mat-toolbar {
   flex: 1 1 auto;
 }
 
-.mentors {
-  font-size: 14px;
-  max-width: 145px;
-  padding-bottom: 0;
+.schedules {
+  font-size: 12px;
+  max-width: 90px;
+  padding-right: 5px;
 }
 
 .cal-week-view {

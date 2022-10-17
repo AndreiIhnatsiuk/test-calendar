@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Slot} from '../../entities/calendar/slot';
 import {SlotRequest} from '../../entities/calendar/slot-request';
 import {SlotScheduleRequest} from '../../entities/calendar/slot-schedule-request';
+import {SlotScheduleUpdate} from '../../entities/calendar/slot-schedule-update';
 
 @Injectable({providedIn: 'root'})
 export class SlotService {
@@ -24,6 +25,14 @@ export class SlotService {
 
   public createSchedule(slotScheduleRequest: SlotScheduleRequest): Observable<SlotScheduleRequest> {
     return this.http.post<SlotScheduleRequest>('/api/calendar/slot-schedule', slotScheduleRequest);
+  }
+
+  public getSchedule(): Observable<Array<SlotScheduleRequest>> {
+    return this.http.get<Array<SlotScheduleRequest>>('/api/calendar/slot-schedule');
+  }
+
+  public patchSchedule(scheduleId: number, slotScheduleUpdate: SlotScheduleUpdate): Observable<any> {
+    return this.http.patch('/api/calendar/slot-schedule/' + scheduleId, slotScheduleUpdate);
   }
 
 }

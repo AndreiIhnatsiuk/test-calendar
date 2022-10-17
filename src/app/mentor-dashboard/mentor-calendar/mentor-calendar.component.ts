@@ -1,9 +1,15 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable, OnInit, ViewEncapsulation} from '@angular/core';
-import {CalendarDateFormatter, CalendarEvent, CalendarEventTitleFormatter, DateFormatterParams} from 'angular-calendar';
+import {
+  CalendarDateFormatter,
+  CalendarEvent,
+  CalendarEventTimesChangedEvent,
+  CalendarEventTitleFormatter,
+  DateFormatterParams
+} from 'angular-calendar';
 import {WeekViewHourSegment} from 'calendar-utils';
-import {fromEvent} from 'rxjs';
+import {fromEvent, Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {addDays, addMinutes, endOfWeek} from 'date-fns';
+import {addDays, addMinutes, endOfWeek, setDay} from 'date-fns';
 import {DatePipe, formatDate} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {AppointmentService} from '../../services/calendar-service/appointment.service';
@@ -53,6 +59,11 @@ export class CustomDateAdapter extends NativeDateAdapter {
   }
 }
 
+class SlotMeta {
+  constructor() {
+  }
+}
+
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,11 +91,15 @@ export class MentorCalendarComponent implements OnInit {
   dialogRef: any;
   mentorId: number;
   isPlanningMode = false;
+  isReschedulingMode = false;
+  slotScheduleRequest: SlotScheduleRequest[] = [];
+  chosenSlotScheduleRequest: SlotScheduleRequest;
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
   slotScheduleTimes: SlotScheduleTime[] = [];
+  refreshTime = new Subject<void>();
 
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -100,6 +115,13 @@ export class MentorCalendarComponent implements OnInit {
     this.authService.getMe().subscribe((me) => {
       this.mentorId = me.id;
       this.getSlots(me.id);
+    });
+    this.getSchedules();
+  }
+
+  getSchedules() {
+    this.slotService.getSchedule().subscribe((slotSchedules) => {
+      this.slotScheduleRequest = slotSchedules;
     });
   }
 
@@ -139,6 +161,7 @@ export class MentorCalendarComponent implements OnInit {
           start: new Date(element.startDate),
           end: addMinutes(new Date(element.startDate), 15),
           color: {primary: 'rgb(51, 182, 121)', secondary: 'rgb(51, 182, 121)', secondaryText: 'white'},
+          meta: new SlotMeta(),
         };
         slotsEvent.push(newEvent);
       });
@@ -157,15 +180,19 @@ export class MentorCalendarComponent implements OnInit {
   eventClicked({event}: { event: CalendarEvent }): void {
     if (event.meta instanceof AppointmentMeta) {
       this.useDialog(event);
-    } else {
+    } else if (event.meta instanceof SlotMeta) {
       this.addEvent(event);
     }
   }
 
   addEvent(event: CalendarEvent): void {
     this.dialogRef = this.dialog.open(MentorAddEventDialogComponent, {data: {event: event, mentorId: this.mentorId}});
-    this.dialogRef.afterClosed().subscribe(() => {
-      this.refresh();
+    this.dialogRef.afterClosed().subscribe({
+      complete: () => {
+        this.getAppointments();
+        this.getSlots(this.mentorId);
+        this.refresh();
+      }
     });
   }
 
@@ -178,12 +205,15 @@ export class MentorCalendarComponent implements OnInit {
       title: 'New slots',
       color: this.isPlanningMode ? color1 : color2,
       start: segment.date,
+      resizable: {
+        beforeStart: this.isPlanningMode,
+        afterEnd: this.isPlanningMode,
+      },
       meta: {
         tmpEvent: true,
       },
     };
     this.events = [...this.events, dragToSelectEvent];
-    console.log(dragToSelectEvent);
     const segmentPosition = segmentElement.getBoundingClientRect();
     this.dragToCreateActive = true;
     const endOfView = endOfWeek(this.viewDate, {
@@ -199,76 +229,157 @@ export class MentorCalendarComponent implements OnInit {
         }),
         takeUntil(fromEvent(document, 'mouseup'))
       )
-      .subscribe((mouseMoveEvent: MouseEvent) => {
-        const minutesDiff = ceilToNearest(
-          mouseMoveEvent.clientY - segmentPosition.top,
-          15
-        );
-        const daysDiff =
-          floorToNearest(
-            mouseMoveEvent.clientX - segmentPosition.left,
-            segmentPosition.width
-          ) / segmentPosition.width;
+      .subscribe({
+        next: (mouseMoveEvent: MouseEvent) => {
+          const minutesDiff = ceilToNearest(
+            mouseMoveEvent.clientY - segmentPosition.top,
+            15
+          );
+          const daysDiff =
+            floorToNearest(
+              mouseMoveEvent.clientX - segmentPosition.left,
+              segmentPosition.width
+            ) / segmentPosition.width;
 
-        const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
-        if (newEnd > segment.date && newEnd < endOfView) {
-          dragToSelectEvent.end = newEnd;
-        }
-        this.refresh();
-      }, null, () => {
-        if (dragToSelectEvent.end === undefined) {
-          dragToSelectEvent.end = addMinutes(dragToSelectEvent.start, 15);
-        }
-        console.log(dragToSelectEvent);
-        this.dialogRef = this.dialog
-          .open(AddSlotsDialogComponent,
-            {
-              data:
-                {
-                  date: this.isPlanningMode ? this.datePipe.transform(dragToSelectEvent.start, 'EEEE').toUpperCase()
-                    : this.datePipe.transform(dragToSelectEvent.start, 'yyyy-MM-dd'),
-                  start: this.datePipe.transform(dragToSelectEvent.start, 'HH:mm'),
-                  end: this.datePipe.transform(dragToSelectEvent.end, 'HH:mm'),
-                  slotScheduleTimes: this.slotScheduleTimes,
-                  isPlanningMode: this.isPlanningMode,
-                  scheduleEvents: this.scheduleEvents,
-                  currentEvent: dragToSelectEvent
-                }
-            });
-        this.dialogRef.afterClosed().subscribe(() => {
-          console.log(dragToSelectEvent);
-          console.log(this.events);
-          console.log(this.scheduleEvents);
-          this.getAppointments();
-          this.getSlots(this.mentorId);
+          const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+          if (newEnd > segment.date && newEnd < endOfView) {
+            dragToSelectEvent.end = newEnd;
+          }
           this.refresh();
-        });
+        },
+        complete: () => {
+          if (dragToSelectEvent.end === undefined) {
+            dragToSelectEvent.end = addMinutes(dragToSelectEvent.start, 15);
+          }
+          this.dialogRef = this.dialog
+            .open(AddSlotsDialogComponent,
+              {
+                data:
+                  {
+                    date: this.datePipe.transform(dragToSelectEvent.start, 'yyyy-MM-dd'),
+                    start: this.datePipe.transform(dragToSelectEvent.start, 'HH:mm'),
+                    end: this.datePipe.transform(dragToSelectEvent.end, 'HH:mm'),
+                    isPlanningMode: this.isPlanningMode,
+                    scheduleEvents: this.scheduleEvents,
+                    currentEvent: dragToSelectEvent
+                  }
+              });
+          this.dialogRef.afterClosed().subscribe(() => {
+            this.getAppointments();
+            this.getSlots(this.mentorId);
+            this.refresh();
+          });
+        },
       });
   }
 
   switchPlanningMode() {
-    this.isPlanningMode ? this.isPlanningMode = false : this.isPlanningMode = true;
+    this.isPlanningMode = !this.isPlanningMode;
+    this.scheduleEvents = [];
+    this.getAppointments();
+    this.getSlots(this.mentorId);
+    this.refreshDatePickerPeriodValue();
+  }
+
+  switchReschedulingMode() {
+    this.isReschedulingMode = !this.isReschedulingMode;
+    this.refreshDatePickerPeriodValue();
   }
 
   createSchedule() {
+    if (this.isPlanningMode) {
+      this.scheduleEvents.forEach((event) => {
+        const day = this.datePipe.transform(event.start, 'EEEE').toUpperCase();
+        const startTime = this.datePipe.transform(event.start, 'HH:mm');
+        const endTime = this.datePipe.transform(event.end, 'HH:mm');
+        const slotScheduleTime = new SlotScheduleTime(day, startTime, endTime, event.meta.appointmentTypes);
+        this.slotScheduleTimes.push(slotScheduleTime);
+      });
+    } else {
+      this.slotScheduleTimes = this.chosenSlotScheduleRequest.slotScheduleTimes;
+    }
     const slotScheduleRequest = new SlotScheduleRequest(new Date(this.range.value.start),
       new Date(this.range.value.end), this.slotScheduleTimes);
-    this.slotService.createSchedule(slotScheduleRequest).subscribe(() => {
-      this.snackBar.open('Отправлено', undefined, {
-        duration: 10000
-      });
-    }, (err) => {
-      this.snackBar.open(err.error.message, undefined, {
-        duration: 10000
-      });
+    this.slotService.createSchedule(slotScheduleRequest).subscribe({
+      next: () => {
+        this.snackBar.open('Отправлено', undefined, {
+          duration: 10000
+        });
+      },
+      error: (err) => {
+        this.snackBar.open(err.error.message, undefined, {
+          duration: 10000
+        });
+      },
+      complete: () => {
+        this.isPlanningMode = false;
+        this.scheduleEvents = [];
+        this.getAppointments();
+        this.getSlots(this.mentorId);
+        this.getSchedules();
+        this.refreshDatePickerPeriodValue();
+        this.refresh();
+      }
     });
-    this.isPlanningMode = false;
+  }
+
+  displayScheduleInReschedulingMode(slotScheduleRequest: SlotScheduleRequest) {
+    this.range.setValue({start: this.chosenSlotScheduleRequest.startDate, end: this.chosenSlotScheduleRequest.endDate});
     this.scheduleEvents = [];
+    const newEvents: CalendarEvent[] = [];
+    slotScheduleRequest.slotScheduleTimes.forEach(element => {
+      const newEvent: CalendarEvent = {
+        title: '',
+        start: this.setTime(element.startTime, this.getDateOfWeekDayForCurrentWeek(element.dayOfWeek)),
+        end: this.setTime(element.endTime, this.getDateOfWeekDayForCurrentWeek(element.dayOfWeek)),
+        color: {primary: '#ead137', secondary: '#ead137', secondaryText: 'white'},
+      };
+      newEvents.push(newEvent);
+    });
+    this.scheduleEvents = newEvents;
+    this.refresh();
+  }
+
+  changeScheduleEndTime(scheduleId: number) {
+    this.slotService.patchSchedule(scheduleId, {endDate: new Date(this.range.value.end)}).subscribe({
+      next: () => {
+        this.snackBar.open('Дата окончания расписания изменена', undefined, {
+          duration: 10000
+        });
+      },
+      error: (err) => {
+        this.snackBar.open(err.error.message, undefined, {
+          duration: 10000
+        });
+      },
+    });
+  }
+
+  private setTime(source: string, dateSource: Date): Date {
+    const time: string = source || '00:00:00';
+    const date = new Date(`01-01-00 ${time}`);
+    dateSource.setHours(date.getHours(), date.getMinutes(), 0);
+    return dateSource;
+  }
+
+  private getDateOfWeekDayForCurrentWeek(weekDay: string): Date {
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    return setDay(new Date(), days.indexOf(weekDay), {weekStartsOn: 1});
+  }
+
+  private refreshDatePickerPeriodValue() {
+    this.range.setValue({start: null, end: null});
   }
 
   private refresh() {
     this.events = [...this.events];
     this.cdr.detectChanges();
+  }
+
+  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.refreshTime.next();
   }
 }
 
