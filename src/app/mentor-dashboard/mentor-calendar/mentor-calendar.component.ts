@@ -202,9 +202,19 @@ export class MentorCalendarComponent implements OnInit {
     const color2 = {primary: 'rgb(131,199,231)', secondary: 'rgb(131,199,231)', secondaryText: 'white'};
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
-      title: 'New slots',
+      title: this.isPlanningMode ? '' : 'New slots',
       color: this.isPlanningMode ? color1 : color2,
       start: segment.date,
+      actions: this.isPlanningMode ? [
+        {
+          label: '<i class="material-icons mat-icon"><span class="event-action">delete_outlined</span></i>',
+          onClick: ({event}: { event: CalendarEvent }): void => {
+            this.scheduleEvents = this.scheduleEvents.filter((iEvent) => iEvent !== event);
+            console.log('Event deleted', event);
+            console.log(this.scheduleEvents);
+          },
+        },
+      ] : null,
       resizable: {
         beforeStart: this.isPlanningMode,
         afterEnd: this.isPlanningMode,
