@@ -73,14 +73,14 @@
           class="today-button"
           mat-icon-button
           (click)="changeScheduleEndTime(chosenSlotScheduleRequest.id)"
-          matTooltip='Изменить'>
+          matTooltip='Изменить дату окончания выбранного расписания'>
           <mat-icon>restore</mat-icon>
   </button>
   <button *ngIf="isPlanningMode || isReschedulingMode"
           class="today-button"
           mat-icon-button
           (click)="createSchedule()"
-          matTooltip='Сохранить'>
+          matTooltip='Сохранить новое расписание на выбранный период'>
           <mat-icon>save</mat-icon>
   </button>
   <button *ngIf="isPlanningMode || isReschedulingMode"
@@ -118,7 +118,7 @@
 <mwl-calendar-week-view
   style="width: 80%"
   [viewDate]="viewDate"
-  [events]="isPlanningMode || isReschedulingMode ? events.concat(scheduleEvents) : events"
+  [events]="events"
   [hourSegmentTemplate]="weekViewHourSegmentTemplate"
   [weekStartsOn]="weekStartsOn"
   [locale]="locale"

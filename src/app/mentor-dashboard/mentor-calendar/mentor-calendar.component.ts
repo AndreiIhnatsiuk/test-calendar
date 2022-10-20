@@ -209,7 +209,7 @@ export class MentorCalendarComponent implements OnInit {
         {
           label: '<i class="material-icons mat-icon"><span class="event-action">delete_outlined</span></i>',
           onClick: ({event}: { event: CalendarEvent }): void => {
-            this.scheduleEvents = this.scheduleEvents.filter((iEvent) => iEvent !== event);
+            this.events = this.events.filter((iEvent) => iEvent !== event);
             console.log('Event deleted', event);
             console.log(this.scheduleEvents);
           },
@@ -275,8 +275,13 @@ export class MentorCalendarComponent implements OnInit {
                   }
               });
           this.dialogRef.afterClosed().subscribe(() => {
-            this.getAppointments();
-            this.getSlots(this.mentorId);
+            if (!this.isPlanningMode) {
+              this.getAppointments();
+              this.getSlots(this.mentorId);
+            }
+            if (Object.keys(dragToSelectEvent.meta).length === 0) {
+              this.events = this.events.filter((iEvent) => iEvent !== dragToSelectEvent);
+            }
             this.refresh();
           });
         },
@@ -293,6 +298,8 @@ export class MentorCalendarComponent implements OnInit {
 
   switchReschedulingMode() {
     this.isReschedulingMode = !this.isReschedulingMode;
+    this.getAppointments();
+    this.getSlots(this.mentorId);
     this.refreshDatePickerPeriodValue();
   }
 
@@ -312,7 +319,7 @@ export class MentorCalendarComponent implements OnInit {
       new Date(this.range.value.end), this.slotScheduleTimes);
     this.slotService.createSchedule(slotScheduleRequest).subscribe({
       next: () => {
-        this.snackBar.open('Отправлено', undefined, {
+        this.snackBar.open('Расписание создано', undefined, {
           duration: 10000
         });
       },
@@ -334,6 +341,7 @@ export class MentorCalendarComponent implements OnInit {
   }
 
   displayScheduleInReschedulingMode(slotScheduleRequest: SlotScheduleRequest) {
+    this.events = [...this.events].filter(value => !this.scheduleEvents.includes(value));
     this.range.setValue({start: this.chosenSlotScheduleRequest.startDate, end: this.chosenSlotScheduleRequest.endDate});
     this.scheduleEvents = [];
     const newEvents: CalendarEvent[] = [];
@@ -347,6 +355,7 @@ export class MentorCalendarComponent implements OnInit {
       newEvents.push(newEvent);
     });
     this.scheduleEvents = newEvents;
+    this.events = [...this.events].concat(this.scheduleEvents);
     this.refresh();
   }
 
