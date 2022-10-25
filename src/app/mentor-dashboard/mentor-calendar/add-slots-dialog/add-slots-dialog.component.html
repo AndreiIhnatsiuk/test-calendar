@@ -1,20 +1,4 @@
-<div *ngIf="appointmentTypes">
-  <h1>Выберите типы слотов:</h1>
-  <mat-checkbox [checked]="allComplete"
-                color="primary"
-                [indeterminate]="someComplete()"
-                (change)="setAll($event.checked)">
-    Выбрать все
-  </mat-checkbox>
-</div>
-<div *ngFor="let type of appointmentTypes">
-  <mat-checkbox color="primary"
-                [(ngModel)]="type.selected"
-                (ngModelChange)="updateAllComplete()"
-                (change)="addTypeId(type.id)">
-    {{type.title}}
-  </mat-checkbox>
-</div>
+<app-appointment-type-select (sendAppointmentTypesIds)="appointmentTypeIds = $event"></app-appointment-type-select>
 <div>
   <span *appSpinOn="sending"></span>
   <button *ngIf="data.isPlanningMode && !sending"

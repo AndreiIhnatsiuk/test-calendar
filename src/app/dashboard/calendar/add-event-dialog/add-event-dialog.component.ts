@@ -18,7 +18,7 @@ class DialogData {
   templateUrl: './add-event-dialog.component.html',
   styleUrls: ['./add-event-dialog.component.scss']
 })
-export class AddEventDialogComponent implements OnInit {
+export class AddEventDialogComponent implements OnInit { // TODO refactor conditions at HTML
   appointmentTypes: AppointmentType[];
   chosenAppointmentTypeId: number;
   description: string;

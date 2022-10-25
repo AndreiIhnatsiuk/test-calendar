@@ -1,4 +1,7 @@
 <mat-toolbar>
+  <button mat-icon-button (click)="isExpanded = !isExpanded">
+    <mat-icon>menu</mat-icon>
+  </button>
   <span>
     <button class="today-button"
             mat-icon-button
@@ -29,8 +32,9 @@
       <mat-icon>chevron_right</mat-icon>
     </button>
   </span>
-  <mat-icon class="time-icon"
-            matTooltip='Минут доступно для назначения консультации'>schedule
+  <mat-icon
+    class="time-icon"
+    matTooltip='Минут доступно для назначения консультации'>schedule
   </mat-icon>
   <span>
     {{displayedAvailableTime}}
@@ -40,20 +44,49 @@
     <h1 style="font-size: 30px">{{ viewDate | calendarDate:('weekViewTitle'): locale: weekStartsOn }}</h1>
   </span>
   <span class="example-spacer"></span>
-  <span class="mentors">
-    <mat-form-field class="mentors" appearance="legacy">
-      <mat-label>Выберите ментора</mat-label>
-      <mat-select [(value)]="chosenMentorId">
-        <mat-option (click)="getAppointments()">Нет</mat-option>
-        <mat-option *ngFor="let mentor of mentors"
-                    [value]="mentor.userId"
-                    (click)="getSlots(chosenMentorId)">
-                    {{mentor.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </span>
 </mat-toolbar>
+
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()"
+               (mouseleave)="mouseleave()">
+    <mat-nav-list>
+      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+        <mat-form-field class="mentors" appearance="legacy">
+          <mat-label>Выберите ментора</mat-label>
+          <mat-select [(value)]="chosenMentorId" (click)="isSelectOpen = !isSelectOpen">
+            <mat-option (click)="getAppointments()">Нет</mat-option>
+            <mat-option *ngFor="let mentor of mentors"
+                        [value]="mentor.userId"
+                        (click)="getSlots(chosenMentorId)">
+              {{mentor.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <app-appointment-type-select
+          [allComplete]="true"
+          (sortSlots)="filterEvents()"
+          (sendAppointmentTypesIds)="appointmentTypeIds = $event">
+        </app-appointment-type-select>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <div class="example-sidenav-content">
+    <mwl-calendar-week-view
+      [viewDate]="viewDate"
+      [events]="events"
+      [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+      [weekStartsOn]="weekStartsOn"
+      [locale]="locale"
+      [hourSegments]="4"
+      [hourSegmentHeight]="16"
+      [eventSnapSize]="20"
+      [minimumEventHeight]="16"
+      [weekendDays]=[0,6]
+      (eventClicked)="eventClicked($event)">
+    </mwl-calendar-week-view>
+  </div>
+</mat-sidenav-container>
+
 <ng-template
   #weekViewHourSegmentTemplate
   let-segment="segment"
@@ -67,25 +100,10 @@
     [style.height.px]="segmentHeight"
     [class.cal-hour-start]="segment.isStart"
     [class.cal-after-hour-start]="!segment.isStart"
-    [ngClass]="segment.cssClass"
-  >
+    [ngClass]="segment.cssClass">
     <div class="cal-time" *ngIf="isTimeLabel">
       {{ segment.date | calendarDate:'dayViewHour':'ru' }}
     </div>
   </div>
 </ng-template>
 
-<mwl-calendar-week-view
-  [viewDate]="viewDate"
-  [events]="events"
-  [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-  [weekStartsOn]="weekStartsOn"
-  [locale]="locale"
-  [hourSegments]="4"
-  [hourSegmentHeight]="16"
-  [eventSnapSize]="20"
-  [minimumEventHeight]="16"
-  [weekendDays]=[0,6]
-
-  (eventClicked)="eventClicked($event)">
-</mwl-calendar-week-view>

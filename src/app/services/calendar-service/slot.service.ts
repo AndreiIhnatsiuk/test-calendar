@@ -11,15 +11,15 @@ export class SlotService {
   constructor(private http: HttpClient) {
   }
 
-  public get(mentorId: number): Observable<Array<Slot>> {
+  public getSlots(mentorId: number): Observable<Array<Slot>> {
     return this.http.get<Array<Slot>>('/api/slots?mentorId=' + mentorId);
   }
 
-  public set(slotDto: SlotRequest): Observable<any> {
+  public createSlots(slotDto: SlotRequest): Observable<any> {
     return this.http.post('/api/slots', slotDto);
   }
 
-  public delete(date: string, from: string, to: string): Observable<any> {
+  public deleteSlots(date: string, from: string, to: string): Observable<any> {
     return this.http.delete('/api/slots?date=' + date + '&from=' + from + '&to=' + to);
   }
 

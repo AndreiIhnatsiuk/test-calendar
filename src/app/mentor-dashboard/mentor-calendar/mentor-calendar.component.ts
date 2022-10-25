@@ -153,7 +153,7 @@ export class MentorCalendarComponent implements OnInit {
 
   getSlots(mentorId: number) {
     this.getAppointments();
-    this.slotService.get(mentorId).subscribe(slots => {
+    this.slotService.getSlots(mentorId).subscribe(slots => {
       const slotsEvent: CalendarEvent[] = [];
       slots.forEach(element => {
         const newEvent: CalendarEvent = {

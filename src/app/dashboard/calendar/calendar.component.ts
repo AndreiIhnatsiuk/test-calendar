@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {CalendarDateFormatter, CalendarEvent, CalendarEventTitleFormatter, DateFormatterParams} from 'angular-calendar';
 import {DatePipe, formatDate} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
@@ -11,6 +11,9 @@ import {MentorService} from '../../services/mentor.service';
 import {AppointmentMeta} from '../../entities/calendar/appointment-meta';
 import {addMinutes, isSameISOWeek} from 'date-fns';
 import {AppointmentTime} from '../../entities/calendar/appointment-time';
+import {MatSidenav} from '@angular/material/sidenav';
+import {AppointmentType} from '../../entities/calendar/appointment-type';
+
 
 @Injectable()
 export class CustomDateFormatter extends CalendarDateFormatter {
@@ -28,6 +31,14 @@ export class CustomDateFormatter extends CalendarDateFormatter {
 
   public weekViewColumnSubHeader({date, locale}: DateFormatterParams): string {
     return formatDate(date, 'd', locale);
+  }
+}
+
+class SlotMeta {
+  appointmentTypes: number[];
+
+  constructor(appointmentTypes: AppointmentType[]) {
+    this.appointmentTypes = appointmentTypes.map(value => value.id);
   }
 }
 
@@ -57,6 +68,14 @@ export class CalendarComponent implements OnInit {
   chosenMentorId: number;
   availableTime: AppointmentTime[];
   displayedAvailableTime: number;
+  appointmentTypeIds = [];
+  @ViewChild('sidenav') sidenav: MatSidenav;
+  isExpanded = false;
+  showSubmenu = true;
+  isShowing = false;
+  isSelectOpen = false;
+  slotEvents: CalendarEvent[] = [];
+  appointmentEvent: CalendarEvent[] = [];
 
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -76,6 +95,18 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  mouseenter() {
+    if (!this.isExpanded) {
+      this.isShowing = true;
+    }
+  }
+
+  mouseleave() {
+    if (!this.isExpanded && this.isSelectOpen) {
+      this.isShowing = false;
+    }
+  }
+
   getTimeForThisWeek() {
     this.displayedAvailableTime = 0;
     for (let i = 0; i < this.availableTime.length; i++) {
@@ -86,76 +117,100 @@ export class CalendarComponent implements OnInit {
   }
 
   getAppointments() {
-    this.appointmentService.getAppointments().subscribe(data => {
-      const newEvents: CalendarEvent[] = [];
-      data.forEach(element => {
-        const newEvent: CalendarEvent<AppointmentMeta> = {
-          title: element.appointmentType.title + ' | ' + element.mentor.name + ' ' +
-            this.datePipe.transform(element.startDate, 'HH:mm') + '-' + this.datePipe.transform(element.endDate, 'HH:mm'),
-          start: new Date(element.startDate),
-          end: new Date(element.endDate),
-          color: {primary: 'rgb(63, 81, 181)', secondary: 'rgb(63, 81, 181)', secondaryText: 'white'},
-          meta: {
-            eventTitle: element.appointmentType.title,
-            eventDescription: element.description,
-            eventConferenceLink: element.conferenceLink,
-            eventParticipants: element.mentor.name + ' | ' + element.user.name,
-            mentorId: element.mentor.id,
-            appointmentId: element.id
-          } as AppointmentMeta,
-        };
-        newEvents.push(newEvent);
-      });
-      this.events = newEvents;
-      this.getTimeForThisWeek();
-      this.refresh();
+    this.appointmentEvent = [];
+    this.appointmentService.getAppointments().subscribe({
+      next: value => {
+        value.forEach(element => {
+          const newAppointmentEvent: CalendarEvent<AppointmentMeta> = {
+            title: element.appointmentType.title + ' | ' + element.mentor.name + ' ' +
+              this.datePipe.transform(element.startDate, 'HH:mm') + '-' + this.datePipe.transform(element.endDate, 'HH:mm'),
+            start: new Date(element.startDate),
+            end: new Date(element.endDate),
+            color: {primary: 'rgb(63, 81, 181)', secondary: 'rgb(63, 81, 181)', secondaryText: 'white'},
+            meta: new AppointmentMeta(
+              element.appointmentType.title,
+              element.description,
+              element.conferenceLink,
+              element.mentor.name + ' | ' + element.user.name,
+              element.mentor.id,
+              element.id
+            ),
+          };
+          this.appointmentEvent.push(newAppointmentEvent);
+        });
+      },
+      complete: () => {
+        this.filterEvents();
+        this.getTimeForThisWeek();
+        this.isSelectOpen = !this.isSelectOpen;
+      }
     });
   }
 
+  filterEvents() {
+    this.events = [];
+    const filteredSlots: CalendarEvent[] = this.slotEvents.filter((element) => {
+      return element.meta instanceof SlotMeta && element.meta.appointmentTypes.some(x => this.appointmentTypeIds.includes(x));
+    });
+    this.chosenMentorId ? this.events = this.appointmentEvent.concat(filteredSlots) : this.events = this.appointmentEvent;
+    this.cdr.detectChanges();
+  }
+
   getSlots(mentorId: number) {
-    this.getAppointments();
-    this.slotService.get(mentorId).subscribe(slots => {
-      const slotsEvent: CalendarEvent[] = [];
-      slots.forEach(element => {
-        const newEvent: CalendarEvent = {
-          title: '',
-          start: new Date(element.startDate),
-          end: addMinutes(new Date(element.startDate), 15),
-          color: {primary: '#51ab86', secondary: '#51ab86', secondaryText: 'white'},
-        };
-        slotsEvent.push(newEvent);
-      });
-      this.events = [...this.events].concat(slotsEvent);
-      this.refresh();
+    this.slotEvents = [];
+    this.slotService.getSlots(mentorId).subscribe({
+      next: value => {
+        value.forEach(element => {
+          const newEvent: CalendarEvent = {
+            title: '',
+            start: new Date(element.startDate),
+            end: addMinutes(new Date(element.startDate), 15),
+            color: {primary: 'rgb(51, 182, 121)', secondary: 'rgb(51, 182, 121)', secondaryText: 'white'},
+            meta: new SlotMeta(element.appointmentTypes),
+          };
+          this.slotEvents.push(newEvent);
+        });
+      },
+      complete: () => {
+        this.isSelectOpen = !this.isSelectOpen;
+        this.filterEvents();
+      }
     });
   }
 
   useDialog(event: CalendarEvent) {
     this.dialogRef = this.dialog.open(EventDialogComponent, {data: event});
-    this.dialogRef.afterClosed().subscribe(() => {
-      this.chosenMentorId === undefined ? this.getAppointments() : this.getSlots(this.chosenMentorId);
+    this.dialogRef.afterClosed().subscribe({
+      complete: () => {
+        if (this.chosenMentorId === undefined) {
+          this.getAppointments();
+        } else {
+          this.getAppointments();
+          this.getSlots(this.chosenMentorId);
+        }
+      }
     });
   }
 
   eventClicked({event}: { event: CalendarEvent }): void {
-    if (event.meta !== undefined) {
+    if (event.meta instanceof AppointmentMeta) {
       this.useDialog(event);
-    } else {
+    } else if (event.meta instanceof SlotMeta) {
       this.addEvent(event);
     }
   }
 
   addEvent(event: CalendarEvent): void {
     this.dialogRef = this.dialog.open(AddEventDialogComponent, {data: {event: event, mentorId: this.chosenMentorId}});
-    this.dialogRef.afterClosed().subscribe(() => {
-      this.chosenMentorId === undefined ? this.getAppointments() : this.getSlots(this.chosenMentorId);
+    this.dialogRef.afterClosed().subscribe({
+      complete: () => {
+        if (this.chosenMentorId === undefined) {
+          this.getAppointments();
+        } else {
+          this.getAppointments();
+          this.getSlots(this.chosenMentorId);
+        }
+      }
     });
   }
-
-  private refresh() {
-    this.events = [...this.events];
-    this.cdr.detectChanges();
-  }
 }
-
-

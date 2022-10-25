@@ -10,13 +10,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDialogModule} from '@angular/material/dialog';
 import {SpinOnModule} from '../spin-on/spin-on.directive';
+import {AppointmentTypeSelectModule} from '../appointment-type-select/appointment-type-select.module';
 
 @NgModule({
   declarations: [
     MarkedPipe
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    AppointmentTypeSelectModule
   ],
   exports: [
     MarkedPipe,
@@ -28,7 +30,8 @@ import {SpinOnModule} from '../spin-on/spin-on.directive';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SpinOnModule
+    SpinOnModule,
+    AppointmentTypeSelectModule
   ]
 })
 export class SharedModule { }

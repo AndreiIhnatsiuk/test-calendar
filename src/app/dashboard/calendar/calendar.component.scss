@@ -56,7 +56,7 @@ mat-toolbar {
 }
 
 .cal-week-view {
-  margin: 0 20px 10px 20px;
+  //margin: 0 20px 10px 20px;
   font-size: 12px;
 
   .cal-header.cal-today {
@@ -91,3 +91,36 @@ mat-toolbar {
   }
 }
 
+.example-container {
+  //border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.example-sidenav-content {
+  //display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px 0 15px;
+}
+.example-sidenav {
+  user-select: none;
+}
+.full-width {
+  width: 100%;
+}
+.menu-button {
+  transition: 300ms ease-in-out;
+  transform: rotate(0deg);
+}
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+.submenu {
+  overflow-y: hidden;
+  transition: transform 300ms ease;
+  transform: scaleY(0);
+  transform-origin: top;
+  padding: 0 15px 0 15px;
+}
+.submenu.expanded {
+  transform: scaleY(1);
+}
