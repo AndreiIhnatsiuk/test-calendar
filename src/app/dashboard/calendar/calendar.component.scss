@@ -74,6 +74,8 @@ mat-toolbar {
   }
 
   .cal-time-events {
+    max-height: 720px;
+    overflow-y: auto;
     .cal-event {
       font-size: 11px;
       line-height: normal;
@@ -91,9 +93,18 @@ mat-toolbar {
   }
 }
 
+.cal-day-headers {
+  margin-right: 14.5px;
+}
+
+.cal-day-columns {
+  height: 100%;
+}
+
 .example-container {
   //border: 1px solid rgba(0, 0, 0, 0.5);
 }
+
 .example-sidenav-content {
   //display: flex;
   height: 100%;
@@ -101,19 +112,24 @@ mat-toolbar {
   justify-content: center;
   padding: 0 15px 0 15px;
 }
+
 .example-sidenav {
   user-select: none;
 }
+
 .full-width {
   width: 100%;
 }
+
 .menu-button {
   transition: 300ms ease-in-out;
   transform: rotate(0deg);
 }
+
 .menu-button.rotated {
   transform: rotate(180deg);
 }
+
 .submenu {
   overflow-y: hidden;
   transition: transform 300ms ease;
@@ -121,6 +137,11 @@ mat-toolbar {
   transform-origin: top;
   padding: 0 15px 0 15px;
 }
+
 .submenu.expanded {
   transform: scaleY(1);
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: black !important;
 }

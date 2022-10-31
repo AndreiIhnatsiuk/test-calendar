@@ -12,7 +12,6 @@ import {AppointmentMeta} from '../../entities/calendar/appointment-meta';
 import {addMinutes, isSameISOWeek} from 'date-fns';
 import {AppointmentTime} from '../../entities/calendar/appointment-time';
 import {MatSidenav} from '@angular/material/sidenav';
-import {AppointmentType} from '../../entities/calendar/appointment-type';
 
 
 @Injectable()
@@ -35,10 +34,12 @@ export class CustomDateFormatter extends CalendarDateFormatter {
 }
 
 class SlotMeta {
-  appointmentTypes: number[];
+  appointmentType: number;
+  title: string;
 
-  constructor(appointmentTypes: AppointmentType[]) {
-    this.appointmentTypes = appointmentTypes.map(value => value.id);
+  constructor(appointmentType: number, title: string) {
+    this.appointmentType = appointmentType;
+    this.title = title;
   }
 }
 
@@ -150,10 +151,11 @@ export class CalendarComponent implements OnInit {
   filterEvents() {
     this.events = [];
     const filteredSlots: CalendarEvent[] = this.slotEvents.filter((element) => {
-      return element.meta instanceof SlotMeta && element.meta.appointmentTypes.some(x => this.appointmentTypeIds.includes(x));
+      return element.meta instanceof SlotMeta && this.appointmentTypeIds.includes(element.meta.appointmentType);
     });
     this.chosenMentorId ? this.events = this.appointmentEvent.concat(filteredSlots) : this.events = this.appointmentEvent;
     this.cdr.detectChanges();
+    console.log(this.events);
   }
 
   getSlots(mentorId: number) {
@@ -161,14 +163,16 @@ export class CalendarComponent implements OnInit {
     this.slotService.getSlots(mentorId).subscribe({
       next: value => {
         value.forEach(element => {
-          const newEvent: CalendarEvent = {
-            title: '',
-            start: new Date(element.startDate),
-            end: addMinutes(new Date(element.startDate), 15),
-            color: {primary: 'rgb(51, 182, 121)', secondary: 'rgb(51, 182, 121)', secondaryText: 'white'},
-            meta: new SlotMeta(element.appointmentTypes),
-          };
-          this.slotEvents.push(newEvent);
+          element.appointmentTypes.sort((a, b) => a.id - b.id).forEach((type) => {
+            const newEvent: CalendarEvent = {
+              title: '',
+              start: new Date(element.startDate),
+              end: addMinutes(new Date(element.startDate), 15),
+              color: {primary: '#' + type.color, secondary: '#' + type.color, secondaryText: 'white'},
+              meta: new SlotMeta(type.id, type.title),
+            };
+            this.slotEvents.push(newEvent);
+          });
         });
       },
       complete: () => {

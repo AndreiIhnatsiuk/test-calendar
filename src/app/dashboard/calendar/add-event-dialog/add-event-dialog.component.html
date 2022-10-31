@@ -1,14 +1,6 @@
-<div *ngIf="data.event.title.length === 0">
-  <mat-form-field appearance="legacy">
-    <mat-label>Выберите тип</mat-label>
-    <mat-select [(value)]="chosenAppointmentTypeId">
-      <mat-option *ngFor="let type of appointmentTypes"
-                  [value]="type.id">
-        {{type.title}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<h2 *ngIf="data.event.title.length === 0">
+ {{data.event.meta.title}}
+</h2>
 <div>
   <mat-form-field>
     <mat-label>Введите описание</mat-label>

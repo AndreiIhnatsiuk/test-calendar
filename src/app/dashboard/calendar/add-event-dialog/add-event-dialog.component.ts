@@ -19,8 +19,6 @@ class DialogData {
   styleUrls: ['./add-event-dialog.component.scss']
 })
 export class AddEventDialogComponent implements OnInit { // TODO refactor conditions at HTML
-  appointmentTypes: AppointmentType[];
-  chosenAppointmentTypeId: number;
   description: string;
   sending = false;
 
@@ -31,15 +29,12 @@ export class AddEventDialogComponent implements OnInit { // TODO refactor condit
   }
 
   ngOnInit(): void {
-    this.appointmentsService.getAppointmentTypes().subscribe(types => {
-      this.appointmentTypes = types;
-    });
   }
 
   addEvent(): void {
     this.sending = true;
     const appointmentRequest =
-      new AppointmentRequest(this.data.mentorId, this.chosenAppointmentTypeId, this.description, this.data.event.start);
+      new AppointmentRequest(this.data.mentorId, this.data.event.meta.appointmentType, this.description, this.data.event.start);
     this.appointmentsService.addAppointment(appointmentRequest).subscribe(() => {
       this.sending = false;
       this.snackBar.open('Отправлено', undefined, {

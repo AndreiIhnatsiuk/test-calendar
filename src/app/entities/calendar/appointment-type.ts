@@ -3,5 +3,6 @@ export interface AppointmentType {
   title: string;
   paid: boolean;
   duration: number;
+  color: string;
   selected: boolean;
 }
