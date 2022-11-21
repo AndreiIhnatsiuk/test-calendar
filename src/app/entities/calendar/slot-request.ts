@@ -1,12 +1,10 @@
 export class SlotRequest {
-  date: string;
-  from: string;
-  to: string;
+  from: Date;
+  to: Date;
   appointmentTypes: number[];
 
 
-  constructor(date: string, from: string, to: string, appointmentTypes: number[]) {
-    this.date = date;
+  constructor(from: Date, to: Date, appointmentTypes: number[]) {
     this.from = from;
     this.to = to;
     this.appointmentTypes = appointmentTypes;

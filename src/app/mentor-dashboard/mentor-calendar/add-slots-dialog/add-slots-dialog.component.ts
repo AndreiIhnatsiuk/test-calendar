@@ -4,11 +4,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SlotRequest} from '../../../entities/calendar/slot-request';
 import {CalendarEvent} from 'angular-calendar';
+import {DatePipe} from '@angular/common';
 
 class DialogData {
-  date: string;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
   isPlanningMode: boolean;
   scheduleEvents: CalendarEvent[];
   currentEvent: CalendarEvent;
@@ -25,6 +25,7 @@ export class AddSlotsDialogComponent implements OnInit {
 
   constructor(private slotService: SlotService,
               private snackBar: MatSnackBar,
+              private datePipe: DatePipe,
               private dialogRef: MatDialogRef<AddSlotsDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
@@ -33,10 +34,12 @@ export class AddSlotsDialogComponent implements OnInit {
   }
 
   createSlots(): void {
-    console.log(this.appointmentTypeIds);
+    console.log(this.data.start);
+    console.log(this.data.end);
     this.sending = true;
-    const slotDto = new SlotRequest(this.data.date, this.data.start,
+    const slotDto = new SlotRequest(this.data.start,
       this.data.end, this.appointmentTypeIds);
+    console.log(slotDto);
     this.slotService.createSlots(slotDto).subscribe(() => {
       this.sending = false;
       this.snackBar.open('Слоты созданы успешно', undefined, {
@@ -54,7 +57,7 @@ export class AddSlotsDialogComponent implements OnInit {
 
   deleteSlots() {
     this.sending = true;
-    this.slotService.deleteSlots(this.data.date, this.data.start, this.data.end)
+    this.slotService.deleteSlots(this.data.start, this.data.end)
       .subscribe({
         next: () => {
           this.sending = false;
@@ -77,7 +80,9 @@ export class AddSlotsDialogComponent implements OnInit {
   }
 
   confirm(): void {
-    if (confirm('Действительно хотите удалить слоты с ' + this.data.start + ' по ' + this.data.end + '?')) {
+    const from = this.datePipe.transform(this.data.start, 'hh:mm dd-MM-yyyy');
+    const to = this.datePipe.transform(this.data.end, 'hh:mm dd-MM-yyyy');
+    if (confirm('Действительно хотите удалить слоты с ' + from + ' по ' + to + '?')) {
       this.deleteSlots();
     }
   }

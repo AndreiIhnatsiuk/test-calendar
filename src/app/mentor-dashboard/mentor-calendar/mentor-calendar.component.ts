@@ -9,7 +9,7 @@ import {
 import {WeekViewHourSegment} from 'calendar-utils';
 import {fromEvent, Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {addDays, addMinutes, endOfWeek, setDay} from 'date-fns';
+import {addDays, addMinutes, endOfISOWeek, endOfWeek, isSameISOWeek, setDay, startOfISOWeek} from 'date-fns';
 import {DatePipe, formatDate} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {AppointmentService} from '../../services/calendar-service/appointment.service';
@@ -126,7 +126,8 @@ export class MentorCalendarComponent implements OnInit {
   }
 
   getAppointments() {
-    this.appointmentService.getAppointments().subscribe(data => {
+    this.appointmentService.getAppointments(isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
+      endOfISOWeek(this.viewDate)).subscribe(data => {
       const newEvents: CalendarEvent[] = [];
       data.forEach(element => {
         const newEvent: CalendarEvent = {
@@ -153,7 +154,8 @@ export class MentorCalendarComponent implements OnInit {
 
   getSlots(mentorId: number) {
     this.getAppointments();
-    this.slotService.getSlots(mentorId).subscribe(slots => {
+    this.slotService.getSlots(mentorId, isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
+      endOfISOWeek(this.viewDate)).subscribe(slots => {
       const slotsEvent: CalendarEvent[] = [];
       slots.forEach(element => {
         const newEvent: CalendarEvent = {
@@ -167,12 +169,14 @@ export class MentorCalendarComponent implements OnInit {
       });
       this.events = [...this.events].concat(slotsEvent);
       this.refresh();
+      console.log(this.events);
     });
   }
 
   useDialog(event: CalendarEvent) {
     this.dialogRef = this.dialog.open(MentorEventDialogComponent, {data: event});
     this.dialogRef.afterClosed().subscribe(() => {
+      this.getSlots(this.mentorId);
       this.refresh();
     });
   }
@@ -189,7 +193,6 @@ export class MentorCalendarComponent implements OnInit {
     this.dialogRef = this.dialog.open(MentorAddEventDialogComponent, {data: {event: event, mentorId: this.mentorId}});
     this.dialogRef.afterClosed().subscribe({
       complete: () => {
-        this.getAppointments();
         this.getSlots(this.mentorId);
         this.refresh();
       }
@@ -259,16 +262,15 @@ export class MentorCalendarComponent implements OnInit {
         },
         complete: () => {
           if (dragToSelectEvent.end === undefined) {
-            dragToSelectEvent.end = addMinutes(dragToSelectEvent.start, 15);
+            dragToSelectEvent.end = addMinutes(dragToSelectEvent.start, 15); // hardcode slot duration
           }
           this.dialogRef = this.dialog
             .open(AddSlotsDialogComponent,
               {
                 data:
                   {
-                    date: this.datePipe.transform(dragToSelectEvent.start, 'yyyy-MM-dd'),
-                    start: this.datePipe.transform(dragToSelectEvent.start, 'HH:mm'),
-                    end: this.datePipe.transform(dragToSelectEvent.end, 'HH:mm'),
+                    start: dragToSelectEvent.start,
+                    end: dragToSelectEvent.end,
                     isPlanningMode: this.isPlanningMode,
                     scheduleEvents: this.scheduleEvents,
                     currentEvent: dragToSelectEvent
@@ -306,10 +308,14 @@ export class MentorCalendarComponent implements OnInit {
   createSchedule() {
     if (this.isPlanningMode) {
       this.scheduleEvents.forEach((event) => {
-        const day = this.datePipe.transform(event.start, 'EEEE').toUpperCase();
-        const startTime = this.datePipe.transform(event.start, 'HH:mm');
-        const endTime = this.datePipe.transform(event.end, 'HH:mm');
-        const slotScheduleTime = new SlotScheduleTime(day, startTime, endTime, event.meta.appointmentTypes);
+        const startDay = this.datePipe.transform(event.start, 'EEEE').toUpperCase();
+        const startTime = this.datePipe.transform(event.start, 'HH:mm:ss.SSSZZZZZ');
+        const endDay = this.datePipe.transform(event.start, 'EEEE').toUpperCase();
+        const endTime = this.datePipe.transform(event.end, 'HH:mm:ss.SSSZZZZZ');
+        const slotScheduleTime = new SlotScheduleTime(
+          {dayOfWeek: startDay, time: startTime},
+          {dayOfWeek: endDay, time: endTime},
+          event.meta.appointmentTypes);
         this.slotScheduleTimes.push(slotScheduleTime);
       });
     } else {
@@ -348,8 +354,8 @@ export class MentorCalendarComponent implements OnInit {
     slotScheduleRequest.slotScheduleTimes.forEach(element => {
       const newEvent: CalendarEvent = {
         title: '',
-        start: this.setTime(element.startTime, this.getDateOfWeekDayForCurrentWeek(element.dayOfWeek)),
-        end: this.setTime(element.endTime, this.getDateOfWeekDayForCurrentWeek(element.dayOfWeek)),
+        start: this.setTime(element.start.time, this.getDateOfWeekDayForCurrentWeek(element.start.dayOfWeek)),
+        end: this.setTime(element.end.time, this.getDateOfWeekDayForCurrentWeek(element.end.dayOfWeek)),
         color: {primary: '#ead137', secondary: '#ead137', secondaryText: 'white'},
       };
       newEvents.push(newEvent);
@@ -399,6 +405,10 @@ export class MentorCalendarComponent implements OnInit {
     event.start = newStart;
     event.end = newEnd;
     this.refreshTime.next();
+  }
+
+  getEventsWhenWeekChange() {
+    this.getSlots(this.mentorId);
   }
 }
 

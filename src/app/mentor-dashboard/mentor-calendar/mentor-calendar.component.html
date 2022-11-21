@@ -4,6 +4,7 @@
             mat-icon-button
             mwlCalendarToday
             [(viewDate)]="viewDate"
+            (click)="getEventsWhenWeekChange()"
             matTooltip='Сегодня'>
             <mat-icon>today</mat-icon>
     </button>
@@ -13,6 +14,7 @@
             mwlCalendarPreviousView
             [view]="'week'"
             [(viewDate)]="viewDate"
+            (click)="getEventsWhenWeekChange()"
             matTooltip='Предыдущая неделя'>
       <mat-icon>chevron_left</mat-icon>
     </button>
@@ -22,6 +24,7 @@
             mwlCalendarNextView
             [view]="'week'"
             [(viewDate)]="viewDate"
+            (click)="getEventsWhenWeekChange()"
             matTooltip='Следующая неделя'>
       <mat-icon>chevron_right</mat-icon>
     </button>

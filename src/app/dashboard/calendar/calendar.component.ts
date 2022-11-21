@@ -9,7 +9,7 @@ import {AppointmentService} from '../../services/calendar-service/appointment.se
 import {SlotService} from '../../services/calendar-service/slot.service';
 import {MentorService} from '../../services/mentor.service';
 import {AppointmentMeta} from '../../entities/calendar/appointment-meta';
-import {addMinutes, isSameISOWeek} from 'date-fns';
+import {addMinutes, endOfISOWeek, isSameISOWeek, startOfISOWeek} from 'date-fns';
 import {AppointmentTime} from '../../entities/calendar/appointment-time';
 import {MatSidenav} from '@angular/material/sidenav';
 
@@ -87,12 +87,27 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appointmentService.getAvailableTime().subscribe(time => {
-      this.availableTime = time;
-    });
+    this.getAvailableTimeForCurrentWeek();
     this.getAppointments();
-    this.mentorService.get(1).subscribe(mentors => {
+    this.mentorService.get(1).subscribe(mentors => { // Course hardcode
       this.mentors = mentors;
+    });
+    console.log(this.chosenMentorId);
+  }
+
+  getAvailableTimeForCurrentWeek() {
+    this.appointmentService.getAvailableTime().subscribe({
+      next: time => {
+        this.availableTime = time;
+      },
+      complete: () => {
+        this.displayedAvailableTime = 0;
+        for (const item of this.availableTime) {
+          if (isSameISOWeek(new Date(this.viewDate), new Date(item.startDate))) {
+            this.displayedAvailableTime = item.minutes;
+          }
+        }
+      }
     });
   }
 
@@ -108,18 +123,10 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getTimeForThisWeek() {
-    this.displayedAvailableTime = 0;
-    for (let i = 0; i < this.availableTime.length; i++) {
-      if (isSameISOWeek(new Date(this.viewDate), new Date(this.availableTime[i].startDate))) {
-        this.displayedAvailableTime = this.availableTime[i].minutes;
-      }
-    }
-  }
-
   getAppointments() {
     this.appointmentEvent = [];
-    this.appointmentService.getAppointments().subscribe({
+    this.appointmentService.getAppointments(isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
+      endOfISOWeek(this.viewDate)).subscribe({
       next: value => {
         value.forEach(element => {
           const newAppointmentEvent: CalendarEvent<AppointmentMeta> = {
@@ -142,8 +149,9 @@ export class CalendarComponent implements OnInit {
       },
       complete: () => {
         this.filterEvents();
-        this.getTimeForThisWeek();
+        this.getAvailableTimeForCurrentWeek();
         this.isSelectOpen = !this.isSelectOpen;
+        console.log(this.chosenMentorId);
       }
     });
   }
@@ -160,7 +168,8 @@ export class CalendarComponent implements OnInit {
 
   getSlots(mentorId: number) {
     this.slotEvents = [];
-    this.slotService.getSlots(mentorId).subscribe({
+    this.slotService.getSlots(mentorId, isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
+      endOfISOWeek(this.viewDate)).subscribe({
       next: value => {
         value.forEach(element => {
           element.appointmentTypes.sort((a, b) => a.id - b.id).forEach((type) => {
@@ -178,6 +187,7 @@ export class CalendarComponent implements OnInit {
       complete: () => {
         this.isSelectOpen = !this.isSelectOpen;
         this.filterEvents();
+        console.log(this.chosenMentorId);
       }
     });
   }
@@ -186,12 +196,7 @@ export class CalendarComponent implements OnInit {
     this.dialogRef = this.dialog.open(EventDialogComponent, {data: event});
     this.dialogRef.afterClosed().subscribe({
       complete: () => {
-        if (this.chosenMentorId === undefined) {
-          this.getAppointments();
-        } else {
-          this.getAppointments();
-          this.getSlots(this.chosenMentorId);
-        }
+        this.getEventsForWeekChange(this.chosenMentorId);
       }
     });
   }
@@ -208,13 +213,16 @@ export class CalendarComponent implements OnInit {
     this.dialogRef = this.dialog.open(AddEventDialogComponent, {data: {event: event, mentorId: this.chosenMentorId}});
     this.dialogRef.afterClosed().subscribe({
       complete: () => {
-        if (this.chosenMentorId === undefined) {
-          this.getAppointments();
-        } else {
-          this.getAppointments();
-          this.getSlots(this.chosenMentorId);
-        }
+        this.getEventsForWeekChange(this.chosenMentorId);
       }
     });
+  }
+
+  getEventsForWeekChange(mentorId: number) {
+    if (mentorId) {
+      this.getSlots(mentorId);
+    }
+    this.getAppointments();
+    console.log(this.availableTime);
   }
 }

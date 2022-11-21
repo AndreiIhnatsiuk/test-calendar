@@ -1,13 +1,14 @@
+import {WeekTime} from './week-time';
+
 export class SlotScheduleTime {
-  dayOfWeek: string;
-  startTime: string;
-  endTime: string;
+  start: WeekTime;
+  end: WeekTime;
   appointmentTypes: number[];
 
-  constructor(dayOfWeek: string, startTime: string, endTime: string, appointmentTypes: number[]) {
-    this.dayOfWeek = dayOfWeek;
-    this.startTime = startTime;
-    this.endTime = endTime;
+
+  constructor(start: WeekTime, end: WeekTime, appointmentTypes: number[]) {
+    this.start = start;
+    this.end = end;
     this.appointmentTypes = appointmentTypes;
   }
 }
