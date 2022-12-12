@@ -37,17 +37,17 @@ export class SlotService {
   }
 
   public createSchedule(slotScheduleRequest: SlotScheduleRequest): Observable<SlotScheduleRequest> {
-    return this.http.post<SlotScheduleRequest>('/api/calendar/slot-schedule', slotScheduleRequest);
+    return this.http.post<SlotScheduleRequest>('/api/slot-schedule', slotScheduleRequest);
   }
 
   public getSchedule(): Observable<Array<SlotScheduleRequest>> {
     const params = new HttpParams()
       .set('timezone', this.datePipe.transform(new Date(), 'ZZZZZ'));
-    return this.http.get<Array<SlotScheduleRequest>>('/api/calendar/slot-schedule?', {params: params});
+    return this.http.get<Array<SlotScheduleRequest>>('/api/slot-schedule?', {params: params});
   }
 
   public patchSchedule(scheduleId: number, slotScheduleUpdate: SlotScheduleUpdate): Observable<any> {
-    return this.http.patch('/api/calendar/slot-schedule/' + scheduleId, slotScheduleUpdate);
+    return this.http.patch('/api/slot-schedule/' + scheduleId, slotScheduleUpdate);
   }
 
   private formatDateToStringWithTemplate(date: Date): string {
