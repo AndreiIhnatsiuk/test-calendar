@@ -3,14 +3,14 @@ export class AppointmentMeta {
   eventDescription: string;
   eventConferenceLink: string;
   eventParticipants: string;
-  mentorId: number;
+  mentorId: string;
   appointmentId: number;
 
   constructor(eventTitle: string,
               eventDescription: string,
               eventConferenceLink: string,
               eventParticipants: string,
-              mentorId: number,
+              mentorId: string,
               appointmentId: number) {
     this.eventTitle = eventTitle;
     this.eventDescription = eventDescription;

@@ -66,7 +66,7 @@ export class CalendarComponent implements OnInit {
   weekStartsOn: 1 = 1;
   dialogRef: any;
   mentors: Mentor[];
-  chosenMentorId: number;
+  chosenMentorId: string;
   availableTime: AppointmentTime[];
   displayedAvailableTime: number;
   appointmentTypeIds = [];
@@ -166,7 +166,7 @@ export class CalendarComponent implements OnInit {
     console.log(this.events);
   }
 
-  getSlots(mentorId: number) {
+  getSlots(mentorId: string) {
     this.slotEvents = [];
     this.slotService.getSlots(mentorId, isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
       endOfISOWeek(this.viewDate)).subscribe({
@@ -218,7 +218,7 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  getEventsForWeekChange(mentorId: number) {
+  getEventsForWeekChange(mentorId: string) {
     if (mentorId) {
       this.getSlots(mentorId);
     }

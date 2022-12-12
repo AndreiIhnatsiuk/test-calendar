@@ -1,10 +1,10 @@
 export class AppointmentRequest {
-  mentorId: number;
+  mentorId: string;
   appointmentTypeId: number;
   description: string;
   startDate: Date;
 
-  constructor(mentorId: number, appointmentTypeId: number, description: string, startDate: Date) {
+  constructor(mentorId: string, appointmentTypeId: number, description: string, startDate: Date) {
     this.mentorId = mentorId;
     this.appointmentTypeId = appointmentTypeId;
     this.description = description;

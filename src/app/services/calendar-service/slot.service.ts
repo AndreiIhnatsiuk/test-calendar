@@ -13,7 +13,7 @@ export class SlotService {
               private datePipe: DatePipe) {
   }
 
-  public getSlots(mentorId: number, from?: Date, to?: Date): Observable<Array<Slot>> {
+  public getSlots(mentorId: string, from?: Date, to?: Date): Observable<Array<Slot>> {
     let params = new HttpParams();
     params = params.append('mentorId', mentorId);
     if (from) {

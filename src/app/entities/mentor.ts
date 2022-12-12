@@ -1,5 +1,5 @@
 export interface Mentor {
-  userId: number;
+  userId: string;
   name: string;
   githubUsername: string;
 }

@@ -1,7 +1,7 @@
 import {EmailNotifications} from './email-notifications';
 
 export interface Personal {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   analyticsId: string;

@@ -89,7 +89,7 @@ export class MentorCalendarComponent implements OnInit {
   dragToCreateActive = false;
   weekStartsOn: 1 = 1;
   dialogRef: any;
-  mentorId: number;
+  mentorId: string;
   isPlanningMode = false;
   isReschedulingMode = false;
   slotScheduleRequest: SlotScheduleRequest[] = [];
@@ -152,7 +152,7 @@ export class MentorCalendarComponent implements OnInit {
     });
   }
 
-  getSlots(mentorId: number) {
+  getSlots(mentorId: string) {
     this.getAppointments();
     this.slotService.getSlots(mentorId, isSameISOWeek(this.viewDate, new Date) ? new Date : startOfISOWeek(this.viewDate),
       endOfISOWeek(this.viewDate)).subscribe(slots => {

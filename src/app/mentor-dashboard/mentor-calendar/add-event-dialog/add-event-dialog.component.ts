@@ -9,7 +9,7 @@ import {AppointmentUpdate} from '../../../entities/calendar/appointment-update';
 
 class DialogData {
   event: CalendarEvent;
-  mentorId: number;
+  mentorId: string;
   dialog: any;
 }
 
