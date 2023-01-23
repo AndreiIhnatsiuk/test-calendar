@@ -1,0 +1,66 @@
+<div class="center">
+  <div class="cards">
+    <mat-card>
+      <mat-card-title *ngIf="singleDaysLeft">
+        Отпуск: {{singleDaysLeft}}
+      </mat-card-title>
+      <mat-card-title *ngIf="weekDaysLeft">
+        Отгулы: {{weekDaysLeft}}
+      </mat-card-title>
+      <mat-card-content>
+        <p>"Отгулы" расходуются, если вы берете отпуск меньше недели. Иначе дни будут браться из "отпуска".
+          Вы можете отменить отпуск, удалив его, если он еще не начался. А так же можно изменить даты будущих отпусков
+          или дату окончания текущего отпуска. Во время отпуска вам доступен личный план и, при желании, вы можете
+          продолжать обучение.
+          Приятного отдыха!
+        </p>
+      </mat-card-content>
+
+      <mat-card-actions align="center">
+        <button mat-raised-button
+                class="button"
+                color="primary"
+                (click)="useDialog()">Взять отпуск
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="cards" *ngIf="vacations">
+    <mat-card class="card"
+              *ngFor="let vacation of vacations; ">
+      <mat-card-title class="vacation-card">
+        Отпуск
+      </mat-card-title>
+
+      <mat-card-content class="content">
+        Дата начала: {{vacation.startDate | date:'dd MMMM yyyy':null:'ru'}}
+      </mat-card-content>
+
+      <mat-card-content class="content">
+        Дата окончания: {{vacation.endDate | date:'dd MMMM yyyy':null:'ru'}}
+      </mat-card-content>
+      <mat-card-content
+        *ngIf="parseDate(vacation.startDate) < today.getTime() && parseDate(vacation.endDate) > today.getTime()">
+        До конца отпуска осталось: {{countLeftDays(vacation.endDate)}}
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button [disabled]="parseDate(vacation.endDate) < today.getTime() "
+                mat-icon-button matTooltip="Изменить"
+                (click)="useDialog(vacation.id, vacation.startDate, vacation.endDate)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button [disabled]="parseDate(vacation.startDate) < today.getTime()"
+                mat-icon-button matTooltip="Удалить"
+                (click)="confirm(vacation.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+
+

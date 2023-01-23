@@ -9,9 +9,7 @@ import {ModuleComponent} from './module/module.component';
 import {TaskComponent} from './task/task.component';
 import {MatTableModule} from '@angular/material/table';
 import {SubmissionComponent} from './submission/submission.component';
-import {AceModule} from 'ngx-ace-wrapper';
-import {ACE_CONFIG} from 'ngx-ace-wrapper';
-import {AceConfigInterface} from 'ngx-ace-wrapper';
+import {ACE_CONFIG, AceConfigInterface, AceModule} from 'ngx-ace-wrapper';
 import {NgxMaskModule} from 'ngx-mask';
 import {OptionQuestionComponent} from './option-question/option-question.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -59,6 +57,11 @@ import localeRu from '@angular/common/locales/ru';
 import {CalendarComponent} from './calendar/calendar.component';
 import {EventDialogComponent} from './calendar/event-dialog/event-dialog.component';
 import {AddEventDialogComponent} from './calendar/add-event-dialog/add-event-dialog.component';
+import {VacationComponent} from './vacation/vacation.component';
+import {VacationDialogComponent} from './vacation/vacation-dialog/vacation-dialog.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 
 registerLocaleData(localeRu);
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -89,6 +92,10 @@ const routes: Routes = [
       {
         path: 'plan',
         component: PersonalPlanComponent,
+      },
+      {
+        path: 'vacation',
+        component: VacationComponent,
       },
       {
         path: 'java/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
@@ -151,6 +158,8 @@ const routes: Routes = [
     CalendarComponent,
     EventDialogComponent,
     AddEventDialogComponent,
+    VacationComponent,
+    VacationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -177,12 +186,18 @@ const routes: Routes = [
     MatRadioModule,
     CalendarWeekModule,
     CalendarCommonModule,
+    MatDatepickerModule,
+    ReactiveFormsModule,
+    MatNativeDateModule
   ],
   providers: [
     DatePipe,
     {
       provide: ACE_CONFIG,
       useValue: DEFAULT_ACE_CONFIG
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'ru-Ru'
     },
     {
       provide: MAT_RADIO_DEFAULT_OPTIONS,

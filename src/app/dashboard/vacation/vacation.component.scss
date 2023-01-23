@@ -1,0 +1,49 @@
+.card {
+  border: #1a1b1f;
+  margin: 10px 15px 10px 15px;
+
+}
+.vacation-card {
+  font-size: 20px;
+}
+
+.content {
+  margin-bottom: 5px;
+}
+
+.header {
+  padding: 10px 0 0 16px;
+}
+
+.button {
+  margin-left: 10px;
+}
+
+.datepicker {
+  font-size: 18px;
+  max-width: 160px;
+  margin: 0 10px 0 10px;
+}
+
+.container {
+  margin: 0 auto 0;
+  display: block;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.center {
+  margin: 10px auto auto;
+  max-width: 550px;
+  padding: 0 5%;
+}
+
+.cards {
+  max-width: 550px;
+  max-height: 100%;
+}
+
+p {
+  text-indent: 20px;
+}
