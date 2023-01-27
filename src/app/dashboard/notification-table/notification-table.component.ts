@@ -14,7 +14,7 @@ import {EnabledNotificationRequest} from '../../entities/notification/enabled-no
   styleUrls: ['./notification-table.component.scss']
 })
 export class NotificationTableComponent implements OnInit {
-  sending: boolean;
+  sending: Map<string, boolean> = new Map();
   notificationTypes: NotificationType[];
   notificationChannelInfo: NotificationChannelInfo[];
   enabledNotifications: EnabledNotification[];
@@ -59,11 +59,12 @@ export class NotificationTableComponent implements OnInit {
   }
 
   subscribe(type: string, channel: string) {
-    this.sending = true;
+    const key = 'type: ' + type + ' channel: ' + channel;
+    this.sending.set(key, true);
     this.notificationService.makeNotificationEnabled(new EnabledNotificationRequest(type, channel)).subscribe(((enabledNotification) => {
       const row = this.dataSource.find(x => x.type.id === type);
       row[channel] = enabledNotification.id;
-      this.sending = false;
+      this.sending.set(key, false);
       this.snackBar.open('Вы подписались на получение уведомлений ' + type + ' посредством ' + channel, undefined, {
         duration: 10000
       });
@@ -75,13 +76,16 @@ export class NotificationTableComponent implements OnInit {
   }
 
   unsubscribe(id: number, index: number, channel: string) {
-    this.sending = true;
+    const row = this.dataSource[index];
+    const type = row['type'].id;
+    const key = 'type: ' + type + ' channel: ' + channel;
+    this.sending.set(key, true);
     this.notificationService.disableNotification(id).subscribe((() => {
-      const row = this.dataSource[index];
       if (row[channel] === id) {
         row[channel] = null;
       }
-      this.sending = false;
+      this.sending.set(key, false);
+
       this.snackBar.open('Вы отписались от данного уведомления', undefined, {
         duration: 10000
       });

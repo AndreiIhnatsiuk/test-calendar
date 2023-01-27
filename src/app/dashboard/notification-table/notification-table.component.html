@@ -13,7 +13,7 @@
                                 ? subscribe(element.type.id, column.columnDef)
                                 : unsubscribe(element[column.columnDef], i, column.columnDef)"
                       [checked]="isChecked(element[column.columnDef])"
-                      [disabled]="sending">
+                      [disabled]="sending.get('type: ' + element.type.id + ' channel: ' + column.columnDef)">
         </mat-checkbox>
       </td>
     </ng-container>
