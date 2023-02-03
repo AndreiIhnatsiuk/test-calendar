@@ -1,8 +1,25 @@
-.mat-flat-button {
+.mdc-button {
+  align-items: flex-start;
+  display: inline-block;
+  min-width: 30px;
+}
+
+.mat-mdc-unelevated-button > .mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+
+.mat-mdc-unelevated-button.mat-mdc-button-base {
+  height: 30px;
+}
+
+
+.mat-mdc-unelevated-button {
   color: rgba(0, 0, 0, 0.65);
   padding: 3px;
-  min-width: 0;
-  line-height: 0;
+
 
   &.active-button-item {
     border: 2px solid rgba(255, 255, 255, 0.9);
@@ -11,12 +28,15 @@
 }
 
 @media screen and (max-width: 992px) {
-  .mat-flat-button {
+  .mat-mdc-unelevated-button {
     padding: 8px;
 
     &.active-button-item {
       padding: 6px;
     }
+  }
+  .mat-mdc-unelevated-button.mat-mdc-button-base {
+    height: 38px;
   }
 }
 
@@ -36,6 +56,6 @@
   background-color: #f39543;
 }
 
-.mat-flat-button[disabled] {
+.mat-mdc-unelevated-button[disabled] {
   background-color: grey;
 }

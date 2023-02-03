@@ -1,12 +1,22 @@
 .token {
-  margin-bottom: 0px;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .countdown {
   font: 400 12px Roboto, "Helvetica Neue", sans-serif;
   color: #7c8193;
+  padding-top: 0;
 }
 
 .button {
   height: 35px;
+}
+
+.mat-mdc-card {
+  padding: 16px;
+}
+
+.content {
+  padding-top: 0;
 }

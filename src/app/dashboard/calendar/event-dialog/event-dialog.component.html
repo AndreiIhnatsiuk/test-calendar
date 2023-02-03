@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z0">
+<mat-card appearance="raised" class="dialog">
   <mat-card-title>
     {{event.meta.eventTitle}}
   </mat-card-title>
@@ -14,7 +14,7 @@
   <mat-card-content>
     Список участников: {{event.meta.eventParticipants}}
   </mat-card-content>
-  <mat-card-content>
+  <mat-card-actions>
     <button *ngIf="!sending" mat-flat-button
             (click)="confirm(event.meta.appointmentId)"
             [matTooltip]="'Удалить'">
@@ -30,6 +30,6 @@
         <span class="icon"> edit </span>
       </mat-icon>
     </button>
-  </mat-card-content>
+  </mat-card-actions>
 </mat-card>
 

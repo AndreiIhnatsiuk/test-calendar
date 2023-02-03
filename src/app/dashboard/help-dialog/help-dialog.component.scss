@@ -4,6 +4,7 @@
   bottom: 20px;
   z-index: 5;
 }
+
 .row {
   margin-top: 0;
   margin-bottom: 5px;
@@ -22,7 +23,7 @@
   }
 
   .header {
-    line-height: 40px;
+    line-height: 46px;
     font-size: 24px;
     text-align: center;
   }
@@ -32,33 +33,39 @@
     background-color: #0000000a;
     overflow-y: auto;
     max-height: 70vh;
+    width: 100%;
 
     a {
       text-decoration: none;
     }
 
-    .mat-card {
+    .mat-mdc-card {
       margin: 10px;
       padding: 10px;
       cursor: pointer;
 
-      .mat-card-header {
+      .mat-mdc-card-header {
         margin: 0;
+        padding: 0;
 
-        .mat-card-title {
+        .mat-mdc-card-title {
           font-size: 14px;
           margin: 0;
+          color: #1a1b1f;
+          padding: 0 16px 5px 16px;
         }
 
-        .mat-card-subtitle {
+        .mat-mdc-card-subtitle {
           margin: 0;
         }
 
         .mat-icon {
+          height: 30px;
           font-size: 30px;
+          width: 30px;
         }
 
-        .mat-card-avatar {
+        .mat-mdc-card-avatar {
           width: 30px;
           height: 30px;
           background-size: cover;
@@ -78,15 +85,11 @@
   width: 60px;
   height: 60px;
 
-  &::ng-deep.mat-button-wrapper {
-    padding: 0;
-
-    mat-icon {
-      color: white;
-      font-size: 35px;
-      width: unset;
-      height: unset;
-    }
+  mat-icon {
+    color: white;
+    font-size: 35px;
+    width: unset;
+    height: unset;
   }
 }
 

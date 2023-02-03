@@ -2,7 +2,7 @@
   <div>
     <div>
       <h2>Личный план</h2>
-      <mat-card class="card plan">
+      <mat-card appearance="raised" class="card plan">
         <mat-card-content class="plan-content">
           <app-personal-plan-content></app-personal-plan-content>
         </mat-card-content>
@@ -10,7 +10,7 @@
       <h2>Модули</h2>
       <div>
         <div class="hover" (click)="send(module.id)" *ngFor="let module of modules">
-          <mat-card class="card">
+          <mat-card appearance="raised" class="card">
             <mat-card-header class="card-img" style="background-color: #{{module.color}}; background-size: cover;">
               <mat-card-title style="color: {{brightness(module.color)}}">{{module.title}}</mat-card-title>
             </mat-card-header>

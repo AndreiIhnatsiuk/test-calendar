@@ -15,11 +15,15 @@
   margin: 0 10px 0 10px;
 }
 
+.create-schedule {
+  height: 68px;
+}
+
 .cal-event-container.cal-starts-within-day.cal-ends-within-day.ng-star-inserted {
   max-width: 80% !important;
 }
 
-.mat-tooltip {
+.mat-mdc-tooltip {
   max-width: unset !important;
   font-size: 10px;
   line-height: 16px;

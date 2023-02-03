@@ -1,39 +1,41 @@
-<div *ngIf="data.mentorId">
-  <mat-form-field appearance="legacy">
-    <mat-label>Выберите тип</mat-label>
-    <mat-select [(value)]="chosenAppointmentTypeId">
-      <mat-option *ngFor="let type of appointmentTypes"
-                  [value]="type.id">
-        {{type.title}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-<div>
-  <mat-form-field>
-    <mat-label>Введите описание</mat-label>
-    <textarea matInput autocomplete="off" type="text" [(ngModel)]="description"
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="5">
+<div class="dialog">
+  <div *ngIf="data.mentorId">
+    <mat-form-field appearance="outline">
+      <mat-label>Выберите тип</mat-label>
+      <mat-select [(value)]="chosenAppointmentTypeId">
+        <mat-option *ngFor="let type of appointmentTypes"
+                    [value]="type.id">
+          {{type.title}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Введите описание</mat-label>
+      <textarea matInput autocomplete="off" type="text" [(ngModel)]="description"
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5">
       </textarea>
-  </mat-form-field>
-</div>
-<div *appSpinOn="sending"></div>
-<div>
-  <button
-    *ngIf="data.mentorId && !sending"
-    mat-raised-button color="primary"
-    (click)="addEvent()"
-    title="Отправить">Отправить
-  </button>
-</div>
-<div>
-  <button
-    *ngIf="!data.mentorId && !sending"
-    mat-raised-button color="primary"
-    (click)="patchEvent()"
-    title="Отправить">Отправить
-  </button>
+    </mat-form-field>
+  </div>
+  <div *appSpinOn="sending"></div>
+  <div>
+    <button
+      *ngIf="data.mentorId && !sending"
+      mat-raised-button color="primary"
+      (click)="addEvent()"
+      title="Отправить">Отправить
+    </button>
+  </div>
+  <div>
+    <button
+      *ngIf="!data.mentorId && !sending"
+      mat-raised-button color="primary"
+      (click)="patchEvent()"
+      title="Отправить">Отправить
+    </button>
+  </div>
 </div>

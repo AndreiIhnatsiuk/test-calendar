@@ -51,7 +51,7 @@
                (mouseleave)="mouseleave()">
     <mat-nav-list>
       <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-        <mat-form-field class="mentors" appearance="legacy">
+        <mat-form-field class="mentors" appearance="outline">
           <mat-label>Выберите ментора</mat-label>
           <mat-select [(value)]="chosenMentorId" (click)="isSelectOpen = !isSelectOpen">
             <mat-option (click)="getAppointments()">Нет</mat-option>

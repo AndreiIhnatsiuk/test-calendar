@@ -1,14 +1,17 @@
 <form>
-  <mat-form-field class="full-width">
-    <input matInput [(ngModel)]="name" name="name" placeholder="Имя" text="text">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Имя</mat-label>
+    <input matInput [(ngModel)]="name" name="name"  text="text">
   </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input matInput [(ngModel)]="email" name="email" placeholder="Email" type="email">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="email" name="email"  type="email">
   </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input matInput [(ngModel)]="password" name="password" placeholder="Пароль" type="password">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Пароль</mat-label>
+    <input matInput [(ngModel)]="password" name="password" type="password">
   </mat-form-field>
   <div>
     <mat-checkbox color="primary" [(ngModel)]="offerNotification" name="offerNotification">

@@ -23,7 +23,7 @@ mat-toolbar {
     text-overflow: ellipsis;
   }
 
-  .mat-button:hover {
+  .mat-mdc-button:hover {
     color: lightgrey;
   }
 
@@ -40,9 +40,13 @@ mat-toolbar {
     display: flex;
     align-items: center;
     color: white;
+    padding: 0 16px 0 16px;
 
     mat-icon {
       margin-right: 2px;
+      height: 24px;
+      width: 24px;
+      font-size: 24px;
     }
   }
 

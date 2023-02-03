@@ -1,20 +1,20 @@
-<h2 *ngIf="data.event.title.length === 0">
- {{data.event.meta.title}}
-</h2>
-<div>
-  <mat-form-field>
-    <mat-label>Введите описание</mat-label>
-    <textarea matInput autocomplete="off" type="text" [(ngModel)]="description"
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="5">
+<div class="dialog">
+  <h2 *ngIf="data.event.title.length === 0" > {{data.event.meta.title}}</h2>
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Введите описание</mat-label>
+      <textarea matInput autocomplete="off" type="text" [(ngModel)]="description"
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5">
     </textarea>
-  </mat-form-field>
-</div>
-<div>
-  <button *appSpinOn="sending" mat-raised-button color="primary"
-          (click)="data.event.title.length === 0 ? addEvent() : patchEvent()"
-          title="Отправить">Отправить
-  </button>
+    </mat-form-field>
+  </div>
+  <div>
+    <button *appSpinOn="sending" mat-raised-button color="primary"
+            (click)="data.event.title.length === 0 ? addEvent() : patchEvent()"
+            title="Отправить">Отправить
+    </button>
+  </div>
 </div>

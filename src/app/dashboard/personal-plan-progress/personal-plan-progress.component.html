@@ -11,11 +11,9 @@
     <mat-progress-bar *ngIf="futurePlan.status === 'Ended'" class="progress completed"></mat-progress-bar>
     <mat-progress-bar *ngIf="planCompleted" class="progress completed"></mat-progress-bar>
 
-
-  </button>
   <ng-container *ngIf="futurePlan">
     <div routerLink="plan" *ngIf="futurePlan.status === 'Active' && !planCompleted">
-      <div class="timer" *ngIf="secondsToSample < secondsInDay">
+      <div  *ngIf="secondsToSample < secondsInDay">
         <span>Осталось: {{secondsToSample * 1000 | date:'HH:mm:ss':'+0000'}}</span>
       </div>
 
@@ -33,4 +31,5 @@
       <span *ngIf="planCompleted">План выполнен.</span>
     </div>
   </ng-container>
+  </button>
 </div>

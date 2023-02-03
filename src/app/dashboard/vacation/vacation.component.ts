@@ -65,8 +65,8 @@ export class VacationComponent implements OnInit {
   useDialog(id?: number, startDate?: Date, endDate?: Date) {
     this.dialogRef = this.dialog.open(VacationDialogComponent, {
       disableClose: true,
-      height: '250px',
-      width: '300px',
+      height: '220px',
+      width: '320px',
       data: {id: id, startDate: startDate, endDate: endDate}
     });
     this.dialogRef.afterClosed().subscribe({

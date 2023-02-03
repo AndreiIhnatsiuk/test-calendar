@@ -8,6 +8,10 @@
   text-align: center;
 }
 
-::ng-deep.mat-tab-header {
+::ng-deep.mat-mdc-tab-header {
   margin-bottom: 20px;
+}
+
+.mat-mdc-card {
+  padding: 16px;
 }

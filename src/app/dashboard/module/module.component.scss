@@ -109,15 +109,15 @@ mat-expansion-panel {
     padding: 0;
   }
 
-  .mat-list-base {
-    padding-top: 0;
+  .mat-mdc-list-base {
+    padding: 0;
   }
 
-  ::ng-deep .mat-list-base .mat-list-item {
+  ::ng-deep .mat-mdc-list-base .mat-mdc-list-item {
     font-size: 14px;
   }
-
-  ::ng-deep .mat-nav-list .mat-list-item .mat-list-item-content {
+  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+  .mat-mdc-list-item {
     padding: 0 0 0 36px;
 
     .mat-line {

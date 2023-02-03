@@ -1,6 +1,6 @@
 <h1 class="header">Список задач в очереди</h1>
 <div *ngIf="mentorSubmissions">
-  <mat-card class="card"
+  <mat-card appearance="raised" class="card"
             *ngFor="let sub of mentorSubmissions; let i = index">
     <mat-card-title>
       ProblemID: {{sub.problemId}}

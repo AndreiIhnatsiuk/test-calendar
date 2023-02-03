@@ -15,13 +15,10 @@
     <mat-label>Telegram</mat-label>
     <input [disabled]="true"
            [(ngModel)]="personal.telegramUsername" matInput>
-    <button class="button"
-            mat-button color="primary"
-            *ngIf="!bindingTelegram && !personal.telegramUsername"
-            (click)="telegramBinding()">Привязать
-    </button>
-    <span *appSpinOn="bindingTelegram; diameter: 21"></span>
   </mat-form-field>
+  <p *ngIf="!bindingTelegram && !personal.telegramUsername">Телеграм аккаунт не привязан<br>
+    <a *appSpinOn="sendingEmail; diameter: 21" href="javascript:void(0)" (click)="telegramBinding()">Привязать.</a>
+  </p>
   <mat-form-field class="full-width">
     <mat-label>Телефон</mat-label>
     <input [disabled]="personal.phone"

@@ -60,13 +60,12 @@ ul.answers {
 
       p {
         white-space: break-spaces;
+        margin-bottom: 0;
       }
     }
-
     label, .answer-content, .mat-checkbox-label {
       width: 100%;
     }
-
     .mat-checkbox-inner-container {
       margin: 4px 0 auto 0;
     }

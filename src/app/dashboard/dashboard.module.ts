@@ -61,7 +61,7 @@ import {VacationComponent} from './vacation/vacation.component';
 import {VacationDialogComponent} from './vacation/vacation-dialog/vacation-dialog.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
+import {MAT_DATE_LOCALE, MatLineModule, MatNativeDateModule} from '@angular/material/core';
 
 registerLocaleData(localeRu);
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -188,7 +188,8 @@ const routes: Routes = [
     CalendarCommonModule,
     MatDatepickerModule,
     ReactiveFormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatLineModule
   ],
   providers: [
     DatePipe,

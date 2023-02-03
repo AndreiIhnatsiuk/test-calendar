@@ -1,25 +1,27 @@
-<app-appointment-type-select (sendAppointmentTypesIds)="appointmentTypeIds = $event"></app-appointment-type-select>
-<div>
-  <span *appSpinOn="sending"></span>
-  <button *ngIf="data.isPlanningMode && !sending"
-          class="button-create-delete"
-          mat-raised-button
-          color="primary"
-          (click)="addSlotScheduleTimes()">
-    Добавить в расписание
-  </button>
-  <button *ngIf="!data.isPlanningMode && !sending"
-          class="button-create-delete"
-          mat-raised-button
-          color="primary"
-          (click)="createSlots()">
-    Создать
-  </button>
-  <button *ngIf="!sending"
-          class="button-create-delete"
-          mat-raised-button
-          color="primary"
-          (click)="confirm()">
-    Удалить
-  </button>
+<div class="dialog">
+  <app-appointment-type-select (sendAppointmentTypesIds)="appointmentTypeIds = $event"></app-appointment-type-select>
+  <div>
+    <span *appSpinOn="sending"></span>
+    <button *ngIf="data.isPlanningMode && !sending"
+            class="button-create-delete"
+            mat-raised-button
+            color="primary"
+            (click)="addSlotScheduleTimes()">
+      Добавить в расписание
+    </button>
+    <button *ngIf="!data.isPlanningMode && !sending"
+            class="button-create-delete"
+            mat-raised-button
+            color="primary"
+            (click)="createSlots()">
+      Создать
+    </button>
+    <button *ngIf="!sending"
+            class="button-create-delete"
+            mat-raised-button
+            color="primary"
+            (click)="confirm()">
+      Удалить
+    </button>
+  </div>
 </div>

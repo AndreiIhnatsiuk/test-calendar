@@ -5,14 +5,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
 $custom-typography: mat.define-typography-config(
-  $subheading-1: mat.define-typography-level(14px, 21px),
-  $body-1: mat.define-typography-level(14px, 21px),
+  $subtitle-2: mat.define-typography-level(14px, 21px),
+  $body-1: mat.define-typography-level(14px, 21px,),
   $button: mat.define-typography-level(14px, 21px)
 );
 
 @include mat.typography-hierarchy($custom-typography);
 @include mat.all-component-typographies($custom-typography);
-@include mat.core($custom-typography);
+@include mat.core();
 
 html, body {
   height: 100%;
@@ -21,6 +21,7 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
 }
 
 pre, code {
@@ -46,10 +47,10 @@ pre {
   }
 }
 
-as-split {  // fixing error touch devices
+as-split { // fixing error touch devices
   touch-action: pan-y;
 }
 
-.mat-tooltip.tooltip {
+.mat-mdc-tooltip.tooltip {
   font-size: 15px;
 }
