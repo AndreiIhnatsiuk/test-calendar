@@ -19,7 +19,7 @@ import {MentorEventDialogComponent} from './event-dialog/event-dialog.component'
 import {MentorAddEventDialogComponent} from './add-event-dialog/add-event-dialog.component';
 import {AddSlotsDialogComponent} from './add-slots-dialog/add-slots-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {SlotScheduleRequest} from '../../entities/calendar/slot-schedule-request';
 import {SlotScheduleTime} from '../../entities/calendar/slot-schedule-time';

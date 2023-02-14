@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NotificationType} from '../../entities/notification/notification-type';
 import {NotificationChannelInfo} from '../../entities/notification/notification-channel-info';
 import {EnabledNotification} from '../../entities/notification/enabled-notification';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {NotificationService} from '../../services/notification.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {zip} from 'rxjs';

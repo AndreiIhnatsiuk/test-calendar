@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Gtag} from 'angular-gtag';
 import {VersionControlService} from './services/version-control.service';
 

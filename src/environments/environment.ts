@@ -5,7 +5,22 @@
 export const environment = {
   production: false,
   brokerURL: 'ws://localhost:8080/ws',
-  googleTrackingId: 'UA-138130610-3'
+  googleTrackingId: 'UA-138130610-3',
+  auth: {
+    issuer: 'https://account.dev.study.team.starwix.net/realms/itman',
+    redirectUri: window.location.origin + '/dashboard',
+    logoutUrl: 'http://localhost:4200',
+    postLogoutRedirectUri: 'http://localhost:4200',
+    clientId: 'itman-backend',
+    sessionChecksEnabled: true,
+    scope: 'openid profile email offline_access',
+    responseType: 'code',
+    showDebugInformation: true,
+    useSilentRefresh: true,
+    clearHashAfterLogin: false,
+    sessionCheckIntervall: 60000,
+    allowedUrls: ['api', '/api']
+  },
 };
 
 /*

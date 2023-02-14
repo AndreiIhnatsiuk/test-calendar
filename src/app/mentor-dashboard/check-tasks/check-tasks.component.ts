@@ -4,7 +4,7 @@ import {Gtag} from 'angular-gtag';
 import {Personal} from '../../entities/personal';
 import {MentorSubmission} from '../../entities/mentor-submission';
 import {MentorSubmissionService} from '../../services/mentor-submission.service';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {MentorSubmissionDialogComponent} from './mentor-submission-dialog/mentor-submission-dialog.component';
 
 @Component({

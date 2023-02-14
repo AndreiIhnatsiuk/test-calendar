@@ -1,6 +1,6 @@
 import {Component, HostListener, Input, OnChanges, OnDestroy, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {UserAnswer} from '../../entities/user-answer';
 import {ProblemService} from '../../services/problem.service';
 import {FullProblem} from '../../entities/full-problem';

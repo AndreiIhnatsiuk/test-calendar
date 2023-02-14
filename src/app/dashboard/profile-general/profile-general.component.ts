@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Personal} from '../../entities/personal';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TelegramService} from '../../services/telegram.service';
 import {TelegramToken} from '../../entities/telegram-token';

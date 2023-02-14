@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Message} from '../../entities/message';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {WebSocketService} from '../../services/web-socket.service';
 import {ChatSnapshot} from '../../entities/chat-snapshot';
 import {Router} from '@angular/router';

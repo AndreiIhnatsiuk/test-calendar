@@ -54,3 +54,23 @@ as-split { // fixing error touch devices
 .mat-mdc-tooltip.tooltip {
   font-size: 15px;
 }
+
+.authenticating-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 5rem;
+  background: #fff;
+  opacity: 0.8;
+  animation: pulsate 0.4s infinite alternate linear;
+}
+
+@keyframes pulsate {
+  from { opacity: 1.0; }
+  to { opacity: 0.2; }
+}

@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TelegramToken} from '../../entities/telegram-token';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {interval, Subscription} from 'rxjs';
 import {TelegramService} from '../../services/telegram.service';
 import {MatSnackBar} from '@angular/material/snack-bar';

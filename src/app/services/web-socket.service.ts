@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {RxStompService} from '@stomp/ng2-stompjs';
-import {AuthService} from './auth.service';
+import {AuthService} from '../auth/auth.service';
 import {filter, flatMap, map, take} from 'rxjs/operators';
 import {rxStompConfig} from '../rx-stomp.config';
 import { IMessage } from '@stomp/stompjs';
@@ -17,32 +17,32 @@ export class WebSocketService {
     this.subjects = new Map<string, Subject<any>>();
     this.nextConfirmId = 1;
     this.rxStompService = new ReplaySubject<RxStompService>(1);
-    this.authService.currentUser
-      .pipe(
-        filter(token => token !== null),
-        take(1)
-      ).subscribe(token => {
-        rxStompConfig.connectHeaders = {
-          auth: token.token
-        };
-        const rxStompService = new RxStompService();
-        rxStompService.configure(rxStompConfig);
-        rxStompService.activate();
-        this.rxStompService.next(rxStompService);
-      });
-    this.watchIMessage('/user/responses').subscribe(message => {
-      const confirmId = message.headers.confirm;
-      const subject = this.subjects.get(confirmId);
-      if (subject != null) {
-        this.subjects.delete(confirmId);
-        const body = JSON.parse(message.body) as WebSocketResponse;
-        if (body.status === 'Ok') {
-          subject.next(body.body);
-        } else {
-          subject.error(body.body);
-        }
-      }
-    });
+    // this.authService.currentUser
+    //   .pipe(
+    //     filter(token => token !== null),
+    //     take(1)
+    //   ).subscribe(token => {
+    //     rxStompConfig.connectHeaders = {
+    //       auth: token.token
+    //     };
+    //     const rxStompService = new RxStompService();
+    //     rxStompService.configure(rxStompConfig);
+    //     rxStompService.activate();
+    //     this.rxStompService.next(rxStompService);
+    //   });
+    // this.watchIMessage('/user/responses').subscribe(message => {
+    //   const confirmId = message.headers.confirm;
+    //   const subject = this.subjects.get(confirmId);
+    //   if (subject != null) {
+    //     this.subjects.delete(confirmId);
+    //     const body = JSON.parse(message.body) as WebSocketResponse;
+    //     if (body.status === 'Ok') {
+    //       subject.next(body.body);
+    //     } else {
+    //       subject.error(body.body);
+    //     }
+    //   }
+    // });
   }
 
   private watchIMessage(url: string): Observable<IMessage> {

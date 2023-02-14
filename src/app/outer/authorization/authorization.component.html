@@ -1,6 +1,6 @@
 <div class="center">
   <mat-card appearance="raised">
-    <nav mat-tab-nav-bar>
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
       <a mat-tab-link
          *ngFor="let link of navLinks"
          [routerLink]="link.link"
@@ -9,6 +9,7 @@
         {{link.label}}
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
     <router-outlet></router-outlet>
   </mat-card>
 

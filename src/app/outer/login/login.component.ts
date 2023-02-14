@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Gtag} from 'angular-gtag';
@@ -25,20 +25,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.sending = true;
-    this.authService.login(this.email, this.password).subscribe(() => {
-      this.gtag.event('login', {
-        event_category: 'account'
-      });
-      this.router.navigate(['/dashboard']);
-    }, () => {
-      this.gtag.event('login', {
-        event_category: 'error-account'
-      });
-      this.sending = false;
-      this.snackBar.open('Логин или пароль введены не верно.', undefined, {
-        duration: 5000
-      });
-    });
+    // this.sending = true;
+    // this.authService.login(this.email, this.password).subscribe(() => {
+    //   this.gtag.event('login', {
+    //     event_category: 'account'
+    //   });
+    //   this.router.navigate(['/dashboard']);
+    // }, () => {
+    //   this.gtag.event('login', {
+    //     event_category: 'error-account'
+    //   });
+    //   this.sending = false;
+    //   this.snackBar.open('Логин или пароль введены не верно.', undefined, {
+    //     duration: 5000
+    //   });
+    // });
   }
 }

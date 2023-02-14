@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../auth/auth.service';
 import {UserAgreementDialogComponent} from '../user-agreement-dialog/user-agreement-dialog.component';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -46,40 +46,40 @@ export class RegistrationComponent implements OnInit {
   }
 
   create() {
-    if (this.password.length < 7) {
-      this.snackBar.open('Минимальная длина пароля 7 символов.', undefined, {
-        duration: 5000
-      });
-      return;
-    }
-    this.sending = true;
-    this.authService.create(this.name, this.email, this.password, this.offerNotification).subscribe(() => {
-        this.authService.login(this.email, this.password).subscribe(() => {
-          this.gtag.event('signup', {
-            event_category: 'account'
-          });
-          this.personalPlanService.generatePlan().subscribe(() => {
-            this.moduleService.getModules().subscribe(modules => {
-              this.topicService.getAllByModuleId(modules[0].id).subscribe(topics => {
-                this.router.navigate(['/dashboard/module/' + modules[0].id + '/lesson/' + topics[0].lessons[0].id]);
-              });
-            });
-          });
-        }, () => {
-          this.gtag.event('signup', {
-            event_category: 'error-account'
-          });
-          this.sending = false;
-        });
-        this.snackBar.open('Регистрация завершена. Приятного обучения.', undefined, {
-          duration: 5000
-        });
-        this.password = '';
-    }, error => {
-      this.snackBar.open(error.error.message, undefined, {
-        duration: 5000
-      });
-      this.sending = false;
-    });
+    // if (this.password.length < 7) {
+    //   this.snackBar.open('Минимальная длина пароля 7 символов.', undefined, {
+    //     duration: 5000
+    //   });
+    //   return;
+    // }
+    // this.sending = true;
+    // this.authService.create(this.name, this.email, this.password, this.offerNotification).subscribe(() => {
+    //     this.authService.login(this.email, this.password).subscribe(() => {
+    //       this.gtag.event('signup', {
+    //         event_category: 'account'
+    //       });
+    //       this.personalPlanService.generatePlan().subscribe(() => {
+    //         this.moduleService.getModules().subscribe(modules => {
+    //           this.topicService.getAllByModuleId(modules[0].id).subscribe(topics => {
+    //             this.router.navigate(['/dashboard/module/' + modules[0].id + '/lesson/' + topics[0].lessons[0].id]);
+    //           });
+    //         });
+    //       });
+    //     }, () => {
+    //       this.gtag.event('signup', {
+    //         event_category: 'error-account'
+    //       });
+    //       this.sending = false;
+    //     });
+    //     this.snackBar.open('Регистрация завершена. Приятного обучения.', undefined, {
+    //       duration: 5000
+    //     });
+    //     this.password = '';
+    // }, error => {
+    //   this.snackBar.open(error.error.message, undefined, {
+    //     duration: 5000
+    //   });
+    //   this.sending = false;
+    // });
   }
 }

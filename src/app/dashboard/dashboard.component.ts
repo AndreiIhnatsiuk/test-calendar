@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../auth/auth.service';
 import {Personal} from '../entities/personal';
 import {Gtag} from 'angular-gtag';
 
@@ -27,6 +27,5 @@ export class DashboardComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    location.reload();
   }
 }
