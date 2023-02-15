@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Gtag} from 'angular-gtag';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-renew',
@@ -18,7 +18,7 @@ export class RenewComponent implements OnInit {
               private router: Router,
               private snackBar: MatSnackBar,
               private route: ActivatedRoute,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
     this.sending = false;
   }
 

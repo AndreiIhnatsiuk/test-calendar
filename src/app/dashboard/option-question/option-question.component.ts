@@ -6,7 +6,6 @@ import {ProblemService} from '../../services/problem.service';
 import {FullProblem} from '../../entities/full-problem';
 import {SubmissionService} from '../../services/submission.service';
 import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
-import {Gtag} from 'angular-gtag';
 import {ConfigurationService} from '../../services/configurations.service';
 import {QuestionConfig} from '../../entities/question-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -15,6 +14,7 @@ import {StoredAnswers} from '../../entities/stored-answers';
 import {QuestionPageAreas} from '../../entities/question-page-areas';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {zip} from 'rxjs';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-option-question',
@@ -43,7 +43,7 @@ export class OptionQuestionComponent implements OnChanges, OnDestroy {
               private submissionService: SubmissionService,
               private problemService: ProblemService,
               private configurationService: ConfigurationService,
-              private gtag: Gtag,
+              private gtag: FakeGtagService,
               private snackBar: MatSnackBar,
               private localStorage: LocalStorageService) {
     const questionPageAreas: string = localStorage.getItem('questionPageAreas');

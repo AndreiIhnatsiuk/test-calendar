@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth/auth.service';
 import {Personal} from '../entities/personal';
-import {Gtag} from 'angular-gtag';
+import {FakeGtagService} from '../services/fake-gtag.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,7 @@ export class DashboardComponent implements OnInit {
   personal: Personal;
 
   constructor(private authService: AuthService,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
   }
 
   ngOnInit() {

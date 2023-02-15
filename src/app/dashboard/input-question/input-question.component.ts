@@ -7,9 +7,9 @@ import {UserAnswer} from '../../entities/user-answer';
 import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 import {ConfigurationService} from '../../services/configurations.service';
 import {QuestionConfig} from '../../entities/question-config';
-import {Gtag} from 'angular-gtag';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 import {zip} from 'rxjs';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-input-question',
@@ -34,7 +34,7 @@ export class InputQuestionComponent implements OnChanges {
     private problemService: ProblemService,
     private submissionService: SubmissionService,
     private configurationService: ConfigurationService,
-    private gtag: Gtag
+    private gtag: FakeGtagService
   ) {
   }
 

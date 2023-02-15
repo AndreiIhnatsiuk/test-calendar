@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {Gtag} from 'angular-gtag';
 import {VersionControlService} from './services/version-control.service';
+import {FakeGtagService} from './services/fake-gtag.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'ITman Study';
 
   // don't delete: gtag. It needs for it initialization
-  constructor(gtag: Gtag, versionControlService: VersionControlService) {
+  constructor(gtag: FakeGtagService, versionControlService: VersionControlService) {
     let alertShown = false;
     versionControlService.updateObservable.subscribe(() => {
       if (!alertShown) {

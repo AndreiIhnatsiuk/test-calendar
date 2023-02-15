@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Gtag} from 'angular-gtag';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private snackBar: MatSnackBar,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
     this.sending = false;
   }
 

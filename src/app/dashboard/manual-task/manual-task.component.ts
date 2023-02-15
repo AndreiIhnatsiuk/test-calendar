@@ -7,10 +7,10 @@ import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {Gtag} from 'angular-gtag';
 import {FullSubmission} from '../../entities/full-submission';
 import {SubmissionStatus} from '../../entities/submission-status';
 import {GitSubmissionComponent} from '../git-submission/git-submission.component';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-manual-task',
@@ -36,7 +36,7 @@ export class ManualTaskComponent implements OnChanges, OnDestroy {
               private submissionService: SubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
   }
 
   ngOnChanges() {

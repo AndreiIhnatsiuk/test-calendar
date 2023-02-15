@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {Gtag} from 'angular-gtag';
 import {Personal} from '../../entities/personal';
 import {MentorSubmission} from '../../entities/mentor-submission';
 import {MentorSubmissionService} from '../../services/mentor-submission.service';
 import {AuthService} from '../../auth/auth.service';
 import {MentorSubmissionDialogComponent} from './mentor-submission-dialog/mentor-submission-dialog.component';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-check-tasks',
@@ -20,7 +20,7 @@ export class CheckTasksComponent implements OnInit {
 
   constructor(private mentorService: MentorSubmissionService,
               private authService: AuthService,
-              private gtag: Gtag,
+              private gtag: FakeGtagService,
               private dialog: MatDialog) {
   }
 

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../auth/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Gtag} from 'angular-gtag';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-reset',
@@ -14,7 +14,7 @@ export class ResetComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private snackBar: MatSnackBar,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
     this.sending = false;
   }
 

@@ -8,7 +8,6 @@ import {SubmissionStatus} from '../../entities/submission-status';
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
-import {Gtag} from 'angular-gtag';
 import {Subscription} from 'rxjs';
 import {ProblemService} from '../../services/problem.service';
 import {FullProblem} from '../../entities/full-problem';
@@ -17,6 +16,7 @@ import {BestLastFullSubmission} from '../../entities/best-last-full-submission';
 import {GitTaskSubmissionRequest} from '../../entities/git-task-submission-request';
 import {GitSubmissionComponent} from '../git-submission/git-submission.component';
 import {GitManualTaskSubmissionRequest} from '../../entities/git-manual-task-submission-request';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-git-task',
@@ -44,7 +44,7 @@ export class GitTaskComponent implements OnChanges, OnDestroy {
               private submissionService: SubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
   }
 
   ngOnChanges() {

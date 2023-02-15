@@ -4,7 +4,7 @@ import {AuthService} from '../../auth/auth.service';
 import {WebSocketService} from '../../services/web-socket.service';
 import {ChatSnapshot} from '../../entities/chat-snapshot';
 import {Router} from '@angular/router';
-import {Gtag} from 'angular-gtag';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit {
   constructor(private authService: AuthService,
               private webSocketService: WebSocketService,
               private router: Router,
-              private gtag: Gtag) {
+              private gtag: FakeGtagService) {
     this.isOpen = false;
     this.name = '';
     this.messages = [];

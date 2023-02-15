@@ -11,7 +11,6 @@ import {AceComponent} from 'ngx-ace-wrapper';
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
-import {Gtag} from 'angular-gtag';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {HintService} from '../../services/hint.services';
@@ -27,6 +26,7 @@ import {LocalStorageService} from '../../services/local-storage.service';
 import {TaskPageAreas} from '../../entities/task-page-areas';
 import {RunSubmission} from '../../entities/run-submission';
 import {StoredSolution} from '../../entities/stored-solution';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-task',
@@ -69,7 +69,7 @@ export class TaskComponent implements OnChanges, OnDestroy {
               private submissionService: SubmissionService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private gtag: Gtag,
+              private gtag: FakeGtagService,
               private localStorage: LocalStorageService) {
     this.editSubject = new Subject<string>();
     this.inputSubject = new Subject<string>();

@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../auth/auth.service';
 import {UserAgreementDialogComponent} from '../user-agreement-dialog/user-agreement-dialog.component';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Gtag} from 'angular-gtag';
 import {PersonalPlanService} from '../../services/personal-plan.service';
 import {ModuleService} from '../../services/module.service';
-import {LessonService} from '../../services/lesson.service';
 import {TopicService} from '../../services/topic.service';
+import {FakeGtagService} from '../../services/fake-gtag.service';
 
 @Component({
   selector: 'app-registration',
@@ -26,7 +25,7 @@ export class RegistrationComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               private snackBar: MatSnackBar,
-              private gtag: Gtag,
+              private gtag: FakeGtagService,
               private personalPlanService: PersonalPlanService,
               private moduleService: ModuleService,
               private topicService: TopicService) {
