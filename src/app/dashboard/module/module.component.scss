@@ -16,6 +16,25 @@ mat-sidenav-container {
   }
 }
 
+.mdc-button {
+  align-items: inherit;
+  justify-content: start;
+  width: -webkit-fill-available;
+}
+
+button {
+  width: -moz-available;
+}
+
+.white-icon {
+  font-size: 10px;
+  height: 10px;
+}
+
+.node-button-padding {
+  padding-left: 8px;
+}
+
 .status {
   width: 50px;
 }
@@ -28,110 +47,35 @@ mat-sidenav-container {
   color: black;
 }
 
-mat-expansion-panel {
-  .topic-icon-lock {
-    display: none;
-    margin: 0 0 0 auto;
-  }
 
-  .title-lock {
+mat-nav-list {
+  .poster {
     position: relative;
     color: #808080;
-    height: 24px;
-    width: 24px;
-  }
-
-  .panel-header-title-custom {
-    position: relative;
-
-    .panel-header-title-custom-available {
-      margin-right: 0;
-
-      .title-topic {
-        height: 24px;
-      }
-
-      .green-check-topic {
-        color: lightgreen;
-        margin: 0 16px 0 auto;
-      }
-    }
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-
-      .title-lock {
-        color: black;
-      }
-
-      .topic-icon-lock {
-        color: black;
-        display: block;
-      }
+      color: black;
     }
-  }
 
-  mat-nav-list {
-    .poster {
-      position: relative;
-      color: #808080;
-
-      &:hover {
-        color: black;
-      }
-
-      &:hover .descr {
-        display: block;
-        margin-right: 16px;
-      }
+    &:hover .descr {
+      display: block;
+      margin-right: 16px;
     }
   }
 }
 
 .nav-topics {
   width: 320px;
-
-  .green-check-lesson {
-    color: lightgreen;
-    margin-right: 16px;
-  }
-
-  .mat-expansion-panel-spacing {
-    margin: 0;
-  }
-
-  .mat-expansion-panel-header {
-    padding: 0 0 0 16px;
-    height: 48px;
-  }
-
-  ::ng-deep .mat-expansion-panel-body {
-    padding: 0;
-  }
-
-  .mat-mdc-list-base {
-    padding: 0;
-  }
-
-  ::ng-deep .mat-mdc-list-base .mat-mdc-list-item {
-    font-size: 14px;
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-  .mat-mdc-list-item {
-    padding: 0 0 0 36px;
-
-    .mat-line {
-      white-space: normal;
-    }
-  }
 }
 
 .active-list-item {
-  color: #673ab7; /* Note: You could also use a custom theme */
+  color: #0052cc;
+  //color: #673ab7; /* Note: You could also use a custom theme */
 }
 
 .accepted {
   color: lightgreen;
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 992px) {

@@ -1,7 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Topic} from '../../entities/topic';
-import {AvailableLessonsService} from '../../services/available-lessons.service';
 import * as routes from '../routes';
 import {Subscription, zip} from 'rxjs';
 import {Problem} from '../../entities/problem';
@@ -14,9 +13,10 @@ import {AvailableProblemsService} from '../../services/available-problem.service
   templateUrl: './next-step.component.html',
   styleUrls: ['./next-step.component.scss']
 })
-export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
+export class NextStepComponent implements OnChanges, OnInit, OnDestroy { // TODO Not working now. Waiting for implement API at backend.
   @Input() problemId: number;
   @Input() lessonId: number;
+  @Input() topicId: number;
 
   moduleId: number;
   problems: Array<Problem>;
@@ -31,7 +31,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private problemService: ProblemService,
-              private availableLessonsService: AvailableLessonsService,
+              // private availableLessonsService: AvailableLessonsService,
               private availableProblemsService: AvailableProblemsService,
               private topicService: TopicService) {
     this.oldLessonId = this.lessonId;
@@ -45,17 +45,17 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     this.moduleId = Number.parseFloat(this.route.parent.snapshot.paramMap.get('moduleId'));
     zip(
       this.topicService.getAllByModuleId(this.moduleId),
-      this.problemService.getProblemsByLessonId(this.lessonId),
+      this.problemService.getProblemsByTopicId(this.topicId),
     ).subscribe(([topics, problems]) => {
       this.topics = topics;
       this.problems = problems;
       this.urlToNextStep = this.getNextStepLink();
     });
-    this.availableLessonsSubscription = this.availableLessonsService.getAvailableLessons(this.moduleId)
-      .subscribe(availableLessons => {
-        this.availableLessons = availableLessons;
-        this.urlToNextStep = this.getNextStepLink();
-      });
+    // this.availableLessonsSubscription = this.availableLessonsService.getAvailableLessons(this.moduleId)
+    //   .subscribe(availableLessons => {
+    //     this.availableLessons = availableLessons;
+    //     this.urlToNextStep = this.getNextStepLink();
+    //   });
   }
 
   ngOnChanges() {
@@ -65,7 +65,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (this.oldLessonId !== this.lessonId) {
       this.oldLessonId = this.lessonId;
-      this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
+      this.problemService.getProblemsByTopicId(this.topicId).subscribe(problems => {
         this.problems = problems;
         if (this.problems) {
           this.availableProblemsSubscription =
@@ -97,7 +97,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
         if (!this.availableProblemIds.has(this.problems[0].id)) {
           return null;
         }
-        return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, this.problems[0].id];
+        return [this.urlToLesson, this.moduleId, routes.TOPIC, this.topicId, routes.PROBLEM, this.problems[0].id];
       }
     } else {
       if (this.problemId && this.problems && this.problems[this.problems.length - 1].id !== this.problemId) {
@@ -114,7 +114,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
         if (!this.availableProblemIds.has(problem.id)) {
           return null;
         }
-        return [this.urlToLesson, this.moduleId, routes.LESSON, this.lessonId, routes.PROBLEM, problem.id];
+        return [this.urlToLesson, this.moduleId, routes.TOPIC, this.topicId, routes.PROBLEM, problem.id];
       }
       if (this.problemId === problem.id) {
         isCurrentTask = true;
@@ -125,7 +125,7 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   getNextLessonLink() {
     const nextLessonId = this.getNextLessonId();
     if (this.availableLessons.has(nextLessonId)) {
-      return [this.urlToLesson, this.moduleId, routes.LESSON, nextLessonId];
+      return [this.urlToLesson, this.moduleId, routes.TOPIC, nextLessonId];
     }
     return null;
   }
@@ -133,14 +133,12 @@ export class NextStepComponent implements OnChanges, OnInit, OnDestroy {
   getNextLessonId() {
     let isCurrentTopic = false;
     for (const topic of this.topics) {
-      for (const lesson of topic.lessons) {
         if (isCurrentTopic) {
-          return lesson.id;
+          return topic.id;
         }
-        if (lesson.id === this.lessonId) {
+        if (topic.id === this.topicId) {
           isCurrentTopic = true;
         }
-      }
     }
     return null;
   }

@@ -10,7 +10,7 @@ export class ButtonProblemComponent implements OnChanges {
   @Input() problemId: number;
   @Input() problemType: string;
   @Input() moduleId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() isAvailable: boolean;
   @Input() problemStatus: string;
   @Input() existSubmissions: boolean;

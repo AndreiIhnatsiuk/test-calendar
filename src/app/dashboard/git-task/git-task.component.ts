@@ -26,7 +26,7 @@ import {FakeGtagService} from '../../services/fake-gtag.service';
 
 export class GitTaskComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() type: string;

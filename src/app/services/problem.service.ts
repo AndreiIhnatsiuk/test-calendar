@@ -10,12 +10,12 @@ export class ProblemService {
   constructor(private http: HttpClient) {
   }
 
-  public getProblemsByLessonId(lessonId: number): Observable<Array<Problem>> {
-    return this.http.get<Array<Problem>>('/api/problems?lessonId=' + lessonId);
+  public getProblemsByTopicId(topicId: number): Observable<Array<Problem>> {
+    return this.http.get<Array<Problem>>('/api/problems?topicId=' + topicId);
   }
 
-  public countByLesson(moduleId: number): Observable<Map<number, number>> {
-    return this.http.get('/api/problems?groupBy=lessons&moduleId=' + moduleId)
+  public countByTopic(moduleId: number): Observable<Map<number, number>> {
+    return this.http.get('/api/problems?groupBy=topics&moduleId=' + moduleId)
       .pipe(map(x => new Map<number, number>(Object.entries(x).map(y => [+y[0], y[1]]))));
   }
 

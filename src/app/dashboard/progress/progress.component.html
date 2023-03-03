@@ -1,9 +1,9 @@
-<div *ngIf="show && lessonId" class="progress">
+<div *ngIf="show && topicId" class="progress">
   <div style="overflow: auto;">
     <div *ngFor="let problem of problems">
       <app-button-problem style="margin-right: 5px;"
         [moduleId]="moduleId"
-        [lessonId]="lessonId"
+        [topicId]="topicId"
         [problemId]="problem.id"
         [problemType]="problem.type"
         [currentProblemId]="problemId"

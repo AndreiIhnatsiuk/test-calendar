@@ -1,64 +1,36 @@
 <mat-sidenav-container>
   <mat-sidenav class="nav-topics" mode="side" opened disableClose>
-
-    <mat-accordion>
-      <mat-expansion-panel [expanded]="isOpened(topic)" hideToggle *ngFor="let topic of topics">
-        <mat-expansion-panel-header expandedHeight="48px" class="panel-header-title-custom">
-
-          <mat-panel-title *ngIf="!hasAvailableLessons(topic.lessons)" class="title-lock">
-            <div class="black">
-              {{topic.name}}
-            </div>
-            <mat-icon class="topic-icon-lock">
-              lock
-            </mat-icon>
-          </mat-panel-title>
-
-          <mat-panel-title *ngIf="hasAvailableLessons(topic.lessons)" class="panel-header-title-custom-available">
-            <div class="title-topic">
-              {{topic.name}}
-            </div>
-            <mat-icon *ngIf="getAcceptedInTopic(topic.lessons)" class="green-check-topic">
-              check
-            </mat-icon>
-          </mat-panel-title>
-
-        </mat-expansion-panel-header>
-
-        <mat-nav-list *ngFor="let lesson of topic.lessons">
-
-          <mat-list-item *ngIf="availableLessons.has(lesson.id)"
-                         [routerLink]="'lesson/' + lesson.id"
-                         routerLinkActive="active-list-item">
-            <div mat-line>
-              {{lesson.name}}
-            </div>
-            <div class="status">
-              <mat-icon *ngIf="getAcceptedInLesson(lesson)" class="green-check-lesson">
-                check
-              </mat-icon>
-            </div>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="!availableLessons.has(lesson.id)"
-                         mat-list-item title="Выполните задания предыдущего урока"
-                         class="poster">
-            <div mat-line>
-              {{lesson.name}}
-            </div>
-            <div class="status">
-              <mat-icon class="descr">
-                lock
-              </mat-icon>
-            </div>
-          </mat-list-item>
-        </mat-nav-list>
-
-      </mat-expansion-panel>
-    </mat-accordion>
-
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="20">
+        <button mat-button class="node-button-padding"
+                matTooltipPosition="after"
+                [matTooltip]="node.name"
+                [routerLink]="'topic/' + node.id"
+                routerLinkActive="active-list-item">
+          <mat-icon class="white-icon">fiber_manual_record</mat-icon>
+          {{node.name}}
+        </button>
+        <span class="accepted">
+            <mat-icon *ngIf="node.acceptedProblemsAmount === node.totalProblemsAmount">check</mat-icon>
+        </span>
+      </mat-tree-node>
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
+        <button mat-button matTreeNodeToggle
+                matTooltipPosition="after"
+                [matTooltip]="node.name"
+                (click)="expandOneCollapseOther(node)"
+                [attr.aria-label]="'Toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+          {{node.name}}
+        </button>
+        <span class="accepted">
+            <mat-icon *ngIf="node.acceptedProblemsAmount === node.totalProblemsAmount">check</mat-icon>
+        </span>
+      </mat-tree-node>
+    </mat-tree>
   </mat-sidenav>
-
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

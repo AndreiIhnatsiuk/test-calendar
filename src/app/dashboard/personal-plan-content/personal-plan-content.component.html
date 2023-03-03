@@ -5,17 +5,17 @@
     {{activePlan.deadline | date:'EEEE, d MMMM в HH:mm':null:'ru'}}
   </div>
   <div *ngFor="let planProblem of planProblems">
-    <div class="lesson">
+    <div class="topic">
       <div>
-        <div class="title" [routerLink]="'/dashboard/module/' + planProblem[0].moduleId + '/lesson/' + planProblem[0].lessonId">
-          {{planProblem[0].lessonTitle}}
+        <div class="title" [routerLink]="'/dashboard/module/' + planProblem[0].moduleId + '/topic/' + planProblem[0].topicId">
+          {{planProblem[0].topicName}}
         </div>
       </div>
       <div class="problems">
         <div *ngFor="let problem of planProblem" class="progress">
           <app-button-problem
             [moduleId]="problem.moduleId"
-            [lessonId]="problem.lessonId"
+            [topicId]="problem.topicId"
             [problemId]="problem.problemId"
             [problemType]="problem.typeProblem"
             [isAvailable]="availableProblemIds.has(problem.problemId)"

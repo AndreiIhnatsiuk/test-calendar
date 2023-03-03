@@ -18,7 +18,6 @@
               <div style="white-space: pre-wrap">{{module.description}}</div>
               <div class="access">
                 <div *ngIf="availableModules.has(module.id)">
-                  {{countLessonsByModules.get(module.id) | i18nPlural: lessons:'ru'}},
                   {{countProblemsByModules.get(module.id) | i18nPlural: tasks:'ru'}}
                 </div>
                 <div *ngIf="!availableModules.has(module.id)">Недоступен</div>

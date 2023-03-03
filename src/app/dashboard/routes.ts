@@ -1,4 +1,4 @@
 export const PROBLEM = 'problem';
-export const LESSON = 'lesson';
+export const TOPIC = 'topic';
 export const DASHBOARD = 'dashboard';
 export const MODULE = 'module';

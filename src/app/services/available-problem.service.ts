@@ -10,15 +10,15 @@ export class AvailableProblemsService {
               private submissionService: SubmissionService) {
   }
 
-  private getAvailableProblemsSingleByLessonId(lessonId: number): Observable<Set<number>> {
-    return this.http.get<Array<number>>('/api/available-problems?lessonId=' + lessonId)
+  private getAvailableProblemsSingleByTopicId(topicId: number): Observable<Set<number>> {
+    return this.http.get<Array<number>>('/api/available-problems?topicId=' + topicId)
       .pipe(map(problemIds => new Set(problemIds)));
   }
 
-  public getAvailableProblemsByLessonId(lessonId: number): Observable<Set<number>> {
+  public getAvailableProblemsByTopicId(topicId: number): Observable<Set<number>> {
     return merge(
-      this.getAvailableProblemsSingleByLessonId(lessonId),
-      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableProblemsSingleByLessonId(lessonId)))
+      this.getAvailableProblemsSingleByTopicId(topicId),
+      this.submissionService.getChanges().pipe(switchMap(() => this.getAvailableProblemsSingleByTopicId(topicId)))
     );
   }
 

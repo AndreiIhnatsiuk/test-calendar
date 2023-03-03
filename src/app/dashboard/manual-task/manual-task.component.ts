@@ -19,7 +19,7 @@ import {FakeGtagService} from '../../services/fake-gtag.service';
 })
 export class ManualTaskComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() type: string;

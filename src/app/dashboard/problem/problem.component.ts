@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Problem} from '../../entities/problem';
 import {ProblemService} from '../../services/problem.service';
@@ -11,21 +11,22 @@ import {ProblemService} from '../../services/problem.service';
 export class ProblemComponent implements OnInit {
   problems: Array<Problem>;
   problemId: number;
-  lessonId: number;
+  topicId: number;
   moduleId: number;
   type: string;
 
   constructor(private route: ActivatedRoute,
-              private problemService: ProblemService) { }
+              private problemService: ProblemService) {
+  }
 
   ngOnInit(): void {
     this.route.parent.paramMap.subscribe(map => {
       this.moduleId = +map.get('moduleId');
     });
     this.route.paramMap.subscribe(map => {
-      this.lessonId = +map.get('lessonId');
+      this.topicId = +map.get('topicId');
       const problemId = +map.get('problemId');
-      this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
+      this.problemService.getProblemsByTopicId(this.topicId).subscribe(problems => {
         this.problems = problems;
         this.type = this.getTypeByProblemId(problemId);
         this.problemId = problemId;

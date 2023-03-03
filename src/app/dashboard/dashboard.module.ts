@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe, registerLocaleData} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {RouterModule, Routes} from '@angular/router';
-import {LessonComponent} from './lesson/lesson.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {ModuleComponent} from './module/module.component';
@@ -62,6 +61,8 @@ import {VacationDialogComponent} from './vacation/vacation-dialog/vacation-dialo
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MAT_DATE_LOCALE, MatLineModule, MatNativeDateModule} from '@angular/material/core';
+import {TopicComponent} from './topic/topic.component';
+import {MatTreeModule} from '@angular/material/tree';
 
 registerLocaleData(localeRu);
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
@@ -98,23 +99,23 @@ const routes: Routes = [
         component: VacationComponent,
       },
       {
-        path: 'java/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
-        redirectTo: url.MODULE + '/1/' + url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId'
+        path: 'java/' + url.TOPIC + '/:topicId/' + url.PROBLEM + '/:problemId',
+        redirectTo: url.MODULE + '/1/' + url.TOPIC + '/:topicId/' + url.PROBLEM + '/:problemId'
       },
       {
-        path: 'java/' + url.LESSON + '/:lessonId',
-        redirectTo: url.MODULE + '/1/' + url.LESSON + '/:lessonId'
+        path: 'java/' + url.TOPIC + '/:topicId',
+        redirectTo: url.MODULE + '/1/' + url.TOPIC + '/:topicId'
       },
       {
         path: url.MODULE + '/:moduleId',
         component: ModuleComponent,
         children: [
           {
-            path: url.LESSON + '/:lessonId',
-            component: LessonComponent
+            path: url.TOPIC + '/:topicId',
+            component: TopicComponent
           },
           {
-            path: url.LESSON + '/:lessonId/' + url.PROBLEM + '/:problemId',
+            path: url.TOPIC + '/:topicId/' + url.PROBLEM + '/:problemId',
             component: ProblemComponent
           }
         ]
@@ -126,7 +127,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DashboardComponent,
-    LessonComponent,
+    TopicComponent,
     ModuleComponent,
     TaskComponent,
     SubmissionComponent,
@@ -189,7 +190,8 @@ const routes: Routes = [
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
-    MatLineModule
+    MatLineModule,
+    MatTreeModule
   ],
   providers: [
     DatePipe,

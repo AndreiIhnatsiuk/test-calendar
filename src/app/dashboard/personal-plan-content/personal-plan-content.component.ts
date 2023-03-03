@@ -16,7 +16,7 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
   activePlan: ActivePlan;
   futurePlan: FuturePlan;
   problemsStatuses: Map<number, string>;
-  planProblemByLessonId: Map<number, Array<PlanProblem>>;
+  planProblemByTopicId: Map<number, Array<PlanProblem>>;
   planProblems: Array<Array<PlanProblem>>;
   availableProblemIds: Set<number>;
   private acceptedProblemsSubscription: Subscription;
@@ -34,7 +34,7 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
               private acceptedSubmissionService: AcceptedSubmissionService) {
     this.problemsStatuses = new Map<number, string>();
     this.availableProblemIds = new Set<number>();
-    this.planProblemByLessonId = new Map<number, Array<PlanProblem>>();
+    this.planProblemByTopicId = new Map<number, Array<PlanProblem>>();
     this.planProblems = new Array<Array<PlanProblem>>();
   }
 
@@ -59,13 +59,13 @@ export class PersonalPlanContentComponent implements OnInit, OnDestroy {
 
   private updateAccepted() {
     for (const planProblem of this.activePlan.problems) {
-      if (this.planProblemByLessonId.has(planProblem.lessonId)) {
-        this.planProblemByLessonId.get(planProblem.lessonId).push(planProblem);
+      if (this.planProblemByTopicId.has(planProblem.topicId)) {
+        this.planProblemByTopicId.get(planProblem.topicId).push(planProblem);
       } else {
-        this.planProblemByLessonId.set(planProblem.lessonId, new Array<PlanProblem>(planProblem));
+        this.planProblemByTopicId.set(planProblem.topicId, new Array<PlanProblem>(planProblem));
       }
     }
-    this.planProblemByLessonId.forEach(value => this.planProblems.push(value));
+    this.planProblemByTopicId.forEach(value => this.planProblems.push(value));
 
     if (this.acceptedProblemsSubscription) {
       this.acceptedProblemsSubscription.unsubscribe();

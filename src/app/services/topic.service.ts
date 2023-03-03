@@ -8,7 +8,7 @@ export class TopicService {
   constructor(private http: HttpClient) {
   }
 
-  public getAllByModuleId(moduleId: number): Observable<Array<Topic>> {
+  public getAllByModuleId(moduleId: number): Observable<any> {
     return this.http.get<Array<Topic>>('/api/topics?moduleId=' + moduleId);
   }
 

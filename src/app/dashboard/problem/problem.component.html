@@ -1,36 +1,36 @@
 <app-task *ngIf="type === 'Task'"
           [problemId]="problemId"
-          [lessonId]="lessonId">
+          [topicId]="topicId">
 </app-task>
 
 <app-git-task *ngIf="type === 'GitTask' || type === 'GitManualTask'"
               [problemId]="problemId"
-              [lessonId]="lessonId"
+              [topicId]="topicId"
               [type]="type">
 </app-git-task>
 
 <app-option-question *ngIf="type === 'OptionQuestion'"
                      [problemId]="problemId"
-                     [lessonId]="lessonId"
+                     [topicId]="topicId"
                      [moduleId]="moduleId">
 </app-option-question>
 
 <app-theory *ngIf="type === 'Theory'"
             [problemId]="problemId"
-            [lessonId]="lessonId">
+            [topicId]="topicId">
 </app-theory>
 
 <app-input-question *ngIf="type === 'InputQuestion'"
                     [problemId]="problemId"
-                    [lessonId]="lessonId">
+                    [topicId]="topicId">
 </app-input-question>
 
 <app-feedback-problem *ngIf="type === 'FeedbackProblem'"
                       [problemId]="problemId"
-                      [lessonId]="lessonId">
+                      [topicId]="topicId">
 </app-feedback-problem>
 
 <app-manual-task *ngIf="type === 'ManualTask'"
                  [problemId]="problemId"
-                 [lessonId]="lessonId">
+                 [topicId]="topicId">
 </app-manual-task>

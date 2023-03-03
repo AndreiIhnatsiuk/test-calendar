@@ -4,7 +4,7 @@ import {Method} from './method';
 
 export interface FullProblem {
   id: number;
-  lessonId: number;
+  topicId: number;
   text: string;
   answers: Array<Answer>;
   multiple: boolean;

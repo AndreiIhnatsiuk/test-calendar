@@ -13,7 +13,7 @@
 
   <ng-container *ngIf="futurePlan">
     <div routerLink="plan" *ngIf="futurePlan.status === 'Active' && !planCompleted">
-      <div  *ngIf="secondsToSample < secondsInDay">
+      <div  class="timer" *ngIf="secondsToSample < secondsInDay">
         <span>Осталось: {{secondsToSample * 1000 | date:'HH:mm:ss':'+0000'}}</span>
       </div>
 

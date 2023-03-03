@@ -18,12 +18,11 @@ export class ProgressComponent implements OnInit, OnDestroy {
   problemsStatuses: Map<number, string>;
   availableProblemIds: Set<number>;
   acceptedLesson: boolean;
-  lessonId: number;
+  topicId: number;
   problemId: number;
   moduleId: number;
   private acceptedProblemsSubscription: Subscription;
   private availableProblemsSubscription: Subscription;
-  urlToLesson: string;
   url = routes;
   show = true;
 
@@ -48,13 +47,13 @@ export class ProgressComponent implements OnInit, OnDestroy {
       .pipe(switchMap(route => route.paramMap))
       .subscribe(paramMap => {
         this.moduleId = Number.parseFloat(this.route.firstChild.snapshot.paramMap.get('moduleId'));
-        this.urlToLesson = this.url.MODULE + '/' + this.moduleId + '/' + this.url.LESSON + '/';
-        const lessonId = +paramMap.get('lessonId');
+        const topicId = +paramMap.get('topicId');
         const problemId = +paramMap.get('problemId');
-        this.show = lessonId !== 0;
-        if (lessonId !== this.lessonId && lessonId !== 0) {
-          this.lessonId = lessonId;
-          this.problemService.getProblemsByLessonId(this.lessonId).subscribe(problems => {
+        this.show = topicId !== 0;
+        if (topicId !== this.topicId && topicId !== 0) {
+          console.log(paramMap);
+          this.topicId = topicId;
+          this.problemService.getProblemsByTopicId(this.topicId).subscribe(problems => {
             this.problems = problems;
             this.updateAccepted();
           });
@@ -97,8 +96,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
       this.availableProblemsSubscription.unsubscribe();
       this.availableProblemsSubscription = undefined;
     }
-    if (this.lessonId) {
-      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblemsByLessonId(this.lessonId)
+    if (this.topicId) {
+      this.availableProblemsSubscription = this.availableProblemsService.getAvailableProblemsByTopicId(this.topicId)
         .subscribe(problemIds => {
           this.availableProblemIds = problemIds;
         });

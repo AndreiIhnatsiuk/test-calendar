@@ -1,5 +1,5 @@
 <button mat-flat-button [ngClass]="status"
-        [routerLink]="'/dashboard/module/' + moduleId + '/lesson/' + lessonId + '/problem/' + problemId"
+        [routerLink]="'/dashboard/module/' + moduleId + '/topic/' + topicId + '/problem/' + problemId"
         [class.active-button-item]="problemId === currentProblemId"
         [disabled]="!isAvailable"
         title="{{title[problemType]}}">

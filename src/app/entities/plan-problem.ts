@@ -1,7 +1,7 @@
 export interface PlanProblem {
-  lessonTitle: string;
+  topicName: string;
   moduleId: number;
-  lessonId: number;
+  topicId: number;
   problemId: number;
   typeProblem: string;
 }

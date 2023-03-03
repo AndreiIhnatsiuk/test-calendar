@@ -2,7 +2,7 @@
   position: relative;
   bottom: 32px;
   font-size: 14px;
-  left: 16px;
+  left: 5px;
   text-align: center;
   max-width: 210px;
   font-weight: 500;
@@ -11,6 +11,7 @@
 }
 .mat-mdc-button {
   vertical-align: top;
+  align-items: inherit;
 }
 
 ::ng-deep .mat-mdc-menu-panel {

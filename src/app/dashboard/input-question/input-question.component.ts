@@ -19,6 +19,7 @@ import {FakeGtagService} from '../../services/fake-gtag.service';
 export class InputQuestionComponent implements OnChanges {
   @Input() problemId: number;
   @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() moduleId: number;
   problem: FullProblem;
   wasAcceptedAnswerAndPageWasNotReloaded: boolean;

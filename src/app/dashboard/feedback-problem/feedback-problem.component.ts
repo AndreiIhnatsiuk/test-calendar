@@ -14,7 +14,7 @@ import {Rating} from '../../entities/rating';
 })
 export class FeedbackProblemComponent implements OnChanges {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() type: string;
   UserFeedback: string;
   problem: FullProblem;

@@ -36,7 +36,7 @@ import {FakeGtagService} from '../../services/fake-gtag.service';
 })
 export class TaskComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() startDate: Date;
   @Input() endDate: Date;
   @ViewChild(AceComponent, {static: false}) ace?: AceComponent;

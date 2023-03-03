@@ -1,119 +1,117 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Topic} from '../../entities/topic';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
-import {concat, of, Subscription} from 'rxjs';
-import {AcceptedSubmissionService} from '../../services/accepted-submission.service';
-import {Lesson} from '../../entities/lesson';
-import {AvailableLessonsService} from '../../services/available-lessons.service';
-import {ProblemService} from '../../services/problem.service';
+import {concat, of} from 'rxjs';
 import {TopicService} from '../../services/topic.service';
+import {FlatTreeControl} from '@angular/cdk/tree';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+
+interface Node {
+  id: number;
+  expandable: boolean;
+  parentId: number;
+  name: string;
+  level: number;
+  acceptedProblemsAmount: number;
+  totalProblemsAmount: number;
+}
 
 @Component({
   selector: 'app-module',
   templateUrl: './module.component.html',
   styleUrls: ['./module.component.scss']
 })
-export class ModuleComponent implements OnInit, OnDestroy {
-  topics: Array<Topic>;
-  lessonId: number;
-  availableLessons: Set<number>;
-  acceptedLessons: Set<number>;
-  acceptedProblemsByLessons: Map<number, number>;
-  countProblemsByLessons: Map<number, number>;
-  private acceptedProblemsByLessonsSubscription: Subscription;
-  private availableLessonsSubscription: Subscription;
+export class ModuleComponent implements OnInit {
+  topicId: number;
+  treeControl: FlatTreeControl<Node>;
+  treeFlattener: MatTreeFlattener<Topic, Node>;
+  dataSource: MatTreeFlatDataSource<Topic, Node>;
 
   constructor(private topicService: TopicService,
-              private problemService: ProblemService,
-              private acceptedSubmissionService: AcceptedSubmissionService,
-              private availableTopicsService: AvailableLessonsService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.acceptedLessons = new Set<number>();
-    this.availableLessons = new Set<number>();
+    this.treeControl = new FlatTreeControl<Node>(
+      node => node.level,
+      node => node.expandable,
+    );
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      node => node.level,
+      node => node.expandable,
+      node => node.children,
+    );
+    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   }
 
   ngOnInit() {
     const moduleId = Number.parseFloat(this.route.snapshot.paramMap.get('moduleId'));
-    this.topicService.getAllByModuleId(moduleId)
-      .subscribe(topics => this.topics = topics);
-    this.acceptedProblemsByLessonsSubscription = this.acceptedSubmissionService.getAcceptedByLessons(moduleId)
-      .subscribe(accepted => this.acceptedProblemsByLessons = accepted);
-    this.problemService.countByLesson(moduleId)
-      .subscribe(number => this.countProblemsByLessons = number);
-    this.availableLessonsSubscription = this.availableTopicsService.getAvailableLessons(moduleId)
-      .subscribe(availableTopics => this.availableLessons = availableTopics);
-
-    concat(
-      of(this.route.firstChild),
-      this.router.events.pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.route.firstChild)
+    this.topicService.getAllByModuleId(moduleId).subscribe((topics) => {
+      this.dataSource.data = topics;
+      concat(
+        of(this.route.firstChild),
+        this.router.events.pipe(
+          filter(event => event instanceof NavigationEnd),
+          map(() => this.route.firstChild)
+        )
       )
-    )
-      .pipe(switchMap(route => route.paramMap))
-      .subscribe(paramMap => {
-        const lessonId = +paramMap.get('lessonId');
-        if (lessonId !== this.lessonId) {
-          this.lessonId = lessonId;
+        .pipe(switchMap(route => route.paramMap))
+        .subscribe(paramMap => {
+          const topicId = +paramMap.get('topicId');
+          if (topicId !== this.topicId) {
+            this.topicId = topicId;
+            this.expandOnInit(topicId);
+          }
+        });
+    });
+  }
+
+  private transformer = (node: Topic, level: number) => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      id: node.id,
+      name: node.name,
+      level: level,
+      acceptedProblemsAmount: node.acceptedProblemsAmount,
+      totalProblemsAmount: node.totalProblemsAmount,
+      parentId: node.parentId
+    };
+  }
+
+  hasChild = (_: number, node: Node) => node.expandable;
+
+  expandOnInit(topicId: number) {
+    let nodeToExpandOnInit = this.treeControl.dataNodes.find(node => node.id === topicId);
+    if (this.treeControl.isExpandable(nodeToExpandOnInit)) {
+      const nodeIndexToExpandOnInit = this.treeControl.dataNodes.findIndex(node => node.id === topicId);
+      this.treeControl.expand(this.treeControl.dataNodes[nodeIndexToExpandOnInit]);
+    } else {
+      while (nodeToExpandOnInit.level > 0) {
+        const parentNode = this.treeControl.dataNodes.find(node => node.id === nodeToExpandOnInit.parentId);
+        const parentNodeIndex = this.treeControl.dataNodes.findIndex(node => node.id === parentNode.id);
+        this.treeControl.expand(this.treeControl.dataNodes[parentNodeIndex]);
+        nodeToExpandOnInit = parentNode;
+      }
+    }
+  }
+
+  expandOneCollapseOther(node) {
+    if (this.treeControl.isExpanded(node)) {
+      let parent = null;
+      const index = this.treeControl.dataNodes.findIndex((n) => n === node);
+      for (let i = index; i >= 0; i--) {
+        if (node.level > this.treeControl.dataNodes[i].level) {
+          parent = this.treeControl.dataNodes[i];
+          break;
         }
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this.acceptedProblemsByLessonsSubscription) {
-      this.acceptedProblemsByLessonsSubscription.unsubscribe();
-    }
-    if (this.availableLessonsSubscription) {
-      this.availableLessonsSubscription.unsubscribe();
-    }
-  }
-
-  public getAcceptedProblem(id: number) {
-    if (!this.acceptedProblemsByLessons) {
-      return '';
-    }
-    const accepted = this.acceptedProblemsByLessons.get(id);
-    return accepted ? accepted : 0;
-  }
-
-  public getTotalProblem(id: number) {
-    if (!this.countProblemsByLessons) {
-      return '';
-    }
-    const count = this.countProblemsByLessons.get(id);
-    return count ? count : 0;
-  }
-
-  public getAcceptedInTopic(lessons: Array<Lesson>): boolean {
-    for (const lesson of lessons) {
-      if (this.getAcceptedProblem(lesson.id) !== this.getTotalProblem(lesson.id)) {
-        return false;
       }
-    }
-    return true;
-  }
-
-  public getAcceptedInLesson(lesson: Lesson): boolean {
-    return this.getAcceptedProblem(lesson.id) === this.getTotalProblem(lesson.id);
-  }
-
-  public hasAvailableLessons(lessons: Array<Lesson>) {
-    for (const lesson of lessons) {
-      if (this.availableLessons.has(lesson.id)) {
-        return true;
+      if (parent) {
+        this.treeControl.collapseDescendants(parent);
+        this.treeControl.expand(parent);
+      } else {
+        this.treeControl.collapseAll();
       }
+      this.treeControl.expand(node);
     }
-    return false;
-  }
-
-  public isOpened(topic: Topic) {
-    for (const lesson of topic.lessons) {
-      if (lesson.id === this.lessonId) {
-        return true;
-      }
-    }
-    return false;
   }
 }

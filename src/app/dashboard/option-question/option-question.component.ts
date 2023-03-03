@@ -9,7 +9,6 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 import {ConfigurationService} from '../../services/configurations.service';
 import {QuestionConfig} from '../../entities/question-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import * as routes from '../routes';
 import {StoredAnswers} from '../../entities/stored-answers';
 import {QuestionPageAreas} from '../../entities/question-page-areas';
 import {LocalStorageService} from '../../services/local-storage.service';
@@ -24,7 +23,7 @@ import {FakeGtagService} from '../../services/fake-gtag.service';
 })
 export class OptionQuestionComponent implements OnChanges, OnDestroy {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() moduleId: number;
 
   questionPageAreas: QuestionPageAreas = new QuestionPageAreas();
@@ -35,7 +34,6 @@ export class OptionQuestionComponent implements OnChanges, OnDestroy {
   sending = false;
   config: QuestionConfig;
   seconds: number;
-  urlToLesson: Array<any>;
   wasAcceptedAnswerAndPageWasNotReloaded: boolean;
 
   constructor(private route: ActivatedRoute,
@@ -84,7 +82,6 @@ export class OptionQuestionComponent implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.wasAcceptedAnswerAndPageWasNotReloaded = false;
-    this.urlToLesson = ['/' + routes.DASHBOARD + '/' + routes.MODULE, this.moduleId, routes.LESSON, this.lessonId];
     zip(
       this.configurationService.getConfiguration(),
       this.problemService.getProblemById(this.problemId),

@@ -1,6 +1,5 @@
-import {EMPTY, Observable} from 'rxjs';
-import {filter, map, switchMap, tap} from 'rxjs/operators';
-import {concat} from 'rxjs';
+import {concat, EMPTY, Observable} from 'rxjs';
+import {filter, map, switchMap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {SubmissionService} from './submission.service';
@@ -26,8 +25,8 @@ export class AcceptedSubmissionService {
     }
   }
 
-  public getAcceptedByLessons(moduleId: number): Observable<Map<number, number>> {
-    const url = '/api/accepted-problems?groupBy=lessons&moduleId=' + moduleId;
+  public getAcceptedByTopics(moduleId: number): Observable<Map<number, number>> {
+    const url = '/api/accepted-problems?groupBy=topics&moduleId=' + moduleId;
     return concat(
       this.http.get<Map<number, number>>(url),
       this.submissionService.getChanges().pipe(

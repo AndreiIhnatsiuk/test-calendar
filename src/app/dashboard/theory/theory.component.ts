@@ -12,7 +12,7 @@ import {BestLastUserAnswer} from '../../entities/best-last-user-answer';
 })
 export class TheoryComponent implements OnChanges {
   @Input() problemId: number;
-  @Input() lessonId: number;
+  @Input() topicId: number;
   @Input() type: string;
   problem: FullProblem;
   disabledButton = false;
